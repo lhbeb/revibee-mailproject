@@ -176,8 +176,8 @@ export default async function handler(req, res) {
                     </table>
 
                     <div style="text-align: center; margin: 32px 0;">
-                      <a href="https://www.happydeel.com" style="background-color: #3b82f6; color: #ffffff; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 18px; display: inline-block; box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.5);">
-                        Visit HappyDeel
+                      <a href="https://www.revibee.com" style="background-color: #015256; color: #ffffff; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 18px; display: inline-block; box-shadow: 0 4px 6px -1px rgba(1, 82, 86, 0.5);">
+                        Visit Revibee
                       </a>
                     </div>
                   </td>
@@ -521,8 +521,8 @@ export default async function handler(req, res) {
                     
                     <div style="text-align: center; margin-top: 24px; padding-top: 24px; border-top: 1px solid #e2e8f0;">
                       <p style="color: #9ca3af; font-size: 12px; margin: 0;">
-                        © 2025 HappyDeel. All rights reserved.<br>
-                        Thank you for choosing HappyDeel!<br>
+                        © 2025 Revibee. All rights reserved.<br>
+                        Thank you for choosing Revibee!<br>
                         <span style="color: #cbd5e1; font-size: 10px;">Ref ID: ${Date.now()}</span>
                       </p>
                     </div>
@@ -545,7 +545,7 @@ export default async function handler(req, res) {
       
       Hello,
       
-      Welcome to HappyDeel, the trusted destination for smart shoppers who want quality products at fair and transparent prices.
+      Welcome to Revibee, the trusted destination for smart shoppers who want quality products at fair and transparent prices.
       
       OUR MISSION
       Make premium products accessible to everyone without inflated retail costs.
@@ -584,8 +584,8 @@ export default async function handler(req, res) {
       Saturday, 10:00 AM - 3:00 PM EST
       Sunday, Closed
       
-      © 2025 HappyDeel. All rights reserved.
-      Thank you for choosing HappyDeel!
+      © 2025 Revibee. All rights reserved.
+      Thank you for choosing Revibee!
     `;
 
     // Return HTML for preview

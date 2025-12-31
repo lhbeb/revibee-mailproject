@@ -640,7 +640,7 @@ export default async function handler(req, res) {
     // Construct absolute URL for logo
     const protocol = req.headers['x-forwarded-proto'] || 'http';
     const host = req.headers.host;
-    const logoUrl = `${protocol}://${host}/pnglogo.png`;
+    const logoUrl = `${protocol}://${host}/revibee_logo.svg`;
 
     const mailOptions = {
       from: `"Revibee Marketplace" <contactrevibee@gmail.com>`,

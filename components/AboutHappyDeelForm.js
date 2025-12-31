@@ -142,7 +142,7 @@ export default function AboutHappyDeelForm() {
         <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8">
             <div className="text-center mb-8">
                 <h2 className="text-2xl font-bold text-gray-800 mb-2">
-                    About HappyDeel Email - Bulk Send
+                    About Revibee Email - Bulk Send
                 </h2>
                 <p className="text-gray-600 text-sm">
                     Send comprehensive business model explanation to multiple customers

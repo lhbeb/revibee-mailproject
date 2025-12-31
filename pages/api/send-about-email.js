@@ -39,7 +39,7 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Invalid email format' });
     }
 
-    console.log('=== SENDING ABOUT HAPPYDEEL EMAIL ===');
+    console.log('=== SENDING ABOUT REVIBEE EMAIL ===');
     console.log('Customer Email:', customerEmail);
     // Get the email transporter
     // const emailTransporter = getTransporter();
@@ -171,7 +171,7 @@ export default async function handler(req, res) {
                 <tr>
                   <td style="background-color: #ffffff; padding: 48px 32px; text-align: center; border-bottom: 1px solid #f1f5f9;">
                     <div style="display: inline-block; margin-bottom: 24px;">
-                      <img src="cid:happydeellogo" alt="HappyDeel" width="180" style="display: block; border: 0; max-width: 100%; height: auto;">
+                      <img src="cid:happydeellogo" alt="Revibee" width="180" style="display: block; border: 0; max-width: 100%; height: auto;">
                     </div>
                     
                   </td>
@@ -208,8 +208,8 @@ export default async function handler(req, res) {
                     </table>
 
                     <div style="text-align: center; margin: 32px 0;">
-                      <a href="https://www.happydeel.com" style="background-color: #015256; color: #ffffff; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 18px; display: inline-block; box-shadow: 0 4px 6px -1px rgba(1, 82, 86, 0.5);">
-                        Visit HappyDeel
+                      <a href="https://www.revibee.com" style="background-color: #015256; color: #ffffff; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 18px; display: inline-block; box-shadow: 0 4px 6px -1px rgba(1, 82, 86, 0.5);">
+                        Visit Revibee
                       </a>
                     </div>
                   </td>
@@ -553,8 +553,8 @@ export default async function handler(req, res) {
                     
                     <div style="text-align: center; margin-top: 24px; padding-top: 24px; border-top: 1px solid #e2e8f0;">
                       <p style="color: #9ca3af; font-size: 12px; margin: 0;">
-                        © 2025 HappyDeel. All rights reserved.<br>
-                        Thank you for choosing HappyDeel!<br>
+                        © 2025 Revibee. All rights reserved.<br>
+                        Thank you for choosing Revibee!<br>
                         <span style="color: #cbd5e1; font-size: 10px;">Ref ID: ${Date.now()}</span>
                       </p>
                     </div>
@@ -577,7 +577,7 @@ export default async function handler(req, res) {
       
       Hello,
       
-      Welcome to HappyDeel - a place where shoppers can find quality products at fair, transparent prices. We offer a curated mix of electronics, photography gear, fashion, bicycles, tools, home equipment, and more.
+      Welcome to Revibee - a place where shoppers can find quality products at fair, transparent prices. We offer a curated mix of electronics, photography gear, fashion, bicycles, tools, home equipment, and more.
       
       OUR MISSION
       Make premium products accessible to everyone without inflated retail costs.
@@ -631,8 +631,8 @@ export default async function handler(req, res) {
       Saturday: 10:00 AM - 3:00 PM EST
       Sunday: Closed
       
-      © 2025 HappyDeel. All rights reserved.
-      Thank you for choosing HappyDeel!
+      © 2025 Revibee. All rights reserved.
+      Thank you for choosing Revibee!
       
       Ref ID: ${Date.now()}
     `;
@@ -670,7 +670,7 @@ export default async function handler(req, res) {
 
     res.status(200).json({
       success: true,
-      message: 'About HappyDeel email sent successfully!',
+      message: 'About Revibee email sent successfully!',
       messageId: info.messageId
     });
 

@@ -73,7 +73,7 @@ export default function Home() {
 
   // Informational Emails (Marketing/Educational)
   const informationalTabs = [
-    { id: 'about', label: 'About Us Happy Deel Email (TBAT)', icon: '🏪' },
+    { id: 'about', label: 'About Us Revibee Email (TBAT)', icon: '🏪' },
   ];
 
   const allTabs = [...transactionalTabs, ...recoveryTabs, ...informationalTabs];
@@ -121,15 +121,9 @@ export default function Home() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-5">
             <div className="flex items-center gap-4">
-              <div className="bg-white p-2 rounded-xl shadow-md">
-                <img
-                  src="/logo.png"
-                  alt="Happydeel"
-                  className="h-10 w-auto"
-                />
-              </div>
-
+              <h1 className="text-2xl font-bold text-white tracking-tight">Mail Project 2.0</h1>
             </div>
+
             <div className="flex items-center gap-4">
               <button
                 onClick={() => setActiveTab(activeTab === 'preview' ? 'tracking' : 'preview')}
@@ -339,7 +333,7 @@ export default function Home() {
                       🏪
                     </div>
                     <div>
-                      <h2 className="text-2xl font-bold text-slate-900">About Us Happy Deel Email (TBAT)</h2>
+                      <h2 className="text-2xl font-bold text-slate-900">About Us Revibee Email (TBAT)</h2>
                       <p className="text-slate-600 text-sm">Send comprehensive business model explanation</p>
                     </div>
                   </div>
@@ -365,7 +359,7 @@ export default function Home() {
 
           {/* Footer Info */}
           <div className="mt-6 text-center text-slate-500 text-sm">
-            <p>HappyDeel Email Management System • Powered by Next.js & Nodemailer</p>
+            <p>Mail Project 2.0 • Powered by Next.js & Nodemailer</p>
           </div>
         </div>
       </div>

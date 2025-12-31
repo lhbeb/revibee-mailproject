@@ -5,7 +5,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Happydeel Email Dashboard",
+  title: "Mail Project 2.0",
   description: "Manage and send transactional emails",
   icons: {
     icon: "/favicon.png",

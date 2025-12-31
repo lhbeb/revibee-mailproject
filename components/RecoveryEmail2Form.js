@@ -178,7 +178,7 @@ export default function RecoveryEmail2Form() {
             onChange={handleInputChange}
             required
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent"
-            placeholder="https://happydeel.com/checkout/..."
+            placeholder="https://example.com/checkout/..."
           />
         </div>
 

@@ -164,7 +164,7 @@ export default function RecoveryEmail2Form() {
             value={formData.productLink}
             onChange={handleInputChange}
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent"
-            placeholder="https://happydeel.com/product/..."
+            placeholder="https://revibee.com/product/..."
           />
         </div>
 

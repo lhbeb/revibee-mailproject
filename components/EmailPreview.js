@@ -34,7 +34,7 @@ export default function EmailPreview() {
       customerEmail: 'alex.j@example.com',
       productName: 'Canon AE-1',
       productLink: 'https://www.usa.canon.com/cameras',
-      checkoutUrl: 'https://happydeel.com/checkout/recover?id=123456'
+      checkoutUrl: 'https://revibee.com/checkout/recover?id=123456'
     },
     about: {
       customerName: 'John Doe',

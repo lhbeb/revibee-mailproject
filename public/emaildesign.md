@@ -3,8 +3,8 @@
 
         <!-- Header - Top White Div for Logo -->
         <div style="background-color: #ffffff; padding: 16px 32px; text-align: center; border-bottom: 1px solid #e2e8f0;">
-            <a href="https://HappyDeel.com" style="display: inline-block;">
-                <img src="https://i.ibb.co/hnHJz4s/logomail.png" alt="HappyDeal" style="height: 48px; width: auto; display: block;">
+            <a href="https://Revibee.com" style="display: inline-block;">
+                <img src="https://i.ibb.co/hnHJz4s/logomail.png" alt="Revibee" style="height: 48px; width: auto; display: block;">
             </a>
         </div>
 
@@ -71,13 +71,13 @@
             
             <!-- Closing Message -->
             <div style="color: #475569; font-size: 15px; line-height: 1.6; margin: 32px 0;">
-                Questions about your order? Our support team is here to help. Thank you for choosing HappyDeal.
+                Questions about your order? Our support team is here to help. Thank you for choosing Revibee.
             </div>
         </div>
         
         <!-- Footer -->
         <div style="background: linear-gradient(135deg, #f1f5f9, #e2e8f0); padding: 32px; text-align: center; border-top: 1px solid #cbd5e1;">
-            <div style="color: #3b82f6; font-size: 18px; font-weight: 700; margin: 0 0 8px 0;">HappyDeal</div>
+            <div style="color: #3b82f6; font-size: 18px; font-weight: 700; margin: 0 0 8px 0;">Revibee</div>
             <div style="color: #64748b; font-size: 14px; margin: 0 0 20px 0; font-weight: 500;">The smart way to buy quality items for less</div>
             <div style="display: flex; justify-content: center; gap: 24px; margin: 20px 0;">
                 <a href="#" style="color: #475569; text-decoration: none; font-size: 13px; font-weight: 500;">Support</a>
@@ -86,7 +86,7 @@
             </div>
             <div style="color: #64748b; font-size: 11px; margin-top: 24px; line-height: 1.4;">
                 This email was sent to jessicatellez90@icloud.com<br>
-                HappyDeal • Premium Pre-Owned Technology
+                Revibee • Premium Pre-Owned Technology
             </div>
         </div>
     </div>

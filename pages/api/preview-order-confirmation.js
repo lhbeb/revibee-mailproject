@@ -52,7 +52,7 @@ export default async function handler(req, res) {
       <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Order Confirmation - HappyDeel</title>
+        <title>Order Confirmation - Revibee.com</title>
         <style>
           * {
             margin: 0;
@@ -313,7 +313,7 @@ export default async function handler(req, res) {
                 <a href="tel:+17176484487" class="contact-link">📞 +17176484487</a>
               </div>
               <div class="copyright">
-                © 2024 HappyDeel. All rights reserved.<br>
+                © 2024 Revibee.com. All rights reserved.<br>
                 The smart way to buy quality items — for less.
               </div>
             </div>

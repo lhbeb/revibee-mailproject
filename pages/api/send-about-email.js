@@ -10,7 +10,7 @@ import { getRandomAccount, createTransporter, getAccountByUser } from '../../src
 //       port: 465,
 //       secure: true,
 //       auth: {
-//         user: 'contacthappydeel@gmail.com',
+//         user: 'contactrevibee@gmail.com',
 //         pass: 'pqdc drxx ltlo xapr',
 //       },
 //     });
@@ -58,7 +58,7 @@ export default async function handler(req, res) {
     }
     const emailTransporter = createTransporter(account);
 
-    // Comprehensive About HappyDeel HTML Template
+    // Comprehensive About Revibee HTML Template
     const htmlTemplate = `
       <!DOCTYPE html>
       <html lang="en">
@@ -648,14 +648,14 @@ export default async function handler(req, res) {
       subject: `How do we keep our prices low? ✨ 🛍️`,
       html: htmlTemplate.replace(
         /src="[^"]*"/,
-        'src="cid:happydeellogo"'
+        'src="cid:revibeelogo"'
       ),
       text: textTemplate,
       attachments: [
         {
           filename: 'logo.svg',
           path: logoUrl,
-          cid: 'happydeellogo' // same cid value as in the html img src
+          cid: 'revibeelogo' // same cid value as in the html img src
         }
       ]
     };

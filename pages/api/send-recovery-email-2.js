@@ -98,7 +98,7 @@ export default async function handler(req, res) {
     }
     const emailTransporter = createTransporter(account);
 
-    // HTML email template - HappyDeel Branded Design (Table-Based for iOS Support)
+    // HTML email template - Revibee Branded Design (Table-Based for iOS Support)
     const htmlTemplate = `
       <!DOCTYPE html>
       <html lang="en">
@@ -106,7 +106,7 @@ export default async function handler(req, res) {
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="format-detection" content="telephone=no, date=no, email=no, address=no">
-        <title>We Saved Your Cart - HappyDeel</title>
+        <title>We Saved Your Cart - Revibee</title>
         <!--[if mso]>
         <noscript>
           <xml>
@@ -206,7 +206,7 @@ export default async function handler(req, res) {
                     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-top: 32px; text-align: center;">
                       <tr>
                         <td style="color: #6b7280; font-size: 14px;">
-                          <p style="margin: 0 0 8px 0;"><strong>Why HappyDeel?</strong></p>
+                          <p style="margin: 0 0 8px 0;"><strong>Why Revibee?</strong></p>
                           <p style="margin: 0 0 16px 0;">We inspect every item to ensure quality. 30-day returns. Fast shipping.</p>
                           <p style="margin: 0; color: #6b7280; font-size: 14px;">
                             Questions? Reply here or <a href="https://wa.me/17176484487" style="color: #015256; text-decoration: none;">WhatsApp +1-717-648-4487</a>.

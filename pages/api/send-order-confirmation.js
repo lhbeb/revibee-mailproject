@@ -38,7 +38,7 @@ export default async function handler(req, res) {
       <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Order Confirmation - HappyDeel</title>
+        <title>Order Confirmation - Revibee.com</title>
         <style>
           /* Reset */
           * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -340,7 +340,7 @@ export default async function handler(req, res) {
               </div>
               
               <div class="copyright">
-                © 2024 HappyDeel. All rights reserved.<br>
+                © 2024 Revibee.com. All rights reserved.<br>
                 The smart way to buy quality items — for less.
               </div>
             </div>
@@ -362,7 +362,7 @@ export default async function handler(req, res) {
       
       Questions? Email contactrevibee@gmail.com
       
-      © 2024 HappyDeel. All rights reserved.
+      © 2024 Revibee.com. All rights reserved.
     `;
 
     // Email options

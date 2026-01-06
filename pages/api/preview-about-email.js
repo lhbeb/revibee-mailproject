@@ -28,7 +28,7 @@ export default async function handler(req, res) {
     const customerName = 'John Doe';
 
 
-    // Comprehensive About HappyDeel HTML Template
+    // Comprehensive About Revibee HTML Template
     const htmlTemplate = `
       <!DOCTYPE html>
       <html lang="en">

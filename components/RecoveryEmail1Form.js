@@ -4,13 +4,9 @@ import { useState, useEffect } from 'react';
 
 export default function RecoveryEmail1Form() {
   const [formData, setFormData] = useState({
-    customerName: '',
-    customerEmail: '',
-    productName: '',
-    productLink: '',
-    checkoutUrl: '',
     senderEmail: ''
   });
+  const [rawData, setRawData] = useState('');
   const [accounts, setAccounts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState({ type: '', content: '' });
@@ -45,12 +41,27 @@ export default function RecoveryEmail1Form() {
     setMessage({ type: '', content: '' });
 
     try {
+      const lines = rawData.split('\n').map(line => line.trim()).filter(line => line);
+      const productLine = lines[0] || '';
+      const email = lines[1] || '';
+      const name = lines[2] || '';
+      const link = lines[4] || '';
+
+      const payload = {
+        customerEmail: email,
+        customerName: name,
+        productName: productLine,
+        checkoutUrl: link,
+        productLink: link,
+        ...formData
+      };
+
       const response = await fetch('/api/send-abandoned-checkout', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(payload),
       });
 
       const result = await response.json();
@@ -61,12 +72,9 @@ export default function RecoveryEmail1Form() {
           content: 'Recovery email 1 sent successfully! 🛒'
         });
         // Reset form
+        // Reset form
+        setRawData('');
         setFormData({
-          customerName: '',
-          customerEmail: '',
-          productName: '',
-          productLink: '',
-          checkoutUrl: '',
           senderEmail: formData.senderEmail // Preserve selection
         });
       } else {
@@ -115,70 +123,24 @@ export default function RecoveryEmail1Form() {
           <p className="mt-1 text-xs text-gray-500">Leave as "Random" to let the system choose.</p>
         </div>
 
-        {/* Customer Email */}
+        {/* Order Details Paste Block */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Customer Email *</label>
-          <input
-            type="email"
-            name="customerEmail"
-            value={formData.customerEmail}
-            onChange={handleInputChange}
+          <div className="flex justify-between mb-2">
+            <label htmlFor="rawData" className="block text-sm font-medium text-gray-700">
+              Order Details (Paste Block) *
+            </label>
+            <span className="text-xs text-gray-400">Line 1: Product | Line 2: Email | Line 5: Link</span>
+          </div>
+          <textarea
+            id="rawData"
+            name="rawData"
+            value={rawData}
+            onChange={(e) => setRawData(e.target.value)}
             required
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent"
-            placeholder="customer@example.com"
-          />
-        </div>
-
-        {/* Customer Name */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Customer Name (Optional)</label>
-          <input
-            type="text"
-            name="customerName"
-            value={formData.customerName}
-            onChange={handleInputChange}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent"
-            placeholder="John Doe"
-          />
-        </div>
-
-        {/* Product Name */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Product Name (Optional)</label>
-          <input
-            type="text"
-            name="productName"
-            value={formData.productName}
-            onChange={handleInputChange}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent"
-            placeholder="Wireless Headphones"
-          />
-        </div>
-
-        {/* Product Link */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Product Link (For Image)</label>
-          <input
-            type="url"
-            name="productLink"
-            value={formData.productLink}
-            onChange={handleInputChange}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent"
-            placeholder="https://revibee.com/product/..."
-          />
-        </div>
-
-        {/* Checkout URL */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Checkout URL *</label>
-          <input
-            type="url"
-            name="checkoutUrl"
-            value={formData.checkoutUrl}
-            onChange={handleInputChange}
-            required
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent"
-            placeholder="https://example.com/checkout/..."
+            rows={6}
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent transition duration-200 ease-in-out text-gray-900 bg-white resize-y font-mono text-sm leading-relaxed"
+            placeholder="Product Name : $Price&#10;customer@example.com&#10;John Doe&#10;123 Address St, City, ST 12345&#10;https://deeldepot.com/product/..."
+            disabled={isLoading}
           />
         </div>
 

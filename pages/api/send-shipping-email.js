@@ -1,4 +1,5 @@
 import { getRandomAccount, createTransporter, getAccountByUser } from '../../src/config/emailAccounts';
+import { logEmail } from '../../src/utils/logger';
 
 // Create a persistent SMTP transporter (connection pool)
 // Note: With multiple accounts, we might want to create a pool per account or just create fresh connections.
@@ -72,7 +73,7 @@ export default async function handler(req, res) {
 
   try {
     // Debug: Log environment variables (without exposing the password)
-    // console.log('Gmail User:', 'contactrevibee@gmail.com'); // Removed hardcoded log
+    // console.log('Gmail User:', 'contactdeeldepot@gmail.com'); // Removed hardcoded log
 
 
     // Get the persistent transporter (no need to verify each time)
@@ -95,7 +96,7 @@ export default async function handler(req, res) {
     // Generate FedEx tracking URL
     const trackingUrl = `https://www.fedex.com/fedextrack/?trknbr=${trackingNumber}`;
 
-    // HTML email template - Revibee Marketplace Branded Design (Fully Responsive)
+    // HTML email template - DeelDepot Branded Design (Fully Responsive)
     const htmlTemplate = `
       <!DOCTYPE html>
       <html lang="en">
@@ -103,7 +104,7 @@ export default async function handler(req, res) {
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="format-detection" content="telephone=no, date=no, email=no, address=no">
-        <title>Your Order Has Shipped - Revibee Marketplace</title>
+        <title>Your Order Has Shipped - DeelDepot</title>
         <!--[if mso]>
         <noscript>
           <xml>
@@ -128,7 +129,7 @@ export default async function handler(req, res) {
           }
         </style>
       </head>
-      <body style="margin: 0; padding: 0; background-color: #f8f9fa; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.5; color: #1e293b; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%;">
+      <body style="margin: 0; padding: 0; background-color: #f8f9fa; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.5; color: #090A28; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%;">
         
         <!-- Wrapper Table for Email Client Compatibility -->
         <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #f8f9fa;">
@@ -140,7 +141,7 @@ export default async function handler(req, res) {
                 
                 <!-- Header -->
                 <tr class="header">
-                  <td style="background-color: #015256; padding: 40px 32px; text-align: center;">
+                  <td style="background-color: #090A28; padding: 40px 32px; text-align: center;">
                     <h1 style="color: #ffffff; font-size: 32px; font-weight: 700; margin: 0 0 12px 0; line-height: 1.2;">
                       Your order is on the way 🚀
                     </h1>
@@ -154,14 +155,14 @@ export default async function handler(req, res) {
                     <!-- Status Indicator -->
                     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-bottom: 32px;">
                       <tr>
-                        <td style="padding: 16px 20px; background-color: #e2ffa9; border-radius: 12px; border: 1px solid #d4f296;">
+                        <td style="padding: 16px 20px; background-color: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;">
                           <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                             <tr>
                               <td style="width: 20px; vertical-align: middle;">
-                                <div style="width: 8px; height: 8px; background-color: #015256; border-radius: 50%; display: inline-block;"></div>
+                                <div style="width: 8px; height: 8px; background-color: #090A28; border-radius: 50%; display: inline-block;"></div>
                               </td>
                               <td style="vertical-align: middle;">
-                                <div style="color: #015256; font-weight: 600; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px; margin: 0;">SHIPPED</div>
+                                <div style="color: #090A28; font-weight: 600; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px; margin: 0;">SHIPPED</div>
                               </td>
                             </tr>
                           </table>
@@ -187,7 +188,7 @@ export default async function handler(req, res) {
                           <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                             <tr>
                               <td align="center" style="padding-bottom: 16px;">
-                                <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="width: 64px; height: 64px; background-color: #015256; border-radius: 12px; margin: 0 auto;">
+                                <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="width: 64px; height: 64px; background-color: #090A28; border-radius: 12px; margin: 0 auto;">
                                   <tr>
                                     <td style="text-align: center; vertical-align: middle; font-size: 28px; color: #ffffff; line-height: 1;">📦</td>
                                   </tr>
@@ -196,7 +197,7 @@ export default async function handler(req, res) {
                             </tr>
                             <tr>
                               <td align="center">
-                                <h3 style="color: #1e293b; font-size: 18px; font-weight: 600; margin: 0 0 8px 0; line-height: 1.4; text-align: center;">${productName}</h3>
+                                <h3 style="color: #090A28; font-size: 18px; font-weight: 600; margin: 0 0 8px 0; line-height: 1.4; text-align: center;">${productName}</h3>
                                 <p style="color: #64748b; font-size: 14px; margin: 0; line-height: 1.4; text-align: center;">Premium Quality • Expertly Inspected • Fast Shipping</p>
                               </td>
                             </tr>
@@ -219,7 +220,7 @@ export default async function handler(req, res) {
                           <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 16px;">
                             <tr>
                               <td style="padding: 20px;">
-                                <div style="color: #015256; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 8px 0;">Delivery Email</div>
+                                <div style="color: #090A28; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 8px 0;">Delivery Email</div>
                                 <div style="color: #475569; font-size: 14px; line-height: 1.5; margin: 0; word-break: break-all;">
                                   ${customerEmail}
                                 </div>
@@ -231,7 +232,7 @@ export default async function handler(req, res) {
                           <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 16px;">
                             <tr>
                               <td style="padding: 20px;">
-                                <div style="color: #015256; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 8px 0;">Status</div>
+                                <div style="color: #090A28; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 8px 0;">Status</div>
                                 <div style="color: #475569; font-size: 14px; line-height: 1.5; margin: 0;">
                                   In Transit<br>
                                   3-7 Business Days
@@ -244,7 +245,7 @@ export default async function handler(req, res) {
                           <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0;">
                             <tr>
                               <td style="padding: 20px;">
-                                <div style="color: #015256; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 8px 0;">Delivery Address</div>
+                                <div style="color: #090A28; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 8px 0;">Delivery Address</div>
                                 <div style="color: #475569; font-size: 14px; line-height: 1.6; margin: 0;">
                                   ${customerAddress}
                                 </div>
@@ -258,16 +259,16 @@ export default async function handler(req, res) {
                     </table>
                     
                     <!-- Tracking Card -->
-                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #e2ffa9; border-radius: 16px; border: 1px solid #d4f296; margin: 32px 0;">
+                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #f8fafc; border-radius: 16px; border: 1px solid #e2e8f0; margin: 32px 0;">
                       <tr>
                         <td style="padding: 28px 24px; text-align: center;">
-                          <h3 style="color: #015256; font-size: 20px; font-weight: 700; margin: 0 0 8px 0;">🚚 Track Your Package</h3>
+                          <h3 style="color: #090A28; font-size: 20px; font-weight: 700; margin: 0 0 8px 0;">🚚 Track Your Package</h3>
                           <p style="color: #475569; font-size: 16px; margin: 0 0 20px 0;">Your package is on its way!</p>
                           
                           <!-- Tracking Number -->
                           <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: 16px 0;">
                             <tr>
-                              <td style="background-color: #ffffff; color: #1e293b; padding: 16px; border-radius: 8px; font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, monospace; font-size: 16px; font-weight: 600; border: 1px solid #cbd5e1; letter-spacing: 1px; text-align: center; word-break: break-all;">
+                              <td style="background-color: #ffffff; color: #090A28; padding: 16px; border-radius: 8px; font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, monospace; font-size: 16px; font-weight: 600; border: 1px solid #cbd5e1; letter-spacing: 1px; text-align: center; word-break: break-all;">
                                 ${trackingNumber}
                               </td>
                             </tr>
@@ -276,8 +277,8 @@ export default async function handler(req, res) {
                           <!-- Track Package Button -->
                           <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="margin: 20px auto 0 auto;">
                             <tr>
-                              <td style="background-color: #015256; border-radius: 8px; text-align: center;">
-                                <a href="${trackingUrl}" style="display: inline-block; padding: 14px 28px; color: #ffffff; text-decoration: none; font-weight: 600; font-size: 16px; border-radius: 8px;">Track Package</a>
+                              <td style="background-color: #F5970C; border-radius: 8px; text-align: center;">
+                                <a href="${trackingUrl}" style="display: inline-block; padding: 14px 28px; color: #090A28; text-decoration: none; font-weight: 600; font-size: 16px; border-radius: 8px;">Track Package</a>
                               </td>
                             </tr>
                           </table>
@@ -289,7 +290,7 @@ export default async function handler(req, res) {
                     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: 32px 0;">
                       <tr>
                         <td style="color: #475569; font-size: 16px; line-height: 1.6; text-align: left;">
-                          We take the risk out of used gear with expert inspection and reliable service on every order. Questions about your order? Our support team is here to help. Thank you for choosing <strong>Revibee Marketplace</strong>!
+                          We take the risk out of used gear with expert inspection and reliable service on every order. Questions about your order? Our support team is here to help. Thank you for choosing <strong>DeelDepot</strong>!
                         </td>
                       </tr>
                     </table>
@@ -299,27 +300,27 @@ export default async function handler(req, res) {
                 
                 <!-- Footer -->
                 <tr>
-                  <td style="background-color: #015256; padding: 32px 24px; text-align: center;">
+                  <td style="background-color: #090A28; padding: 32px 24px; text-align: center;">
                     <div style="color: #e0e7ff; font-size: 16px; margin: 0 0 20px 0; font-weight: 500;">The smart way to buy quality items — for less.</div>
                     
                     <!-- Footer Links -->
                     <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="margin: 20px auto;">
                       <tr>
                         <td style="padding: 0 12px;">
-                          <a href="https://www.revibee.com/contact" style="color: #e2ffa9; text-decoration: none; font-size: 14px; font-weight: 500;">Support</a>
+                          <a href="https://www.deeldepot.com/contact" style="color: #f8fafc; text-decoration: none; font-size: 14px; font-weight: 500;">Support</a>
                         </td>
                         <td style="padding: 0 12px;">
-                          <a href="https://www.revibee.com/track" style="color: #e2ffa9; text-decoration: none; font-size: 14px; font-weight: 500;">Track Orders</a>
+                          <a href="https://www.deeldepot.com/track" style="color: #f8fafc; text-decoration: none; font-size: 14px; font-weight: 500;">Track Orders</a>
                         </td>
                         <td style="padding: 0 12px;">
-                          <a href="https://www.revibee.com/return-policy" style="color: #e2ffa9; text-decoration: none; font-size: 14px; font-weight: 500;">Returns</a>
+                          <a href="https://www.deeldepot.com/return-policy" style="color: #f8fafc; text-decoration: none; font-size: 14px; font-weight: 500;">Returns</a>
                         </td>
                       </tr>
                     </table>
                     
-                    <div style="color: #e2ffa9; font-size: 12px; margin-top: 24px; line-height: 1.4;">
+                    <div style="color: #f8fafc; font-size: 12px; margin-top: 24px; line-height: 1.4;">
                       This email was sent to ${customerEmail}<br>
-                      © 2025 Revibee Marketplace. All rights reserved.
+                      © 2025 DeelDepot. All rights reserved.
                     </div>
                   </td>
                 </tr>
@@ -336,7 +337,7 @@ export default async function handler(req, res) {
 
     // Plain text version for email clients that don't support HTML
     const textTemplate = `
-      Revibee Marketplace - Your Order Has Shipped!
+      DeelDepot - Your Order Has Shipped!
       
       The smart way to buy premium tech, cameras, and bikes — for less.
       
@@ -354,28 +355,37 @@ export default async function handler(req, res) {
       Tracking Number: ${trackingNumber}
       Track your package: ${trackingUrl}
       
-      Questions about your order? Our support team is here to help. Thank you for choosing Revibee Marketplace.
+      Questions about your order? Our support team is here to help. Thank you for choosing DeelDepot.
       
       ---
-      Revibee Marketplace - The smart way to buy quality items for less
+      DeelDepot - The smart way to buy quality items for less
       
       This email was sent to ${customerEmail}
-      Revibee Marketplace • Premium Pre-Owned Technology
+      DeelDepot • Premium Pre-Owned Technology
     `;
 
     // Email options
     const mailOptions = {
-      from: `"Revibee Marketplace" <${account.user}>`,
+      from: `"DeelDepot" <${account.user}>`,
       to: customerEmail,
       subject: `Your Order Has Shipped! 📦 - ${productName}`,
       text: textTemplate,
       html: htmlTemplate,
     };
 
-    // Send email
     const info = await emailTransporter.sendMail(mailOptions);
 
     console.log('Email sent successfully:', info.messageId);
+
+    // Log the sent email
+    logEmail({
+      type: 'Shipping',
+      senderEmail: account.user,
+      recipientEmail: customerEmail,
+      recipientName: customerName,
+      productName: productName,
+      status: 'Success'
+    });
 
     return res.status(200).json({
       success: true,

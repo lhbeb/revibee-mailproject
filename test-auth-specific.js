@@ -34,7 +34,7 @@ async function testAuth(email, password) {
 // Credentials from src/config/emailAccounts.js
 const accounts = [
     {
-        user: 'contactrevibee@gmail.com',
+        user: 'contactdeeldepot@gmail.com',
         pass: 'gdui faql dedk yhxg'
     }
 ];

@@ -4,12 +4,9 @@ import { useState, useEffect } from 'react';
 
 export default function RefundEmailForm() {
   const [formData, setFormData] = useState({
-    customerEmail: '',
-    customerName: '',
-    productName: '',
-    refundAmount: '',
     senderEmail: ''
   });
+  const [rawData, setRawData] = useState('');
   const [accounts, setAccounts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState({ type: '', content: '' });
@@ -44,12 +41,36 @@ export default function RefundEmailForm() {
     setMessage({ type: '', content: '' });
 
     try {
+      const lines = rawData.split('\n').map(line => line.trim()).filter(line => line);
+      const productLine = lines[0] || '';
+      const email = lines[1] || '';
+      const name = lines[2] || '';
+      
+      let amount = '';
+      const priceMatch = productLine.match(/:\s*\$([\d.]+)/);
+      if (priceMatch) {
+        amount = '$' + priceMatch[1];
+      } else {
+        const parts = productLine.split(':');
+        if (parts.length > 1) {
+          amount = parts[parts.length - 1].trim();
+        }
+      }
+
+      const payload = {
+        customerEmail: email,
+        customerName: name,
+        productName: productLine,
+        refundAmount: amount,
+        ...formData
+      };
+
       const response = await fetch('/api/send-refund-email', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(payload),
       });
 
       const result = await response.json();
@@ -60,11 +81,9 @@ export default function RefundEmailForm() {
           content: 'Refund email sent successfully! 💰'
         });
         // Reset form
+        // Reset form
+        setRawData('');
         setFormData({
-          customerEmail: '',
-          customerName: '',
-          productName: '',
-          refundAmount: '',
           senderEmail: formData.senderEmail // Preserve selection
         });
       } else {
@@ -113,59 +132,24 @@ export default function RefundEmailForm() {
           <p className="mt-1 text-xs text-gray-500">Leave as "Random" to let the system choose.</p>
         </div>
 
-        {/* Customer Email */}
+        {/* Order Details Paste Block */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Customer Email</label>
-          <input
-            type="email"
-            name="customerEmail"
-            value={formData.customerEmail}
-            onChange={handleInputChange}
+          <div className="flex justify-between mb-2">
+            <label htmlFor="rawData" className="block text-sm font-medium text-gray-700">
+              Order Details (Paste Block) *
+            </label>
+            <span className="text-xs text-gray-400">Line 1: Product : $Price | Line 2: Email | Line 3: Name</span>
+          </div>
+          <textarea
+            id="rawData"
+            name="rawData"
+            value={rawData}
+            onChange={(e) => setRawData(e.target.value)}
             required
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent"
-            placeholder="customer@example.com"
-          />
-        </div>
-
-        {/* Customer Name */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Customer Name</label>
-          <input
-            type="text"
-            name="customerName"
-            value={formData.customerName}
-            onChange={handleInputChange}
-            required
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent"
-            placeholder="John Doe"
-          />
-        </div>
-
-        {/* Product Name */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Product Name</label>
-          <input
-            type="text"
-            name="productName"
-            value={formData.productName}
-            onChange={handleInputChange}
-            required
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent"
-            placeholder="Awesome Gadget"
-          />
-        </div>
-
-        {/* Refund Amount */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Refund Amount</label>
-          <input
-            type="text"
-            name="refundAmount"
-            value={formData.refundAmount}
-            onChange={handleInputChange}
-            required
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent"
-            placeholder="$49.99"
+            rows={6}
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent transition duration-200 ease-in-out text-gray-900 bg-white resize-y font-mono text-sm leading-relaxed"
+            placeholder="Product Name : $Price&#10;customer@example.com&#10;John Doe&#10;123 Address St, City, ST 12345&#10;https://deeldepot.com/product/..."
+            disabled={isLoading}
           />
         </div>
 

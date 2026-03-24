@@ -1,15 +1,15 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import SentEmailsLog from './SentEmailsLog';
 
 export default function ShippingEmailForm() {
   const [formData, setFormData] = useState({
-    customerEmail: '',
-    customerAddress: '',
-    productName: '',
     trackingNumber: '',
     senderEmail: '' // Optional: specific sender email
   });
+  const [rawData, setRawData] = useState('');
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [accounts, setAccounts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState({ type: '', content: '' });
@@ -44,12 +44,26 @@ export default function ShippingEmailForm() {
     setMessage({ type: '', content: '' });
 
     try {
+      const lines = rawData.split('\n').map(line => line.trim()).filter(line => line);
+      const productLine = lines[0] || '';
+      const email = lines[1] || '';
+      const name = lines[2] || '';
+      const address = lines[3] || '';
+
+      const payload = {
+        customerEmail: email,
+        customerName: name, // even if Shipping API doesn't strictly need it
+        customerAddress: address,
+        productName: productLine,
+        ...formData
+      };
+
       const response = await fetch('/api/send-shipping-email', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(payload),
       });
 
       const result = await response.json();
@@ -59,14 +73,11 @@ export default function ShippingEmailForm() {
           type: 'success',
           content: 'Email sent successfully! 🎉'
         });
-        // Reset form but keep sender selection if desired, or reset everything
+        // Reset form but keep sender selection
+        setRawData('');
         setFormData(prev => ({
           ...prev,
-          customerEmail: '',
-          customerAddress: '',
-          productName: '',
           trackingNumber: ''
-          // senderEmail is preserved
         }));
       } else {
         setMessage({
@@ -101,7 +112,7 @@ export default function ShippingEmailForm() {
             name="senderEmail"
             value={formData.senderEmail}
             onChange={handleInputChange}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#015256] focus:border-transparent transition duration-200 ease-in-out text-gray-900 bg-white"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#F5970C] focus:border-transparent transition duration-200 ease-in-out text-gray-900 bg-white"
             disabled={isLoading}
           >
             <option value="">Random (Auto-Rotate)</option>
@@ -114,56 +125,23 @@ export default function ShippingEmailForm() {
           <p className="mt-1 text-xs text-gray-500">Leave as "Random" to let the system choose.</p>
         </div>
 
-        {/* Customer Email Field */}
+        {/* Order Details Paste Block */}
         <div>
-          <label htmlFor="customerEmail" className="block text-sm font-medium text-gray-700 mb-2">
-            Customer Email *
-          </label>
-          <input
-            type="email"
-            id="customerEmail"
-            name="customerEmail"
-            value={formData.customerEmail}
-            onChange={handleInputChange}
-            required
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 ease-in-out text-gray-900 bg-white"
-            placeholder="customer@example.com"
-            disabled={isLoading}
-          />
-        </div>
-
-        {/* Customer Address Field */}
-        <div>
-          <label htmlFor="customerAddress" className="block text-sm font-medium text-gray-700 mb-2">
-            Customer Address *
-          </label>
+          <div className="flex justify-between mb-2">
+            <label htmlFor="rawData" className="block text-sm font-medium text-gray-700">
+              Order Details (Paste Block) *
+            </label>
+            <span className="text-xs text-gray-400">Line 1: Product | Line 2: Email | Line 3: Name | Line 4: Address | Line 5: Link</span>
+          </div>
           <textarea
-            id="customerAddress"
-            name="customerAddress"
-            value={formData.customerAddress}
-            onChange={handleInputChange}
+            id="rawData"
+            name="rawData"
+            value={rawData}
+            onChange={(e) => setRawData(e.target.value)}
             required
-            rows={3}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#015256] focus:border-transparent transition duration-200 ease-in-out text-gray-900 bg-white resize-none"
-            placeholder="e.g., 123 Main Street, City, State 12345"
-            disabled={isLoading}
-          />
-        </div>
-
-        {/* Product Name Field */}
-        <div>
-          <label htmlFor="productName" className="block text-sm font-medium text-gray-700 mb-2">
-            Product Name *
-          </label>
-          <input
-            type="text"
-            id="productName"
-            name="productName"
-            value={formData.productName}
-            onChange={handleInputChange}
-            required
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 ease-in-out text-gray-900 bg-white"
-            placeholder="e.g., Wireless Headphones"
+            rows={6}
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#F5970C] focus:border-transparent transition duration-200 ease-in-out text-gray-900 bg-white resize-y font-mono text-sm leading-relaxed"
+            placeholder="Product Name : $Price&#10;customer@example.com&#10;John Doe&#10;123 Address St, City, ST 12345&#10;https://deeldepot.com/product/..."
             disabled={isLoading}
           />
         </div>
@@ -191,9 +169,9 @@ export default function ShippingEmailForm() {
         <button
           type="submit"
           disabled={isLoading}
-          className={`w-full py-3 px-4 rounded-lg font-medium text-white transition duration-200 ease-in-out ${isLoading
+          className={`w-full py-3 px-4 rounded-lg font-bold text-[#090A28] transition duration-200 ease-in-out ${isLoading
             ? 'bg-gray-400 cursor-not-allowed'
-            : 'bg-[#015256] hover:bg-[#014245] focus:ring-2 focus:ring-[#015256] focus:ring-offset-2'
+            : 'bg-[#F5970C] hover:bg-[#e08800] focus:ring-2 focus:ring-[#F5970C] focus:ring-offset-2'
             }`}
         >
           {isLoading ? (

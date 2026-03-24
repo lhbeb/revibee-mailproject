@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo } from 'react';
 
-export default function AboutRevibeeForm() {
+export default function AboutDeelDepotForm() {
     const [emailList, setEmailList] = useState('');
     const [senderEmail, setSenderEmail] = useState('');
     const [accounts, setAccounts] = useState([]);
@@ -142,7 +142,7 @@ export default function AboutRevibeeForm() {
         <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8">
             <div className="text-center mb-8">
                 <h2 className="text-2xl font-bold text-gray-800 mb-2">
-                    About Revibee Email - Bulk Send
+                    About DeelDepot Email - Bulk Send
                 </h2>
                 <p className="text-gray-600 text-sm">
                     Send comprehensive business model explanation to multiple customers
@@ -160,7 +160,7 @@ export default function AboutRevibeeForm() {
                         name="senderEmail"
                         value={senderEmail}
                         onChange={(e) => setSenderEmail(e.target.value)}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#015256] focus:border-transparent transition duration-200 ease-in-out text-gray-900 bg-white"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#F5970C] focus:border-transparent transition duration-200 ease-in-out text-gray-900 bg-white"
                         disabled={isLoading}
                     >
                         <option value="">Random (Auto-Rotate)</option>
@@ -178,7 +178,7 @@ export default function AboutRevibeeForm() {
                         <label htmlFor="emailList" className="block text-sm font-medium text-gray-700">
                             Customer Emails (one per line) *
                         </label>
-                        <span className={`text-sm font-medium ${isOverLimit ? 'text-red-600' : emailCount > 0 ? 'text-[#015256]' : 'text-gray-500'}`}>
+                        <span className={`text-sm font-medium ${isOverLimit ? 'text-red-600' : emailCount > 0 ? 'text-[#090A28]' : 'text-gray-500'}`}>
                             {emailCount} email{emailCount !== 1 ? 's' : ''} detected
                             {isOverLimit && ' (MAX: 5000)'}
                         </span>
@@ -191,7 +191,7 @@ export default function AboutRevibeeForm() {
                         required
                         disabled={isLoading}
                         rows={10}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#015256] focus:border-transparent transition-colors text-gray-900 bg-white font-mono text-sm disabled:bg-gray-100 disabled:cursor-not-allowed"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#F5970C] focus:border-transparent transition-colors text-gray-900 bg-white font-mono text-sm disabled:bg-gray-100 disabled:cursor-not-allowed"
                         placeholder="customer1@example.com&#10;customer2@example.com&#10;customer3@example.com"
                     />
                     <p className="mt-2 text-xs text-gray-500">
@@ -208,7 +208,7 @@ export default function AboutRevibeeForm() {
                         </div>
                         <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
                             <div
-                                className="bg-[#015256] h-3 rounded-full transition-all duration-300 ease-out"
+                                className="bg-[#090A28] h-3 rounded-full transition-all duration-300 ease-out"
                                 style={{ width: `${(progress.sent / progress.total) * 100}%` }}
                             />
                         </div>
@@ -223,7 +223,7 @@ export default function AboutRevibeeForm() {
                 <button
                     type="submit"
                     disabled={isLoading || emailCount === 0 || isOverLimit}
-                    className="w-full bg-[#015256] text-white py-3 px-6 rounded-lg font-medium hover:bg-[#014245] focus:ring-2 focus:ring-[#015256] focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full bg-[#F5970C] text-[#090A28] py-3 px-6 rounded-lg font-bold hover:bg-[#e08800] focus:ring-2 focus:ring-[#F5970C] focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     {isLoading ? (
                         <div className="flex items-center justify-center">

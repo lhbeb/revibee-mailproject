@@ -1,4 +1,5 @@
 import { getRandomAccount, createTransporter, getAccountByUser } from '../../src/config/emailAccounts';
+import { logEmail } from '../../src/utils/logger';
 import * as cheerio from 'cheerio';
 
 // Reuse the transporter from the shipping email
@@ -12,7 +13,7 @@ import * as cheerio from 'cheerio';
 //       secure: true, // Use SSL
 //       secure: true, // Use SSL
 //       auth: {
-//         user: 'contactrevibee@gmail.com',
+//         user: 'contactdeeldepot@gmail.com',
 //         pass: 'gdui faql dedk yhxg',
 //       },
 //     });
@@ -56,7 +57,7 @@ export default async function handler(req, res) {
         const response = await fetch(productLink, {
           signal: controller.signal,
           headers: {
-            'User-Agent': 'Mozilla/5.0 (compatible; RevibeeBot/1.0;)'
+            'User-Agent': 'Mozilla/5.0 (compatible; DeelDepotBot/1.0;)'
           }
         });
         clearTimeout(timeoutId);
@@ -114,7 +115,7 @@ export default async function handler(req, res) {
     }
     const emailTransporter = createTransporter(account);
 
-    // HTML email template - Revibee.com Branded Design (Table-Based for iOS Support)
+    // HTML email template - DeelDepot.com Branded Design (Table-Based for iOS Support)
     const htmlTemplate = `
       <!DOCTYPE html>
       <html lang="en">
@@ -122,7 +123,7 @@ export default async function handler(req, res) {
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="format-detection" content="telephone=no, date=no, email=no, address=no">
-        <title>Complete Your Purchase - Revibee.com</title>
+        <title>Complete Your Purchase - DeelDepot.com</title>
         <!--[if mso]>
         <noscript>
           <xml>
@@ -139,7 +140,7 @@ export default async function handler(req, res) {
             background-color: #f8f9fa;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             line-height: 1.5;
-            color: #1e293b;
+            color: #090A28;
             -webkit-text-size-adjust: 100%;
             -ms-text-size-adjust: 100%;
           }
@@ -153,7 +154,7 @@ export default async function handler(req, res) {
           }
         </style>
       </head>
-      <body style="margin: 0; padding: 0; background-color: #f8f9fa; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.5; color: #1e293b;">
+      <body style="margin: 0; padding: 0; background-color: #f8f9fa; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.5; color: #090A28;">
         
         <!-- Wrapper Table -->
         <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #f8f9fa;">
@@ -165,7 +166,7 @@ export default async function handler(req, res) {
                 
                 <!-- Header -->
                 <tr class="header">
-                  <td style="background-color: #015256; padding: 40px 32px; text-align: center;">
+                  <td style="background-color: #090A28; padding: 40px 32px; text-align: center;">
                     <h1 style="color: #ffffff; font-size: 28px; font-weight: 700; margin: 0 0 12px 0; line-height: 1.2;">
                       someone 👀 is eyeing your ${productName || 'item'}
                     </h1>
@@ -180,7 +181,7 @@ export default async function handler(req, res) {
                   <td class="content-cell" style="padding: 32px 24px;">
                     
                     <!-- Abandoned Item Card -->
-                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #e2ffa9; border: 1px solid #d4f296; border-radius: 16px; margin-bottom: 32px;">
+                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px; margin-bottom: 32px;">
                       <tr>
                         <td style="padding: 32px; text-align: center;">
                           <!-- Product Image or Icon -->
@@ -206,9 +207,9 @@ export default async function handler(req, res) {
                           <!-- CTA Button -->
                           <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center">
                             <tr>
-                              <td style="background-color: #015256; border-radius: 8px; box-shadow: 0 4px 6px rgba(1, 82, 86, 0.2);">
-                                <a href="${checkoutUrl}" style="display: inline-block; padding: 16px 32px; color: #ffffff; text-decoration: none; font-weight: 600; font-size: 16px; border-radius: 8px; background-color: #015256; border: 1px solid #015256;">
-                                  <span style="color: #ffffff;">Complete Purchase</span>
+                              <td style="background-color: #F5970C; border-radius: 8px; box-shadow: 0 4px 6px rgba(9, 10, 40, 0.2);">
+                                <a href="${checkoutUrl}" style="display: inline-block; padding: 16px 32px; color: #090A28; text-decoration: none; font-weight: 700; font-size: 16px; border-radius: 8px; background-color: #F5970C; border: 1px solid #F5970C;">
+                                  <span style="color: #090A28;">Complete Purchase</span>
                                 </a>
                               </td>
                             </tr>
@@ -222,10 +223,10 @@ export default async function handler(req, res) {
                     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-top: 32px; text-align: center;">
                       <tr>
                         <td style="color: #6b7280; font-size: 14px;">
-                          <p style="margin: 0 0 8px 0;"><strong>Why Revibee.com?</strong></p>
+                          <p style="margin: 0 0 8px 0;"><strong>Why DeelDepot.com?</strong></p>
                           <p style="margin: 0 0 16px 0;">We inspect every item to ensure quality. 30-day returns. Fast shipping.</p>
                           <p style="margin: 0; color: #6b7280; font-size: 14px;">
-                            Questions? Reply here or <a href="https://wa.me/17176484487" style="color: #015256; text-decoration: none;">WhatsApp +1-717-648-4487</a>.
+                            Questions? Reply here or <a href="https://wa.me/17176484487" style="color: #090A28; text-decoration: none;">WhatsApp +1-717-648-4487</a>.
                           </p>
                         </td>
                       </tr>
@@ -244,18 +245,18 @@ export default async function handler(req, res) {
                     <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin-bottom: 24px;">
                       <tr>
                         <td style="padding: 8px 0;">
-                          <a href="mailto:support@revibee.com" style="color: #015256; text-decoration: none; font-weight: 500; font-size: 14px; display: block;">📧 Email Support</a>
+                          <a href="mailto:support@deeldepot.com" style="color: #090A28; text-decoration: none; font-weight: 500; font-size: 14px; display: block;">📧 Email Support</a>
                         </td>
                       </tr>
                       <tr>
                         <td style="padding: 8px 0;">
-                          <a href="tel:+17176484487" style="color: #015256; text-decoration: none; font-weight: 500; font-size: 14px; display: block;">📞 +17176484487</a>
+                          <a href="tel:+17176484487" style="color: #090A28; text-decoration: none; font-weight: 500; font-size: 14px; display: block;">📞 +17176484487</a>
                         </td>
                       </tr>
                     </table>
                     
                     <div style="color: #9ca3af; font-size: 12px; line-height: 1.5;">
-                      © 2025 Revibee.com. All rights reserved.<br>
+                      © 2025 DeelDepot.com. All rights reserved.<br>
                       Thank you for your business.
                     </div>
                   </td>
@@ -287,16 +288,16 @@ export default async function handler(req, res) {
       Need Help?
       If you have any questions about your order, our customer service team is here to help.
       
-      📧 Email Support (support@revibee.com)
+      📧 Email Support (support@deeldepot.com)
       📞 +17176484487
       
-      © 2025 Revibee.com. All rights reserved.
+      © 2025 DeelDepot.com. All rights reserved.
       Thank you for your business.
     `;
 
     // Email options
     const mailOptions = {
-      from: `"Revibee Marketplace" <${account.user}>`,
+      from: `"DeelDepot" <${account.user}>`,
       to: customerEmail,
       subject: `Hey 👋 ${customerName ? `${customerName}, ` : ''}Your ${productName || 'item'} is waiting!`,
       html: htmlTemplate,
@@ -310,6 +311,16 @@ export default async function handler(req, res) {
 
     console.log('Email sent successfully!');
     console.log('Message ID:', info.messageId);
+
+    // Log the sent email
+    logEmail({
+      type: 'Recovery',
+      senderEmail: account.user,
+      recipientEmail: customerEmail,
+      recipientName: customerName,
+      productName: productName,
+      status: 'Success'
+    });
     console.log(`Email sent in ${endTime - startTime}ms`);
 
     res.status(200).json({

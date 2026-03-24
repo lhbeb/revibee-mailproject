@@ -12,7 +12,7 @@ async function testSMTP() {
       port: 465,
       secure: true,
       auth: {
-        user: 'contactrevibee@gmail.com',
+        user: 'contactdeeldepot@gmail.com',
         pass: 'gdui faql dedk yhxg'
       },
       // Increase timeout
@@ -35,7 +35,7 @@ async function testSMTP() {
       port: 587,
       secure: false, // Upgrade later with STARTTLS
       auth: {
-        user: 'contactrevibee@gmail.com',
+        user: 'contactdeeldepot@gmail.com',
         pass: 'gdui faql dedk yhxg'
       },
       tls: {

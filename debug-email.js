@@ -7,7 +7,7 @@ async function testEmail() {
         port: 465,
         secure: true,
         auth: {
-            user: 'contactrevibee@gmail.com',
+            user: 'contactdeeldepot@gmail.com',
             pass: 'gdui faql dedk yhxg',
         },
         debug: true, // Enable debug output
@@ -21,7 +21,7 @@ async function testEmail() {
 
         console.log('3. Sending test email...');
         const info = await transporter.sendMail({
-            from: '"Revibee Marketplace Debug" <contactrevibee@gmail.com>',
+            from: '"DeelDepot Debug" <contactdeeldepot@gmail.com>',
             to: 'elmahboubimehdi@gmail.com',
             subject: 'Debug Test Email',
             text: 'This is a simple test email to verify delivery.',

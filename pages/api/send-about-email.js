@@ -1,4 +1,5 @@
 import { getRandomAccount, createTransporter, getAccountByUser } from '../../src/config/emailAccounts';
+import { logEmail } from '../../src/utils/logger';
 
 // Reuse the transporter
 // let transporter = null;
@@ -10,7 +11,7 @@ import { getRandomAccount, createTransporter, getAccountByUser } from '../../src
 //       port: 465,
 //       secure: true,
 //       auth: {
-//         user: 'contactrevibee@gmail.com',
+//         user: 'contactdeeldepot@gmail.com',
 //         pass: 'pqdc drxx ltlo xapr',
 //       },
 //     });
@@ -39,7 +40,7 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Invalid email format' });
     }
 
-    console.log('=== SENDING ABOUT REVIBEE EMAIL ===');
+    console.log('=== SENDING ABOUT DEELDEPOT EMAIL ===');
     console.log('Customer Email:', customerEmail);
     // Get the email transporter
     // const emailTransporter = getTransporter();
@@ -58,7 +59,7 @@ export default async function handler(req, res) {
     }
     const emailTransporter = createTransporter(account);
 
-    // Comprehensive About Revibee HTML Template
+    // Comprehensive About DeelDepot HTML Template
     const htmlTemplate = `
       <!DOCTYPE html>
       <html lang="en">
@@ -74,7 +75,7 @@ export default async function handler(req, res) {
             background-color: #f8f9fa;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             line-height: 1.6;
-            color: #1e293b;
+            color: #090A28;
             -webkit-text-size-adjust: 100%;
             -ms-text-size-adjust: 100%;
           }
@@ -171,7 +172,7 @@ export default async function handler(req, res) {
                 <tr>
                   <td style="background-color: #ffffff; padding: 48px 32px; text-align: center; border-bottom: 1px solid #f1f5f9;">
                     <div style="display: inline-block; margin-bottom: 24px;">
-                      <img src="cid:happydeellogo" alt="Revibee" width="180" style="display: block; border: 0; max-width: 100%; height: auto;">
+                      <img src="cid:happydeellogo" alt="DeelDepot" width="180" style="display: block; border: 0; max-width: 100%; height: auto;">
                     </div>
                     
                   </td>
@@ -181,7 +182,7 @@ export default async function handler(req, res) {
               
                 <!-- Headline Question -->
                 <tr>
-                  <td style="padding: 24px 32px; text-align: center; background-color: #015256;">
+                  <td style="padding: 24px 32px; text-align: center; background-color: #090A28;">
                     <h1 style="color: #ffffff; font-size: 24px; font-weight: 700; margin: 0;">
                       How do we keep our prices low?
                     </h1>
@@ -196,11 +197,11 @@ export default async function handler(req, res) {
                       Premium products below retail. Here's how we do it.
                     </p>
                     
-                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #e2ffa9; border-left: 4px solid #015256; border-radius: 8px; margin: 24px 0;">
+                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #f8fafc; border-left: 4px solid #090A28; border-radius: 8px; margin: 24px 0;">
                       <tr>
                         <td style="padding: 20px;">
-                          <p style="color: #015256; font-size: 18px; font-weight: 600; margin: 0 0 8px 0;">Our Mission</p>
-                          <p style="color: #015256; font-size: 18px; margin: 0; line-height: 1.6;">
+                          <p style="color: #090A28; font-size: 18px; font-weight: 600; margin: 0 0 8px 0;">Our Mission</p>
+                          <p style="color: #090A28; font-size: 18px; margin: 0; line-height: 1.6;">
                             Make premium products accessible to everyone without inflated retail costs.
                           </p>
                         </td>
@@ -208,8 +209,8 @@ export default async function handler(req, res) {
                     </table>
 
                     <div style="text-align: center; margin: 32px 0;">
-                      <a href="https://www.revibee.com" style="background-color: #015256; color: #ffffff; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 18px; display: inline-block; box-shadow: 0 4px 6px -1px rgba(1, 82, 86, 0.5);">
-                        Visit Revibee
+                      <a href="https://www.deeldepot.com" style="background-color: #F5970C; color: #090A28; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 18px; display: inline-block; box-shadow: 0 4px 6px -1px rgba(9, 10, 40, 0.5);">
+                        Visit DeelDepot
                       </a>
                     </div>
                   </td>
@@ -218,7 +219,7 @@ export default async function handler(req, res) {
                 <!-- How We Keep Prices Low -->
                 <tr>
                   <td style="padding: 0 32px 32px 32px;">
-                    <h2 style="color: #015256; font-size: 24px; font-weight: 700; margin: 0 0 24px 0; text-align: center;">
+                    <h2 style="color: #090A28; font-size: 24px; font-weight: 700; margin: 0 0 24px 0; text-align: center;">
                       How We Keep Prices Low
                     </h2>
                     
@@ -233,10 +234,10 @@ export default async function handler(req, res) {
                           <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                             <tr>
                               <td style="width: 40px; vertical-align: top;">
-                                <div style="width: 32px; height: 32px; background-color: #015256; border-radius: 50%; text-align: center; line-height: 32px; color: #ffffff; font-weight: 700; font-size: 18px;">1</div>
+                                <div style="width: 32px; height: 32px; background-color: #090A28; border-radius: 50%; text-align: center; line-height: 32px; color: #ffffff; font-weight: 700; font-size: 18px;">1</div>
                               </td>
                               <td style="vertical-align: top;">
-                                <h3 style="color: #015256; font-size: 17px; font-weight: 600; margin: 0 0 8px 0;">Daily wins in online auctions</h3>
+                                <h3 style="color: #090A28; font-size: 17px; font-weight: 600; margin: 0 0 8px 0;">Daily wins in online auctions</h3>
                                 <p style="color: #64748b; font-size: 16px; margin: 0; line-height: 1.6;">We participate in high-volume auctions across multiple platforms. Buying in bulk before items reach regular marketplaces lets us secure lower costs and pass those savings on to you.</p>
                               </td>
                             </tr>
@@ -252,10 +253,10 @@ export default async function handler(req, res) {
                           <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                             <tr>
                               <td style="width: 40px; vertical-align: top;">
-                                <div style="width: 32px; height: 32px; background-color: #015256; border-radius: 50%; text-align: center; line-height: 32px; color: #ffffff; font-weight: 700; font-size: 18px;">2</div>
+                                <div style="width: 32px; height: 32px; background-color: #090A28; border-radius: 50%; text-align: center; line-height: 32px; color: #ffffff; font-weight: 700; font-size: 18px;">2</div>
                               </td>
                               <td style="vertical-align: top;">
-                                <h3 style="color: #015256; font-size: 17px; font-weight: 600; margin: 0 0 8px 0;">Direct deals across online marketplaces</h3>
+                                <h3 style="color: #090A28; font-size: 17px; font-weight: 600; margin: 0 0 8px 0;">Direct deals across online marketplaces</h3>
                                 <p style="color: #64748b; font-size: 16px; margin: 0; line-height: 1.6;">Our team searches Facebook Marketplace, OfferUp, eBay, Kleinanzeigen, and other platforms. By negotiating directly with private sellers, we consistently find high-value deals.</p>
                               </td>
                             </tr>
@@ -271,12 +272,12 @@ export default async function handler(req, res) {
                           <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                             <tr>
                               <td style="width: 40px; vertical-align: top;">
-                                <div style="width: 32px; height: 32px; background-color: #015256; border-radius: 50%; text-align: center; line-height: 32px; color: #ffffff; font-weight: 700; font-size: 18px;">3</div>
+                                <div style="width: 32px; height: 32px; background-color: #090A28; border-radius: 50%; text-align: center; line-height: 32px; color: #ffffff; font-weight: 700; font-size: 18px;">3</div>
                               </td>
                               <td style="vertical-align: top;">
-                                <h3 style="color: #015256; font-size: 17px; font-weight: 600; margin: 0 0 8px 0;">Partnerships with major retailers’ return & liquidation departments</h3>
+                                <h3 style="color: #090A28; font-size: 17px; font-weight: 600; margin: 0 0 8px 0;">Partnerships with major retailers’ return & liquidation departments</h3>
                                 <p style="color: #64748b; font-size: 16px; margin: 0 0 8px 0; line-height: 1.6;">We purchase overstock, open-box items, shelf pulls, refurbished pieces, and customer returns from companies such as Amazon, Best Buy, Target, and others.</p>
-                                <p style="color: #015256; font-size: 13px; margin: 0; font-weight: 600;">Every item is inspected, tested, cleaned, or refurbished before being listed.</p>
+                                <p style="color: #090A28; font-size: 13px; margin: 0; font-weight: 600;">Every item is inspected, tested, cleaned, or refurbished before being listed.</p>
                               </td>
                             </tr>
                           </table>
@@ -291,10 +292,10 @@ export default async function handler(req, res) {
                           <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                             <tr>
                               <td style="width: 40px; vertical-align: top;">
-                                <div style="width: 32px; height: 32px; background-color: #015256; border-radius: 50%; text-align: center; line-height: 32px; color: #ffffff; font-weight: 700; font-size: 18px;">4</div>
+                                <div style="width: 32px; height: 32px; background-color: #090A28; border-radius: 50%; text-align: center; line-height: 32px; color: #ffffff; font-weight: 700; font-size: 18px;">4</div>
                               </td>
                               <td style="vertical-align: top;">
-                                <h3 style="color: #015256; font-size: 17px; font-weight: 600; margin: 0 0 8px 0;">Local deal hunting</h3>
+                                <h3 style="color: #090A28; font-size: 17px; font-weight: 600; margin: 0 0 8px 0;">Local deal hunting</h3>
                                 <p style="color: #64748b; font-size: 16px; margin: 0; line-height: 1.6;">We regularly visit auctions, garage sales, estate sales, wholesalers, and liquidation centers. This helps us find items you often won’t see in traditional stores.</p>
                               </td>
                             </tr>
@@ -310,10 +311,10 @@ export default async function handler(req, res) {
                           <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                             <tr>
                               <td style="width: 40px; vertical-align: top;">
-                                <div style="width: 32px; height: 32px; background-color: #015256; border-radius: 50%; text-align: center; line-height: 32px; color: #ffffff; font-weight: 700; font-size: 18px;">5</div>
+                                <div style="width: 32px; height: 32px; background-color: #090A28; border-radius: 50%; text-align: center; line-height: 32px; color: #ffffff; font-weight: 700; font-size: 18px;">5</div>
                               </td>
                               <td style="vertical-align: top;">
-                                <h3 style="color: #015256; font-size: 17px; font-weight: 600; margin: 0 0 8px 0;">Fair margins, fast turnover</h3>
+                                <h3 style="color: #090A28; font-size: 17px; font-weight: 600; margin: 0 0 8px 0;">Fair margins, fast turnover</h3>
                                 <p style="color: #64748b; font-size: 16px; margin: 0; line-height: 1.6;">Instead of adding heavy markups, we focus on reasonable pricing and steady rotation of inventory.</p>
                               </td>
                             </tr>
@@ -330,7 +331,7 @@ export default async function handler(req, res) {
                     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;">
                       <tr>
                         <td style="padding: 32px;">
-                          <h2 style="color: #015256; font-size: 22px; font-weight: 700; margin: 0 0 16px 0;">
+                          <h2 style="color: #090A28; font-size: 22px; font-weight: 700; margin: 0 0 16px 0;">
                             🤝 A Recent Addition: Approved Private Sellers
                           </h2>
                           <p style="color: #374151; font-size: 17px; line-height: 1.7; margin: 0 0 16px 0;">
@@ -339,7 +340,7 @@ export default async function handler(req, res) {
                           <p style="color: #374151; font-size: 17px; line-height: 1.7; margin: 0 0 16px 0;">
                             They ship their items to our warehouse, where our inspection team performs a complete check:
                           </p>
-                          <ul style="color: #015256; font-size: 16px; margin: 0 0 16px 20px; padding: 0;">
+                          <ul style="color: #090A28; font-size: 16px; margin: 0 0 16px 20px; padding: 0;">
                             <li style="margin-bottom: 8px;">✓ Authentic condition</li>
                             <li style="margin-bottom: 8px;">✓ Full functionality</li>
                             <li style="margin-bottom: 8px;">✓ Pricing aligned with real market value</li>
@@ -356,7 +357,7 @@ export default async function handler(req, res) {
                 <!-- What Makes Us Different -->
                 <tr>
                   <td style="padding: 0 32px 32px 32px;">
-                    <h2 style="color: #015256; font-size: 24px; font-weight: 700; margin: 0 0 24px 0; text-align: center;">
+                    <h2 style="color: #090A28; font-size: 24px; font-weight: 700; margin: 0 0 24px 0; text-align: center;">
                       What Makes Us Different
                     </h2>
                     
@@ -369,7 +370,7 @@ export default async function handler(req, res) {
                                 <span style="font-size: 20px;">✨</span>
                               </td>
                               <td>
-                                <h3 style="color: #015256; font-size: 18px; font-weight: 600; margin: 0 0 4px 0;">Curated Inventory</h3>
+                                <h3 style="color: #090A28; font-size: 18px; font-weight: 600; margin: 0 0 4px 0;">Curated Inventory</h3>
                                 <p style="color: #64748b; font-size: 16px; margin: 0; line-height: 1.6;">Every product goes through a full inspection before shipping.</p>
                               </td>
                             </tr>
@@ -384,7 +385,7 @@ export default async function handler(req, res) {
                                 <span style="font-size: 20px;">📋</span>
                               </td>
                               <td>
-                                <h3 style="color: #015256; font-size: 18px; font-weight: 600; margin: 0 0 4px 0;">Clear Product Details</h3>
+                                <h3 style="color: #090A28; font-size: 18px; font-weight: 600; margin: 0 0 4px 0;">Clear Product Details</h3>
                                 <p style="color: #64748b; font-size: 16px; margin: 0; line-height: 1.6;">We always specify whether an item is new, open box, refurbished, or pre-owned.</p>
                               </td>
                             </tr>
@@ -399,7 +400,7 @@ export default async function handler(req, res) {
                                 <span style="font-size: 20px;">💎</span>
                               </td>
                               <td>
-                                <h3 style="color: #015256; font-size: 18px; font-weight: 600; margin: 0 0 4px 0;">Great Value</h3>
+                                <h3 style="color: #090A28; font-size: 18px; font-weight: 600; margin: 0 0 4px 0;">Great Value</h3>
                                 <p style="color: #64748b; font-size: 16px; margin: 0; line-height: 1.6;">We constantly compare and track market prices to make sure listings offer real savings.</p>
                               </td>
                             </tr>
@@ -414,7 +415,7 @@ export default async function handler(req, res) {
                                 <span style="font-size: 20px;">🎯</span>
                               </td>
                               <td>
-                                <h3 style="color: #015256; font-size: 18px; font-weight: 600; margin: 0 0 4px 0;">Customer Support</h3>
+                                <h3 style="color: #090A28; font-size: 18px; font-weight: 600; margin: 0 0 4px 0;">Customer Support</h3>
                                 <p style="color: #64748b; font-size: 16px; margin: 0; line-height: 1.6;">Fast, free shipping within the U.S. and Canada, a 30-day return policy, and responsive human support.</p>
                               </td>
                             </tr>
@@ -429,7 +430,7 @@ export default async function handler(req, res) {
                                 <span style="font-size: 20px;">♻️</span>
                               </td>
                               <td>
-                                <h3 style="color: #015256; font-size: 18px; font-weight: 600; margin: 0 0 4px 0;">Sustainable Shopping</h3>
+                                <h3 style="color: #090A28; font-size: 18px; font-weight: 600; margin: 0 0 4px 0;">Sustainable Shopping</h3>
                                 <p style="color: #64748b; font-size: 16px; margin: 0; line-height: 1.6;">By reselling returns, overstock, and refurbished goods, you help reduce waste and support a more sustainable buying cycle.</p>
                               </td>
                             </tr>
@@ -443,7 +444,7 @@ export default async function handler(req, res) {
                 <!-- Company Stats -->
                 <tr>
                   <td style="padding: 0 32px 32px 32px;">
-                    <h2 style="color: #015256; font-size: 24px; font-weight: 700; margin: 0 0 24px 0; text-align: center;">
+                    <h2 style="color: #090A28; font-size: 24px; font-weight: 700; margin: 0 0 24px 0; text-align: center;">
                       Company Stats
                     </h2>
                     
@@ -455,10 +456,10 @@ export default async function handler(req, res) {
                       <td valign="top" width="25%">
                       <![endif]-->
                       <div style="display: inline-block; width: 100%; max-width: 140px; vertical-align: top; margin-bottom: 16px;">
-                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #e2ffa9; border-radius: 12px; text-align: center; padding: 16px; border: 2px solid #015256;">
+                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #f8fafc; border-radius: 12px; text-align: center; padding: 16px; border: 2px solid #090A28;">
                           <tr>
                             <td>
-                              <div style="font-size: 28px; font-weight: 700; color: #015256; margin-bottom: 4px;">5000+</div>
+                              <div style="font-size: 28px; font-weight: 700; color: #090A28; margin-bottom: 4px;">5000+</div>
                               <div style="font-size: 13px; color: #64748b; font-weight: 500;">Happy Customers</div>
                             </td>
                           </tr>
@@ -469,10 +470,10 @@ export default async function handler(req, res) {
                       <td valign="top" width="25%">
                       <![endif]-->
                       <div style="display: inline-block; width: 100%; max-width: 140px; vertical-align: top; margin-bottom: 16px;">
-                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #e2ffa9; border-radius: 12px; text-align: center; padding: 16px; border: 2px solid #015256;">
+                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #f8fafc; border-radius: 12px; text-align: center; padding: 16px; border: 2px solid #090A28;">
                           <tr>
                             <td>
-                              <div style="font-size: 28px; font-weight: 700; color: #015256; margin-bottom: 4px;">1000+</div>
+                              <div style="font-size: 28px; font-weight: 700; color: #090A28; margin-bottom: 4px;">1000+</div>
                               <div style="font-size: 13px; color: #64748b; font-weight: 500;">Products Sold</div>
                             </td>
                           </tr>
@@ -483,10 +484,10 @@ export default async function handler(req, res) {
                       <td valign="top" width="25%">
                       <![endif]-->
                       <div style="display: inline-block; width: 100%; max-width: 140px; vertical-align: top; margin-bottom: 16px;">
-                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #e2ffa9; border-radius: 12px; text-align: center; padding: 16px; border: 2px solid #015256;">
+                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #f8fafc; border-radius: 12px; text-align: center; padding: 16px; border: 2px solid #090A28;">
                           <tr>
                             <td>
-                              <div style="font-size: 28px; font-weight: 700; color: #015256; margin-bottom: 4px;">99%</div>
+                              <div style="font-size: 28px; font-weight: 700; color: #090A28; margin-bottom: 4px;">99%</div>
                               <div style="font-size: 13px; color: #64748b; font-weight: 500;">Satisfaction Rate</div>
                             </td>
                           </tr>
@@ -497,10 +498,10 @@ export default async function handler(req, res) {
                       <td valign="top" width="25%">
                       <![endif]-->
                       <div style="display: inline-block; width: 100%; max-width: 140px; vertical-align: top; margin-bottom: 16px;">
-                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #e2ffa9; border-radius: 12px; text-align: center; padding: 16px; border: 2px solid #015256;">
+                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #f8fafc; border-radius: 12px; text-align: center; padding: 16px; border: 2px solid #090A28;">
                           <tr>
                             <td>
-                              <div style="font-size: 28px; font-weight: 700; color: #015256; margin-bottom: 4px;">24/7</div>
+                              <div style="font-size: 28px; font-weight: 700; color: #090A28; margin-bottom: 4px;">24/7</div>
                               <div style="font-size: 13px; color: #64748b; font-weight: 500;">Support Available</div>
                             </td>
                           </tr>
@@ -518,32 +519,32 @@ export default async function handler(req, res) {
                 <!-- Contact Information -->
                 <tr>
                   <td style="background-color: #f8fafc; padding: 32px; border-top: 1px solid #e5e7eb;">
-                    <h2 style="color: #015256; font-size: 22px; font-weight: 700; margin: 0 0 20px 0; text-align: center;">
+                    <h2 style="color: #090A28; font-size: 22px; font-weight: 700; margin: 0 0 20px 0; text-align: center;">
                       📞 Contact Information
                     </h2>
                     
                     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                       <tr>
                         <td style="padding: 12px 0;">
-                          <strong style="color: #015256; font-size: 16px;">Address:</strong><br>
+                          <strong style="color: #090A28; font-size: 16px;">Address:</strong><br>
                           <span style="color: #64748b; font-size: 16px;">1420 N McKinley Ave, Los Angeles, CA 90059, United States</span>
                         </td>
                       </tr>
                       <tr>
                         <td style="padding: 12px 0;">
-                          <strong style="color: #015256; font-size: 16px;">Phone:</strong><br>
-                          <a href="tel:+17176484487" style="color: #015256; text-decoration: none; font-size: 16px;">+1 717 648 4487</a>
+                          <strong style="color: #090A28; font-size: 16px;">Phone:</strong><br>
+                          <a href="tel:+17176484487" style="color: #090A28; text-decoration: none; font-size: 16px;">+1 717 648 4487</a>
                         </td>
                       </tr>
                       <tr>
                         <td style="padding: 12px 0;">
-                          <strong style="color: #015256; font-size: 16px;">Email:</strong><br>
-                          <a href="mailto:contactrevibee@gmail.com" style="color: #015256; text-decoration: none; font-size: 16px;">contactrevibee@gmail.com</a>
+                          <strong style="color: #090A28; font-size: 16px;">Email:</strong><br>
+                          <a href="mailto:contactdeeldepot@gmail.com" style="color: #090A28; text-decoration: none; font-size: 16px;">contactdeeldepot@gmail.com</a>
                         </td>
                       </tr>
                       <tr>
                         <td style="padding: 12px 0;">
-                          <strong style="color: #015256; font-size: 16px;">Business Hours:</strong><br>
+                          <strong style="color: #090A28; font-size: 16px;">Business Hours:</strong><br>
                           <span style="color: #64748b; font-size: 16px;">Monday to Friday, 9:00 AM - 5:00 PM EST</span><br>
                           <span style="color: #64748b; font-size: 16px;">Saturday, 10:00 AM - 3:00 PM EST</span><br>
                           <span style="color: #64748b; font-size: 16px;">Sunday, Closed</span>
@@ -553,8 +554,8 @@ export default async function handler(req, res) {
                     
                     <div style="text-align: center; margin-top: 24px; padding-top: 24px; border-top: 1px solid #e2e8f0;">
                       <p style="color: #9ca3af; font-size: 12px; margin: 0;">
-                        © 2025 Revibee. All rights reserved.<br>
-                        Thank you for choosing Revibee!<br>
+                        © 2025 DeelDepot. All rights reserved.<br>
+                        Thank you for choosing DeelDepot!<br>
                         <span style="color: #cbd5e1; font-size: 10px;">Ref ID: ${Date.now()}</span>
                       </p>
                     </div>
@@ -577,7 +578,7 @@ export default async function handler(req, res) {
       
       Hello,
       
-      Welcome to Revibee - a place where shoppers can find quality products at fair, transparent prices. We offer a curated mix of electronics, photography gear, fashion, bicycles, tools, home equipment, and more.
+      Welcome to DeelDepot - a place where shoppers can find quality products at fair, transparent prices. We offer a curated mix of electronics, photography gear, fashion, bicycles, tools, home equipment, and more.
       
       OUR MISSION
       Make premium products accessible to everyone without inflated retail costs.
@@ -624,15 +625,15 @@ export default async function handler(req, res) {
       CONTACT INFORMATION
       Address: 1420 N McKinley Ave, Los Angeles, CA 90059, United States
       Phone: +1 717 648 4487
-      Email: contactrevibee@gmail.com
+      Email: contactdeeldepot@gmail.com
       
       Business Hours:
       Mon-Fri: 9:00 AM - 5:00 PM EST
       Saturday: 10:00 AM - 3:00 PM EST
       Sunday: Closed
       
-      © 2025 Revibee. All rights reserved.
-      Thank you for choosing Revibee!
+      © 2025 DeelDepot. All rights reserved.
+      Thank you for choosing DeelDepot!
       
       Ref ID: ${Date.now()}
     `;
@@ -640,22 +641,22 @@ export default async function handler(req, res) {
     // Construct absolute URL for logo
     const protocol = req.headers['x-forwarded-proto'] || 'http';
     const host = req.headers.host;
-    const logoUrl = `${protocol}://${host}/revibee_logo.svg`;
+    const logoUrl = `${protocol}://${host}/deeldepot_logo.svg`;
 
     const mailOptions = {
-      from: `"Revibee Marketplace" <contactrevibee@gmail.com>`,
+      from: `"DeelDepot" <contactdeeldepot@gmail.com>`,
       to: customerEmail,
       subject: `How do we keep our prices low? ✨ 🛍️`,
       html: htmlTemplate.replace(
         /src="[^"]*"/,
-        'src="cid:revibeelogo"'
+        'src="cid:deeldepotlogo"'
       ),
       text: textTemplate,
       attachments: [
         {
           filename: 'logo.svg',
           path: logoUrl,
-          cid: 'revibeelogo' // same cid value as in the html img src
+          cid: 'deeldepotlogo' // same cid value as in the html img src
         }
       ]
     };
@@ -666,11 +667,21 @@ export default async function handler(req, res) {
 
     console.log('About email sent successfully!');
     console.log('Message ID:', info.messageId);
+
+    // Log the sent email
+    logEmail({
+      type: 'Marketing',
+      senderEmail: account.user,
+      recipientEmail: customerEmail,
+      recipientName: 'Customer',
+      productName: 'About DeelDepot',
+      status: 'Success'
+    });
     console.log(`Email sent in ${endTime - startTime}ms`);
 
     res.status(200).json({
       success: true,
-      message: 'About Revibee email sent successfully!',
+      message: 'About DeelDepot email sent successfully!',
       messageId: info.messageId
     });
 

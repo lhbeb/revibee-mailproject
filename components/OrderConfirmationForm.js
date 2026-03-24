@@ -4,12 +4,9 @@ import { useState, useEffect } from 'react';
 
 export default function OrderConfirmationForm() {
   const [formData, setFormData] = useState({
-    customerName: '',
-    customerEmail: '',
-    customerAddress: '',
-    productName: '',
     senderEmail: ''
   });
+  const [rawData, setRawData] = useState('');
 
   const [accounts, setAccounts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -45,12 +42,26 @@ export default function OrderConfirmationForm() {
     setMessage({ type: '', content: '' });
 
     try {
+      const lines = rawData.split('\n').map(line => line.trim()).filter(line => line);
+      const productLine = lines[0] || '';
+      const email = lines[1] || '';
+      const name = lines[2] || '';
+      const address = lines[3] || '';
+
+      const payload = {
+        customerEmail: email,
+        customerName: name,
+        customerAddress: address,
+        productName: productLine,
+        ...formData
+      };
+
       const response = await fetch('/api/send-order-confirmation', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(payload),
       });
 
       const result = await response.json();
@@ -61,11 +72,9 @@ export default function OrderConfirmationForm() {
           content: 'Order confirmation sent successfully! 🎉'
         });
         // Reset form
+        // Reset form
+        setRawData('');
         setFormData({
-          customerName: '',
-          customerEmail: '',
-          customerAddress: '',
-          productName: '',
           senderEmail: formData.senderEmail // Preserve selection
         });
       } else {
@@ -114,60 +123,25 @@ export default function OrderConfirmationForm() {
           <p className="mt-1 text-xs text-gray-500">Leave as "Random" to let the system choose.</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Customer Name */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Customer Name</label>
-            <input
-              type="text"
-              name="customerName"
-              value={formData.customerName}
-              onChange={handleInputChange}
-              required
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent"
-            />
+        {/* Order Details Paste Block */}
+        <div>
+          <div className="flex justify-between mb-2">
+            <label htmlFor="rawData" className="block text-sm font-medium text-gray-700">
+              Order Details (Paste Block) *
+            </label>
+            <span className="text-xs text-gray-400">Line 1: Product | Line 2: Email | Line 3: Name | Line 4: Address | Line 5: Link</span>
           </div>
-
-          {/* Customer Email */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Customer Email</label>
-            <input
-              type="email"
-              name="customerEmail"
-              value={formData.customerEmail}
-              onChange={handleInputChange}
-              required
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent"
-            />
-          </div>
-
-          {/* Customer Address */}
-          <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Customer Address</label>
-            <input
-              type="text"
-              name="customerAddress"
-              value={formData.customerAddress}
-              onChange={handleInputChange}
-              required
-              placeholder="123 Main St, City, Country"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent"
-            />
-          </div>
-
-          {/* Product Name */}
-          <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Product Name</label>
-            <input
-              type="text"
-              name="productName"
-              value={formData.productName}
-              onChange={handleInputChange}
-              required
-              placeholder="e.g. Premium Widget"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent"
-            />
-          </div>
+          <textarea
+            id="rawData"
+            name="rawData"
+            value={rawData}
+            onChange={(e) => setRawData(e.target.value)}
+            required
+            rows={6}
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent transition duration-200 ease-in-out text-gray-900 bg-white resize-y font-mono text-sm leading-relaxed"
+            placeholder="Product Name : $Price&#10;customer@example.com&#10;John Doe&#10;123 Address St, City, ST 12345&#10;https://deeldepot.com/product/..."
+            disabled={isLoading}
+          />
         </div>
 
         {/* Submit Button */}

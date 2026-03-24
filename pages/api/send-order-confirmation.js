@@ -1,4 +1,5 @@
 import { getRandomAccount, createTransporter, getAccountByUser } from '../../src/config/emailAccounts';
+import { logEmail } from '../../src/utils/logger';
 
 export default async function handler(req, res) {
   // Only allow POST requests
@@ -38,7 +39,7 @@ export default async function handler(req, res) {
       <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Order Confirmation - Revibee.com</title>
+        <title>Order Confirmation - DeelDepot.com</title>
         <style>
           /* Reset */
           * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -63,14 +64,14 @@ export default async function handler(req, res) {
           
           /* Header */
           .header { 
-            background: linear-gradient(135deg, #015256 0%, #015256 100%); 
+            background: linear-gradient(135deg, #090A28 0%, #090A28 100%); 
             color: white; 
             padding: 48px 32px; 
             text-align: center; 
             position: relative;
           }
           /* Fallback background for clients that don't support gradients well */
-          .header { background-color: #015256; }
+          .header { background-color: #090A28; }
 
           .header-title { 
             font-size: 32px; 
@@ -107,7 +108,7 @@ export default async function handler(req, res) {
             width: 64px;
             height: 64px;
             line-height: 64px; /* Vertically center text */
-            background-color: #015256; /* Solid color fallback */
+            background-color: #090A28; /* Solid color fallback */
             border-radius: 50%;
             display: inline-block; /* Better structure */
             text-align: center; /* Horizontally center text */
@@ -160,7 +161,7 @@ export default async function handler(req, res) {
             padding: 12px;
             background: #f8fafc;
             border-radius: 8px;
-            border-left: 3px solid #015256;
+            border-left: 3px solid #090A28;
           }
           .step-table {
             width: 100%;
@@ -173,7 +174,7 @@ export default async function handler(req, res) {
           
           /* Step Number - Fixed centering */
           .step-number {
-            background: #015256;
+            background: #090A28;
             color: white;
             width: 24px;
             height: 24px;
@@ -194,20 +195,20 @@ export default async function handler(req, res) {
           
           /* Delivery Info */
           .delivery-info {
-            background: #e2ffa9;
-            border: 1px solid #d4f296;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
             border-radius: 12px;
             padding: 24px;
             margin-bottom: 32px;
           }
           .delivery-info h3 {
-            color: #015256;
+            color: #090A28;
             font-size: 16px;
             font-weight: 600;
             margin-bottom: 8px;
           }
           .delivery-info p {
-            color: #1e293b;
+            color: #090A28;
             font-size: 14px;
             margin: 0;
           }
@@ -239,7 +240,7 @@ export default async function handler(req, res) {
             margin-bottom: 8px;
           }
           .contact-link { 
-            color: #015256; 
+            color: #090A28; 
             text-decoration: none;  
             font-weight: 500; 
             font-size: 14px;
@@ -332,7 +333,7 @@ export default async function handler(req, res) {
               
               <div class="contact-info">
                 <div class="contact-link-wrapper">
-                  <a href="mailto:contactrevibee@gmail.com" class="contact-link">📧 Email Support</a>
+                  <a href="mailto:contactdeeldepot@gmail.com" class="contact-link">📧 Email Support</a>
                 </div>
                 <div class="contact-link-wrapper">
                   <a href="tel:+17176484487" class="contact-link">📞 +17176484487</a>
@@ -340,7 +341,7 @@ export default async function handler(req, res) {
               </div>
               
               <div class="copyright">
-                © 2024 Revibee.com. All rights reserved.<br>
+                © 2024 DeelDepot.com. All rights reserved.<br>
                 The smart way to buy quality items — for less.
               </div>
             </div>
@@ -360,14 +361,14 @@ export default async function handler(req, res) {
       
       Shipping To: ${customerAddress || 'Address not provided'}
       
-      Questions? Email contactrevibee@gmail.com
+      Questions? Email contactdeeldepot@gmail.com
       
-      © 2024 Revibee.com. All rights reserved.
+      © 2024 DeelDepot.com. All rights reserved.
     `;
 
     // Email options
     const mailOptions = {
-      from: `"Revibee Marketplace" <${account.user}>`,
+      from: `"DeelDepot" <${account.user}>`,
       to: customerEmail,
       subject: `Order Confirmation - ${productName} 🎉`,
       html: htmlTemplate,
@@ -378,6 +379,16 @@ export default async function handler(req, res) {
     const startTime = Date.now();
     const info = await emailTransporter.sendMail(mailOptions);
     const endTime = Date.now();
+
+    // Log the sent email
+    logEmail({
+      type: 'Confirmation',
+      senderEmail: account.user,
+      recipientEmail: customerEmail,
+      recipientName: customerName,
+      productName: productName,
+      status: 'Success'
+    });
 
     console.log('Email sent successfully!');
     console.log('Message ID:', info.messageId);

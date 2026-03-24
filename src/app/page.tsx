@@ -8,7 +8,7 @@ import RecoveryEmail1Form from '../../components/RecoveryEmail1Form';
 import RecoveryEmail2Form from '../../components/RecoveryEmail2Form';
 import RecoveryEmail3Form from '../../components/RecoveryEmail3Form';
 import AboutHappyDeelForm from '../../components/AboutHappyDeelForm';
-import EmailPreview from '../../components/EmailPreview';
+
 import LoginForm from '../../components/LoginForm';
 
 export default function Home() {
@@ -73,7 +73,7 @@ export default function Home() {
 
   // Informational Emails (Marketing/Educational)
   const informationalTabs = [
-    { id: 'about', label: 'About Us Revibee Email (TBAT)', icon: '🏪' },
+    { id: 'about', label: 'About Us DeelDepot Email (TBAT)', icon: '🏪' },
   ];
 
   const allTabs = [...transactionalTabs, ...recoveryTabs, ...informationalTabs];
@@ -82,7 +82,7 @@ export default function Home() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-teal-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-4 border-[#015256] border-t-transparent mx-auto"></div>
+          <div className="animate-spin rounded-full h-16 w-16 border-4 border-[#F5970C] border-t-transparent mx-auto"></div>
           <p className="mt-4 text-slate-600 font-medium">Loading dashboard...</p>
         </div>
       </div>
@@ -117,7 +117,7 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-slate-50 via-teal-50 to-slate-50">
       {/* Enhanced Header with Gradient */}
-      <header className="bg-[#015256] shadow-lg">
+      <header className="bg-[#090A28] shadow-lg">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-5">
             <div className="flex items-center gap-4">
@@ -125,19 +125,7 @@ export default function Home() {
             </div>
 
             <div className="flex items-center gap-4">
-              <button
-                onClick={() => setActiveTab(activeTab === 'preview' ? 'tracking' : 'preview')}
-                className={`
-                  hidden sm:flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all
-                  ${activeTab === 'preview'
-                    ? 'bg-white text-[#015256] shadow-md ring-2 ring-[#015256] ring-offset-2 ring-offset-[#015256]'
-                    : 'bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm'
-                  }
-                `}
-              >
-                <span>{activeTab === 'preview' ? '🔙' : '👁️'}</span>
-                <span>{activeTab === 'preview' ? 'Exit Preview' : 'Preview Mode'}</span>
-              </button>
+
 
               <div className="hidden sm:flex items-center gap-3 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg">
                 <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center text-white font-semibold">
@@ -162,7 +150,6 @@ export default function Home() {
         <div className="max-w-7xl mx-auto">
           {/* Modern Pill-Style Tabs */}
           <div className="bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden animate-slide-in">
-            {activeTab !== 'preview' && (
               <div className="bg-gradient-to-r from-slate-50 to-teal-50 px-6 py-6 border-b border-slate-200">
                 <nav className="flex flex-col gap-6" aria-label="Email Types">
                   {/* Transactional Section */}
@@ -177,8 +164,8 @@ export default function Home() {
                             flex items-center gap-2 px-5 py-3 rounded-xl font-medium text-sm
                             transition-all duration-200 transform
                             ${activeTab === tab.id
-                              ? 'bg-[#015256] text-white shadow-lg shadow-[#015256]/30 scale-105'
-                              : 'bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900 hover:shadow-md hover:scale-102'
+                              ? 'bg-[#F5970C] text-[#090A28] font-bold shadow-lg shadow-[#F5970C]/40 scale-105'
+                              : 'bg-white text-slate-600 hover:bg-orange-50 hover:text-[#090A28] hover:shadow-md hover:scale-102'
                             }
                           `}
                         >
@@ -201,8 +188,8 @@ export default function Home() {
                             flex items-center gap-2 px-5 py-3 rounded-xl font-medium text-sm
                             transition-all duration-200 transform
                             ${activeTab === tab.id
-                              ? 'bg-[#015256] text-white shadow-lg shadow-[#015256]/30 scale-105'
-                              : 'bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900 hover:shadow-md hover:scale-102'
+                              ? 'bg-[#F5970C] text-[#090A28] font-bold shadow-lg shadow-[#F5970C]/40 scale-105'
+                              : 'bg-white text-slate-600 hover:bg-orange-50 hover:text-[#090A28] hover:shadow-md hover:scale-102'
                             }
                           `}
                         >
@@ -225,8 +212,8 @@ export default function Home() {
                             flex items-center gap-2 px-5 py-3 rounded-xl font-medium text-sm
                             transition-all duration-200 transform
                             ${activeTab === tab.id
-                              ? 'bg-[#015256] text-white shadow-lg shadow-[#015256]/30 scale-105'
-                              : 'bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900 hover:shadow-md hover:scale-102'
+                              ? 'bg-[#F5970C] text-[#090A28] font-bold shadow-lg shadow-[#F5970C]/40 scale-105'
+                              : 'bg-white text-slate-600 hover:bg-orange-50 hover:text-[#090A28] hover:shadow-md hover:scale-102'
                             }
                           `}
                         >
@@ -238,8 +225,6 @@ export default function Home() {
                   </div>
                 </nav>
               </div>
-            )}
-
             {/* Content Area */}
             <div className="p-8 bg-white animate-fade-in">
               {activeTab === 'tracking' && (
@@ -333,27 +318,14 @@ export default function Home() {
                       🏪
                     </div>
                     <div>
-                      <h2 className="text-2xl font-bold text-slate-900">About Us Revibee Email (TBAT)</h2>
+                      <h2 className="text-2xl font-bold text-slate-900">About Us DeelDepot Email (TBAT)</h2>
                       <p className="text-slate-600 text-sm">Send comprehensive business model explanation</p>
                     </div>
                   </div>
                   <AboutHappyDeelForm />
                 </div>
               )}
-              {activeTab === 'preview' && (
-                <div className="space-y-4">
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center text-2xl">
-                      👁️
-                    </div>
-                    <div>
-                      <h2 className="text-2xl font-bold text-slate-900">Email Preview</h2>
-                      <p className="text-slate-600 text-sm">Preview all email templates</p>
-                    </div>
-                  </div>
-                  <EmailPreview />
-                </div>
-              )}
+
             </div>
           </div>
 

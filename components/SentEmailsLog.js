@@ -20,7 +20,10 @@ export default function SentEmailsDashboard() {
   const fetchLogs = useCallback(async () => {
     setIsLoading(true);
     try {
-      const response = await fetch('/api/get-sent-emails');
+      const response = await fetch(`/api/get-sent-emails?_t=${Date.now()}`, {
+        cache: 'no-store',
+        headers: { 'Cache-Control': 'no-cache' }
+      });
       if (response.ok) {
         const data = await response.json();
         setLogs(data.logs || []);
@@ -37,7 +40,10 @@ export default function SentEmailsDashboard() {
   }, [fetchLogs]);
 
   const allSenders = ['All', ...new Set(logs.map(l => l.senderEmail).filter(Boolean))];
-  const allTypes   = ['All', ...Object.keys(TYPE_CONFIG)];
+  const allTypes   = ['All', ...new Set([
+    ...Object.keys(TYPE_CONFIG), 
+    ...logs.map(l => l.type).filter(Boolean)
+  ])];
 
   const filtered = logs.filter(log => {
     const matchType   = filterType === 'All' || log.type === filterType;

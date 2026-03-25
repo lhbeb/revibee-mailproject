@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.100.0",
     "cheerio": "^1.0.0-rc.12",
     "next": "^15.4.8",
     "nodemailer": "^7.0.6",

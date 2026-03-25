@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import SentEmailsLog from './SentEmailsLog';
 
 export default function ShippingEmailForm() {
   const [formData, setFormData] = useState({
@@ -9,7 +8,6 @@ export default function ShippingEmailForm() {
     senderEmail: '' // Optional: specific sender email
   });
   const [rawData, setRawData] = useState('');
-  const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [accounts, setAccounts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState({ type: '', content: '' });
@@ -69,16 +67,10 @@ export default function ShippingEmailForm() {
       const result = await response.json();
 
       if (response.ok) {
-        setMessage({
-          type: 'success',
-          content: 'Email sent successfully! 🎉'
-        });
+        setMessage({ type: 'success', content: 'Email sent successfully! 🎉' });
         // Reset form but keep sender selection
         setRawData('');
-        setFormData(prev => ({
-          ...prev,
-          trackingNumber: ''
-        }));
+        setFormData(prev => ({ ...prev, trackingNumber: '' }));
       } else {
         setMessage({
           type: 'error',
@@ -96,7 +88,7 @@ export default function ShippingEmailForm() {
   };
 
   return (
-    <div className="max-w-md mx-auto bg-white rounded-xl shadow-lg p-8">
+    <div className="w-full">
       <div className="text-center mb-8">
         <p className="text-gray-600">Shipping Confirmation Dashboard</p>
       </div>

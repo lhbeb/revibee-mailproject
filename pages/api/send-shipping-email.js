@@ -378,7 +378,7 @@ export default async function handler(req, res) {
     console.log('Email sent successfully:', info.messageId);
 
     // Log the sent email
-    logEmail({
+    await logEmail({
       type: 'Shipping',
       senderEmail: account.user,
       recipientEmail: customerEmail,

@@ -1,48 +1,66 @@
-import fs from 'fs';
-import path from 'path';
+import { supabase } from '../lib/supabase.js';
 
-const LOG_FILE = path.join(process.cwd(), 'data', 'sent-emails.json');
-
-export const logEmail = (emailData) => {
+/**
+ * Log a sent email to Supabase.
+ * Falls back gracefully if Supabase is not configured.
+ */
+export const logEmail = async (emailData) => {
+  if (!supabase) {
+    console.warn('Supabase not configured — skipping email log.');
+    return;
+  }
   try {
-    const dir = path.dirname(LOG_FILE);
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true });
+    const { error } = await supabase.from('sent_emails').insert([{
+      type: emailData.type,
+      sender_email: emailData.senderEmail,
+      recipient_email: emailData.recipientEmail,
+      recipient_name: emailData.recipientName,
+      product_name: emailData.productName,
+      status: emailData.status || 'Success',
+    }]);
+    if (error) {
+      console.error('Supabase insert error:', error.message);
     }
-
-    let logs = [];
-    if (fs.existsSync(LOG_FILE)) {
-      const fileContent = fs.readFileSync(LOG_FILE, 'utf8');
-      if (fileContent) {
-        logs = JSON.parse(fileContent);
-      }
-    }
-
-    logs.unshift({
-      id: crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substring(7),
-      ...emailData,
-      timestamp: new Date().toISOString()
-    });
-
-    // Keep only the last 1000 emails to prevent infinite growth
-    if (logs.length > 1000) {
-      logs = logs.slice(0, 1000);
-    }
-
-    fs.writeFileSync(LOG_FILE, JSON.stringify(logs, null, 2));
   } catch (err) {
-    console.error('Failed to log email:', err);
+    console.error('Failed to log email to Supabase:', err);
   }
 };
 
-export const getLogs = () => {
+/**
+ * Retrieve sent email logs from Supabase.
+ * Optionally filter by sender email.
+ */
+export const getLogs = async (senderEmail = null) => {
+  if (!supabase) return [];
   try {
-    if (!fs.existsSync(LOG_FILE)) return [];
-    const fileContent = fs.readFileSync(LOG_FILE, 'utf8');
-    if (!fileContent) return [];
-    return JSON.parse(fileContent);
+    let query = supabase
+      .from('sent_emails')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(500);
+
+    if (senderEmail) {
+      query = query.eq('sender_email', senderEmail);
+    }
+
+    const { data, error } = await query;
+    if (error) {
+      console.error('Supabase fetch error:', error.message);
+      return [];
+    }
+    // Normalize column names to match what the frontend expects
+    return (data || []).map(row => ({
+      id: row.id,
+      type: row.type,
+      senderEmail: row.sender_email,
+      recipientEmail: row.recipient_email,
+      recipientName: row.recipient_name,
+      productName: row.product_name,
+      status: row.status,
+      timestamp: row.created_at,
+    }));
   } catch (err) {
-    console.error('Failed to read logs:', err);
+    console.error('Failed to fetch logs from Supabase:', err);
     return [];
   }
 };

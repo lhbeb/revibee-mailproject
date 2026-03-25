@@ -7,7 +7,6 @@ export default function OrderConfirmationForm() {
     senderEmail: ''
   });
   const [rawData, setRawData] = useState('');
-
   const [accounts, setAccounts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState({ type: '', content: '' });
@@ -67,16 +66,10 @@ export default function OrderConfirmationForm() {
       const result = await response.json();
 
       if (response.ok) {
-        setMessage({
-          type: 'success',
-          content: 'Order confirmation sent successfully! 🎉'
-        });
-        // Reset form
+        setMessage({ type: 'success', content: 'Order confirmation sent successfully! 🎉' });
         // Reset form
         setRawData('');
-        setFormData({
-          senderEmail: formData.senderEmail // Preserve selection
-        });
+        setFormData({ senderEmail: formData.senderEmail });
       } else {
         setMessage({
           type: 'error',
@@ -94,7 +87,7 @@ export default function OrderConfirmationForm() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto bg-white rounded-xl shadow-lg p-8">
+    <div className="w-full">
       <div className="text-center mb-8">
         <p className="text-gray-600">Order Confirmation Dashboard</p>
       </div>

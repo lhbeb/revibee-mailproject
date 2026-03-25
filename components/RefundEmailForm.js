@@ -43,18 +43,32 @@ export default function RefundEmailForm() {
     try {
       const lines = rawData.split('\n').map(line => line.trim()).filter(line => line);
       const productLine = lines[0] || '';
-      const email = lines[1] || '';
-      const name = lines[2] || '';
       
+      let email = '';
+      let name = '';
       let amount = '';
-      const priceMatch = productLine.match(/:\s*\$([\d.]+)/);
-      if (priceMatch) {
-        amount = '$' + priceMatch[1];
+
+      // Check if line 2 is an email. If it's a price, shift the indices.
+      const line2 = lines[1] || '';
+      if (line2.startsWith('$') || line2.match(/^[\d.]+/)) {
+        // Line 2 is price
+        amount = line2.startsWith('$') ? line2 : '$' + line2;
+        email = lines[2] || '';
+        name = lines[3] || '';
       } else {
-        const parts = productLine.split(':');
-        if (parts.length > 1) {
-          amount = parts[parts.length - 1].trim();
+        // Fallback: Try to extract from product line as before
+        const priceMatch = productLine.match(/:\s*\$([\d.]+)/);
+        if (priceMatch) {
+          amount = '$' + priceMatch[1];
+        } else {
+          const parts = productLine.split(':');
+          if (parts.length > 1) {
+            amount = parts[parts.length - 1].trim();
+            if (!amount.startsWith('$')) amount = '$' + amount;
+          }
         }
+        email = line2;
+        name = lines[2] || '';
       }
 
       const payload = {
@@ -76,16 +90,9 @@ export default function RefundEmailForm() {
       const result = await response.json();
 
       if (response.ok) {
-        setMessage({
-          type: 'success',
-          content: 'Refund email sent successfully! 💰'
-        });
-        // Reset form
-        // Reset form
+        setMessage({ type: 'success', content: 'Refund email sent successfully! 💰' });
         setRawData('');
-        setFormData({
-          senderEmail: formData.senderEmail // Preserve selection
-        });
+        setFormData({ senderEmail: formData.senderEmail });
       } else {
         setMessage({
           type: 'error',
@@ -103,7 +110,7 @@ export default function RefundEmailForm() {
   };
 
   return (
-    <div className="max-w-md mx-auto bg-white rounded-xl shadow-lg p-8">
+    <div className="w-full">
       <div className="text-center mb-8">
         <p className="text-gray-600">Refund Notification Dashboard</p>
       </div>
@@ -138,7 +145,7 @@ export default function RefundEmailForm() {
             <label htmlFor="rawData" className="block text-sm font-medium text-gray-700">
               Order Details (Paste Block) *
             </label>
-            <span className="text-xs text-gray-400">Line 1: Product : $Price | Line 2: Email | Line 3: Name</span>
+            <span className="text-xs text-gray-400">Line 1: Product | Line 2: Price ($) | Line 3: Email | Line 4: Name</span>
           </div>
           <textarea
             id="rawData"
@@ -146,9 +153,9 @@ export default function RefundEmailForm() {
             value={rawData}
             onChange={(e) => setRawData(e.target.value)}
             required
-            rows={6}
+            rows={7}
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent transition duration-200 ease-in-out text-gray-900 bg-white resize-y font-mono text-sm leading-relaxed"
-            placeholder="Product Name : $Price&#10;customer@example.com&#10;John Doe&#10;123 Address St, City, ST 12345&#10;https://deeldepot.com/product/..."
+            placeholder="Product Name&#10;$450.00&#10;customer@example.com&#10;John Doe&#10;123 Address St, City, ST 12345&#10;https://deeldepot.com/product/..."
             disabled={isLoading}
           />
         </div>

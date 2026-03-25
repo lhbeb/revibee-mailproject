@@ -381,7 +381,7 @@ export default async function handler(req, res) {
     const endTime = Date.now();
 
     // Log the sent email
-    logEmail({
+    await logEmail({
       type: 'Confirmation',
       senderEmail: account.user,
       recipientEmail: customerEmail,

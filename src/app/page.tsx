@@ -8,19 +8,53 @@ import RecoveryEmail1Form from '../../components/RecoveryEmail1Form';
 import RecoveryEmail2Form from '../../components/RecoveryEmail2Form';
 import RecoveryEmail3Form from '../../components/RecoveryEmail3Form';
 import AboutHappyDeelForm from '../../components/AboutHappyDeelForm';
-
+import SentEmailsLog from '../../components/SentEmailsLog';
 import LoginForm from '../../components/LoginForm';
+
+const NAV_GROUPS = [
+  {
+    label: 'Transactional',
+    items: [
+      { id: 'tracking',     icon: '📦', label: 'Shipping Confirmation',    sub: 'Send tracking details' },
+      { id: 'confirmation', icon: '✅', label: 'Order Confirmation',        sub: 'Confirm order placement' },
+      { id: 'refund',       icon: '💰', label: 'Refund Email',              sub: 'Notify about refunds' },
+    ],
+  },
+  {
+    label: 'Recovery',
+    items: [
+      { id: 'recovery1', icon: '🛒', label: 'Recovery — Urgent',     sub: 'Scarcity-driven nudge' },
+      { id: 'recovery2', icon: '💚', label: 'Recovery — Friendly',   sub: 'Gentle reminder' },
+      { id: 'recovery3', icon: '⏰', label: 'Recovery — Last Chance', sub: 'Final push email' },
+    ],
+  },
+  {
+    label: 'Marketing',
+    items: [
+      { id: 'about', icon: '🏪', label: 'About DeelDepot', sub: 'Brand story email' },
+    ],
+  },
+];
+
+const ALL_ITEMS = NAV_GROUPS.flatMap(g => g.items);
+
+const FORM_MAP: Record<string, React.ReactNode> = {
+  tracking:     <ShippingEmailForm />,
+  confirmation: <OrderConfirmationForm />,
+  refund:       <RefundEmailForm />,
+  recovery1:    <RecoveryEmail1Form />,
+  recovery2:    <RecoveryEmail2Form />,
+  recovery3:    <RecoveryEmail3Form />,
+  about:        <AboutHappyDeelForm />,
+};
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState('tracking');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<string | null>(null);
 
-  // Check authentication status on component mount
-  useEffect(() => {
-    checkAuthStatus();
-  }, []);
+  useEffect(() => { checkAuthStatus(); }, []);
 
   const checkAuthStatus = async () => {
     try {
@@ -31,59 +65,28 @@ export default function Home() {
         setUser(data.user);
       } else {
         setIsAuthenticated(false);
-        setUser(null);
       }
-    } catch (error) {
-      console.error('Auth check failed:', error);
+    } catch {
       setIsAuthenticated(false);
-      setUser(null);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleLoginSuccess = (userData: any) => {
-    setIsAuthenticated(true);
-    setUser(userData);
-  };
-
   const handleLogout = async () => {
-    try {
-      await fetch('/api/logout', { method: 'POST' });
-      setIsAuthenticated(false);
-      setUser(null);
-    } catch (error) {
-      console.error('Logout failed:', error);
-    }
+    await fetch('/api/logout', { method: 'POST' });
+    setIsAuthenticated(false);
+    setUser(null);
   };
 
-  // Transactional Emails (Order-related)
-  const transactionalTabs = [
-    { id: 'tracking', label: 'Tracking Number Email', icon: '📦' },
-    { id: 'confirmation', label: 'Order Confirmation', icon: '✅' },
-    { id: 'refund', label: 'Refund Email (TBAT)', icon: '💰' },
-  ];
-
-  // Recovery Emails
-  const recoveryTabs = [
-    { id: 'recovery1', label: 'Recovery 1', icon: '🛒' },
-    { id: 'recovery2', label: 'Recovery 2', icon: '💚' },
-    { id: 'recovery3', label: 'Recovery 3', icon: '⏰' },
-  ];
-
-  // Informational Emails (Marketing/Educational)
-  const informationalTabs = [
-    { id: 'about', label: 'About Us DeelDepot Email (TBAT)', icon: '🏪' },
-  ];
-
-  const allTabs = [...transactionalTabs, ...recoveryTabs, ...informationalTabs];
+  const activeItem = ALL_ITEMS.find(i => i.id === activeTab)!;
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-teal-50 flex items-center justify-center">
+      <div className="min-h-screen bg-[#090A28] flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-4 border-[#F5970C] border-t-transparent mx-auto"></div>
-          <p className="mt-4 text-slate-600 font-medium">Loading dashboard...</p>
+          <div className="animate-spin rounded-full h-14 w-14 border-4 border-[#F5970C] border-t-transparent mx-auto" />
+          <p className="mt-4 text-white/60 text-sm font-medium">Loading...</p>
         </div>
       </div>
     );
@@ -91,250 +94,127 @@ export default function Home() {
 
   if (!isAuthenticated) {
     return (
-      <main className="min-h-screen bg-gradient-to-br from-slate-50 to-teal-50">
-        <header className="bg-white/80 backdrop-blur-sm shadow-sm border-b border-slate-200">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center py-6">
-              <img
-                src="/logo.png"
-                alt="Happydeel"
-                className="h-10 w-auto"
-              />
-            </div>
+      <main className="min-h-screen bg-[#090A28] flex items-center justify-center p-4">
+        <div className="w-full max-w-sm">
+          <div className="text-center mb-8">
+            <h1 className="text-2xl font-black text-white tracking-tight">MailProject</h1>
+            <p className="text-white/40 text-sm mt-1">Admin Dashboard</p>
           </div>
-        </header>
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="flex justify-center animate-slide-in">
-            <div className="w-full max-w-md">
-              <LoginForm onLoginSuccess={handleLoginSuccess} />
-            </div>
-          </div>
+          <LoginForm onLoginSuccess={(u: any) => { setIsAuthenticated(true); setUser(u); }} />
         </div>
       </main>
     );
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-slate-50 via-teal-50 to-slate-50">
-      {/* Enhanced Header with Gradient */}
-      <header className="bg-[#090A28] shadow-lg">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-5">
-            <div className="flex items-center gap-4">
-              <h1 className="text-2xl font-bold text-white tracking-tight">Mail Project 2.0</h1>
-            </div>
+    <main className="min-h-screen bg-slate-100 flex flex-col">
 
-            <div className="flex items-center gap-4">
-
-
-              <div className="hidden sm:flex items-center gap-3 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg">
-                <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center text-white font-semibold">
-                  {(user || 'A').charAt(0).toUpperCase()}
-                </div>
-                <span className="text-white font-medium text-sm">{user || 'Admin'}</span>
+      {/* ── Top Header ── */}
+      <header className="bg-[#090A28] border-b border-white/10 shrink-0">
+        <div className="max-w-[1400px] mx-auto px-6 py-4 flex justify-between items-center">
+          <div className="flex items-center gap-3">
+            <span className="text-white font-black text-xl tracking-tight">MailProject</span>
+            <div className="w-px h-5 bg-white/20" />
+            <span className="text-white/50 text-xs uppercase tracking-widest font-semibold">Mail Center</span>
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 bg-white/10 px-3 py-1.5 rounded-lg">
+              <div className="w-6 h-6 rounded-full bg-[#F5970C] flex items-center justify-center text-[#090A28] text-xs font-black">
+                {(user || 'A').charAt(0).toUpperCase()}
               </div>
-              <button
-                onClick={handleLogout}
-                className="bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white px-4 py-2 rounded-lg text-sm font-medium transition-all hover:scale-105 active:scale-95 flex items-center gap-2"
-              >
-                <span>🚪</span>
-                <span className="hidden sm:inline">Logout</span>
-              </button>
+              <span className="text-white text-sm font-medium hidden sm:block">{user || 'Admin'}</span>
             </div>
+            <button
+              onClick={handleLogout}
+              className="text-white/60 hover:text-white text-sm px-3 py-1.5 rounded-lg hover:bg-white/10 transition-all"
+            >
+              Sign out
+            </button>
           </div>
         </div>
       </header>
 
-      {/* Main Content */}
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="max-w-7xl mx-auto">
-          {/* Modern Pill-Style Tabs */}
-          <div className="bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden animate-slide-in">
-              <div className="bg-gradient-to-r from-slate-50 to-teal-50 px-6 py-6 border-b border-slate-200">
-                <nav className="flex flex-col gap-6" aria-label="Email Types">
-                  {/* Transactional Section */}
-                  <div>
-                    <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3 px-1">Transactional Emails</h3>
-                    <div className="flex flex-wrap gap-2">
-                      {transactionalTabs.map((tab) => (
-                        <button
-                          key={tab.id}
-                          onClick={() => setActiveTab(tab.id)}
-                          className={`
-                            flex items-center gap-2 px-5 py-3 rounded-xl font-medium text-sm
-                            transition-all duration-200 transform
-                            ${activeTab === tab.id
-                              ? 'bg-[#F5970C] text-[#090A28] font-bold shadow-lg shadow-[#F5970C]/40 scale-105'
-                              : 'bg-white text-slate-600 hover:bg-orange-50 hover:text-[#090A28] hover:shadow-md hover:scale-102'
-                            }
-                          `}
-                        >
-                          <span className="text-lg">{tab.icon}</span>
-                          <span>{tab.label}</span>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
+      {/* ── Main Body ── */}
+      <div className="flex-1 max-w-[1400px] mx-auto w-full px-6 py-8 flex flex-col gap-6">
 
-                  {/* Recovery Emails Section */}
-                  <div>
-                    <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3 px-1">Recovery Emails</h3>
-                    <div className="flex flex-wrap gap-2">
-                      {recoveryTabs.map((tab) => (
-                        <button
-                          key={tab.id}
-                          onClick={() => setActiveTab(tab.id)}
-                          className={`
-                            flex items-center gap-2 px-5 py-3 rounded-xl font-medium text-sm
-                            transition-all duration-200 transform
-                            ${activeTab === tab.id
-                              ? 'bg-[#F5970C] text-[#090A28] font-bold shadow-lg shadow-[#F5970C]/40 scale-105'
-                              : 'bg-white text-slate-600 hover:bg-orange-50 hover:text-[#090A28] hover:shadow-md hover:scale-102'
-                            }
-                          `}
-                        >
-                          <span className="text-lg">{tab.icon}</span>
-                          <span>{tab.label}</span>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
+        {/* ── Top Panel: Sidebar + Content ── */}
+        <div className="flex gap-0 bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden" style={{ minHeight: '640px' }}>
 
-                  {/* Informational Section */}
-                  <div>
-                    <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3 px-1">Informational Emails</h3>
-                    <div className="flex flex-wrap gap-2">
-                      {informationalTabs.map((tab) => (
-                        <button
-                          key={tab.id}
-                          onClick={() => setActiveTab(tab.id)}
-                          className={`
-                            flex items-center gap-2 px-5 py-3 rounded-xl font-medium text-sm
-                            transition-all duration-200 transform
-                            ${activeTab === tab.id
-                              ? 'bg-[#F5970C] text-[#090A28] font-bold shadow-lg shadow-[#F5970C]/40 scale-105'
-                              : 'bg-white text-slate-600 hover:bg-orange-50 hover:text-[#090A28] hover:shadow-md hover:scale-102'
-                            }
-                          `}
-                        >
-                          <span className="text-lg">{tab.icon}</span>
-                          <span>{tab.label}</span>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                </nav>
+          {/* Left Sidebar */}
+          <aside className="w-64 shrink-0 bg-[#090A28] flex flex-col">
+            <div className="px-5 pt-6 pb-4">
+              <p className="text-white/30 text-[10px] font-bold uppercase tracking-[0.15em]">Email Templates</p>
+            </div>
+            <nav className="flex-1 px-3 pb-6 space-y-5 overflow-y-auto">
+              {NAV_GROUPS.map(group => (
+                <div key={group.label}>
+                  <p className="text-white/20 text-[9px] font-bold uppercase tracking-widest px-3 mb-1.5">{group.label}</p>
+                  <ul className="space-y-0.5">
+                    {group.items.map(item => {
+                      const isActive = activeTab === item.id;
+                      return (
+                        <li key={item.id}>
+                          <button
+                            onClick={() => setActiveTab(item.id)}
+                            className={`w-full text-left flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-150 group
+                              ${isActive
+                                ? 'bg-[#F5970C] text-[#090A28]'
+                                : 'text-white/60 hover:text-white hover:bg-white/10'
+                              }`}
+                          >
+                            <span className="text-lg shrink-0">{item.icon}</span>
+                            <div className="min-w-0">
+                              <p className={`text-sm font-semibold leading-tight truncate ${isActive ? 'text-[#090A28]' : ''}`}>{item.label}</p>
+                              <p className={`text-[10px] leading-tight mt-0.5 truncate ${isActive ? 'text-[#090A28]/60' : 'text-white/30'}`}>{item.sub}</p>
+                            </div>
+                            {isActive && (
+                              <span className="ml-auto shrink-0 w-1.5 h-1.5 rounded-full bg-[#090A28]/50" />
+                            )}
+                          </button>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              ))}
+            </nav>
+          </aside>
+
+          {/* Right Content Panel */}
+          <div className="flex-1 flex flex-col min-w-0">
+            {/* Panel Header */}
+            <div className="px-8 py-5 border-b border-slate-100 flex items-center gap-4 shrink-0">
+              <div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-xl shrink-0">
+                {activeItem.icon}
               </div>
-            {/* Content Area */}
-            <div className="p-8 bg-white animate-fade-in">
-              {activeTab === 'tracking' && (
-                <div className="space-y-4">
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="w-12 h-12 bg-teal-100 rounded-xl flex items-center justify-center text-2xl">
-                      📦
-                    </div>
-                    <div>
-                      <h2 className="text-2xl font-bold text-slate-900">Tracking Number Email</h2>
-                      <p className="text-slate-600 text-sm">Send tracking details to customers</p>
-                    </div>
-                  </div>
-                  <ShippingEmailForm />
-                </div>
-              )}
-              {activeTab === 'confirmation' && (
-                <div className="space-y-4">
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center text-2xl">
-                      ✅
-                    </div>
-                    <div>
-                      <h2 className="text-2xl font-bold text-slate-900">Order Confirmation</h2>
-                      <p className="text-slate-600 text-sm">Confirm order placement</p>
-                    </div>
-                  </div>
-                  <OrderConfirmationForm />
-                </div>
-              )}
-              {activeTab === 'refund' && (
-                <div className="space-y-4">
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center text-2xl">
-                      💰
-                    </div>
-                    <div>
-                      <h2 className="text-2xl font-bold text-slate-900">Refund Email (TBAT)</h2>
-                      <p className="text-slate-600 text-sm">Notify customers about refunds</p>
-                    </div>
-                  </div>
-                  <RefundEmailForm />
-                </div>
-              )}
-              {activeTab === 'recovery1' && (
-                <div className="space-y-4">
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center text-2xl">
-                      🛒
-                    </div>
-                    <div>
-                      <h2 className="text-2xl font-bold text-slate-900">Recovery Email 1 (Urgent)</h2>
-                      <p className="text-slate-600 text-sm">Create urgency with scarcity messaging</p>
-                    </div>
-                  </div>
-                  <RecoveryEmail1Form />
-                </div>
-              )}
-              {activeTab === 'recovery2' && (
-                <div className="space-y-4">
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center text-2xl">
-                      💚
-                    </div>
-                    <div>
-                      <h2 className="text-2xl font-bold text-slate-900">Recovery Email 2 (Friendly)</h2>
-                      <p className="text-slate-600 text-sm">Helpful reminder with a friendly tone</p>
-                    </div>
-                  </div>
-                  <RecoveryEmail2Form />
-                </div>
-              )}
-              {activeTab === 'recovery3' && (
-                <div className="space-y-4">
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center text-2xl">
-                      ⏰
-                    </div>
-                    <div>
-                      <h2 className="text-2xl font-bold text-slate-900">Recovery Email 3 (Last Chance)</h2>
-                      <p className="text-slate-600 text-sm">Final urgent reminder with limited stock warning</p>
-                    </div>
-                  </div>
-                  <RecoveryEmail3Form />
-                </div>
-              )}
-              {activeTab === 'about' && (
-                <div className="space-y-4">
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="w-12 h-12 bg-teal-100 rounded-xl flex items-center justify-center text-2xl">
-                      🏪
-                    </div>
-                    <div>
-                      <h2 className="text-2xl font-bold text-slate-900">About Us DeelDepot Email (TBAT)</h2>
-                      <p className="text-slate-600 text-sm">Send comprehensive business model explanation</p>
-                    </div>
-                  </div>
-                  <AboutHappyDeelForm />
-                </div>
-              )}
+              <div>
+                <h2 className="text-lg font-bold text-[#090A28] leading-tight">{activeItem.label}</h2>
+                <p className="text-slate-400 text-xs mt-0.5">{activeItem.sub}</p>
+              </div>
+            </div>
 
+            {/* Panel Body — scrollable form area */}
+            <div className="flex-1 overflow-y-auto px-8 py-6">
+              {FORM_MAP[activeTab]}
             </div>
           </div>
+        </div>
 
-          {/* Footer Info */}
-          <div className="mt-6 text-center text-slate-500 text-sm">
-            <p>Mail Project 2.0 • Powered by Next.js & Nodemailer</p>
+        {/* ── Bottom Panel: Sent Emails History ── */}
+        <div className="bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden">
+          <div className="px-6 py-4 border-b border-slate-100 flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center text-lg">📋</div>
+            <div>
+              <h2 className="text-base font-bold text-[#090A28]">Sent Emails History</h2>
+              <p className="text-slate-400 text-xs">All emails sent across every template</p>
+            </div>
+          </div>
+          <div className="p-6">
+            <SentEmailsLog />
           </div>
         </div>
+
       </div>
-    </main >
+    </main>
   );
 }

@@ -4,8 +4,8 @@ import nodemailer from 'nodemailer';
 // Add as many accounts as you need here
 const emailAccounts = [
   {
-    user: 'contactrevibee@gmail.com',
-    pass: 'gdui faql dedk yhxg', // App Password
+    user: 'heydeeldepot@gmail.com',
+    pass: 'ckph mgay vioy jswd', // App Password
   }
 ];
 

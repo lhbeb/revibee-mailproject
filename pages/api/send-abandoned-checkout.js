@@ -313,7 +313,7 @@ export default async function handler(req, res) {
     console.log('Message ID:', info.messageId);
 
     // Log the sent email
-    logEmail({
+    await logEmail({
       type: 'Recovery',
       senderEmail: account.user,
       recipientEmail: customerEmail,

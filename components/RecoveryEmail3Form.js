@@ -67,16 +67,9 @@ export default function RecoveryEmail3Form() {
       const result = await response.json();
 
       if (response.ok) {
-        setMessage({
-          type: 'success',
-          content: 'Recovery email 3 sent successfully! ⏰'
-        });
-        // Reset form
-        // Reset form
+        setMessage({ type: 'success', content: 'Recovery email 3 sent successfully! ⏰' });
         setRawData('');
-        setFormData({
-          senderEmail: formData.senderEmail // Preserve selection
-        });
+        setFormData({ senderEmail: formData.senderEmail });
       } else {
         setMessage({
           type: 'error',
@@ -94,7 +87,7 @@ export default function RecoveryEmail3Form() {
   };
 
   return (
-    <div className="max-w-md mx-auto bg-white rounded-xl shadow-lg p-8">
+    <div className="w-full">
       <div className="text-center mb-8">
         <p className="text-gray-600">Abandoned Cart Recovery (Last Chance)</p>
       </div>

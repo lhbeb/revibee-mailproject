@@ -139,13 +139,20 @@ export default async function handler(req, res) {
               <!-- Main Container -->
               <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="max-width: 600px; background: #ffffff; border-radius: 16px; overflow: hidden; border: 1px solid #e2e8f0;">
                 
-                <!-- Header -->
-                <tr class="header">
-                  <td style="background-color: #090A28; padding: 40px 32px 30px; text-align: center;">
-                    <h1 style="color: #F5970C; font-size: 32px; font-weight: 700; margin: 0 0 8px 0; line-height: 1.2;">
+                <!-- Header Top -->
+                <tr>
+                  <td style="background-color: #F5970C; padding: 40px 32px 24px; text-align: center;">
+                    <h1 style="color: #090A28; font-size: 32px; font-weight: 800; margin: 0; line-height: 1.2;">
                       Your order is on the way 🚀
                     </h1>
-                    ${orderNumber ? `<div style="color: #F5970C; opacity: 0.9; font-size: 14px; font-weight: 500; letter-spacing: 0.5px;">Order ${orderNumber}</div>` : ''}
+                  </td>
+                </tr>
+                
+                <!-- Header Bottom -->
+                <tr>
+                  <td style="background-color: #090A28; padding: 24px 32px 40px; text-align: center;">
+                    <div style="color: #ffffff; font-size: 18px; font-weight: 600; margin: 0;">Thanks for shopping with us</div>
+                    ${orderNumber ? `<div style="color: #ffffff; font-size: 18px; font-weight: 700; margin-top: 16px; letter-spacing: 0.5px;">Order ${orderNumber}</div>` : ''}
                   </td>
                 </tr>
                 

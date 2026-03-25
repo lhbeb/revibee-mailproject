@@ -63,31 +63,35 @@ export default async function handler(req, res) {
           }
           
           /* Header */
-          .header { 
-            background: linear-gradient(135deg, #090A28 0%, #090A28 100%); 
-            color: #F5970C; 
-            padding: 48px 32px; 
+          .header-top { 
+            background-color: #F5970C; 
+            padding: 40px 32px 24px; 
             text-align: center; 
-            position: relative;
           }
-          /* Fallback background for clients that don't support gradients well */
-          .header { background-color: #090A28; }
+          .header-bottom { 
+            background-color: #090A28; 
+            padding: 24px 32px 40px; 
+            text-align: center; 
+          }
 
           .header-title { 
             font-size: 32px; 
-            font-weight: 700; 
-            margin-bottom: 8px;
-            color: #F5970C !important;
-            position: relative;
-            z-index: 1;
+            font-weight: 800; 
+            margin: 0;
+            color: #090A28 !important;
           }
           .header-subtitle { 
             font-size: 18px; 
-            opacity: 0.9;
-            color: #F5970C !important;
-            font-weight: 400;
-            position: relative;
-            z-index: 1;
+            color: #ffffff !important;
+            font-weight: 600;
+            margin: 0;
+          }
+          .header-order {
+            color: #ffffff !important; 
+            font-size: 18px; 
+            font-weight: 700; 
+            margin-top: 16px; 
+            letter-spacing: 0.5px;
           }
           
           /* Content */
@@ -259,10 +263,12 @@ export default async function handler(req, res) {
       </head>
       <body>
         <div class="container">
-          <div class="header">
+          <div class="header-top">
             <h1 class="header-title">Order Confirmed!</h1>
-            <p class="header-subtitle">Thank you for your purchase</p>
-            ${orderNumber ? `<div style="color: #F5970C; opacity: 0.9; font-size: 14px; font-weight: 500; margin-top: 12px; letter-spacing: 0.5px;">Order ${orderNumber}</div>` : ''}
+          </div>
+          <div class="header-bottom">
+            <div class="header-subtitle">Thank you for your purchase</div>
+            ${orderNumber ? `<div class="header-order">Order ${orderNumber}</div>` : ''}
           </div>
           
           <div class="content">

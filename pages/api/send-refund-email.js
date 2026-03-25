@@ -133,10 +133,17 @@ export default async function handler(req, res) {
           <tr>
             <td style="padding: 20px 0; background-color: #f5f5f5;">
               <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden;">
-                <!-- Header -->
-                <tr class="header">
-                  <td style="background-color: #090A28; color: white; padding: 48px 32px; text-align: center;">
-                    <h1 style="font-size: 32px; font-weight: 700; margin-bottom: 8px;">Refund Processed</h1>
+                <!-- Header Top -->
+                <tr>
+                  <td style="background-color: #F5970C; padding: 40px 32px 24px; text-align: center;">
+                    <h1 style="color: #090A28; font-size: 32px; font-weight: 800; margin: 0;">Refund Processed</h1>
+                  </td>
+                </tr>
+                
+                <!-- Header Bottom -->
+                <tr>
+                  <td style="background-color: #090A28; padding: 24px 32px 40px; text-align: center;">
+                    <div style="color: #ffffff; font-size: 18px; font-weight: 600; margin: 0;">We&apos;ve issued a refund for your order</div>
                   </td>
                 </tr>
                 <!-- Main Content -->

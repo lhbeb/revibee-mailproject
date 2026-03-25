@@ -303,7 +303,8 @@ export default async function handler(req, res) {
       recipientEmail: customerEmail,
       recipientName: customerName,
       productName: productName,
-      status: 'Success'
+      status: 'Success',
+      payload: req.body
     });
     console.log(`Email sent in ${endTime - startTime}ms`);
 

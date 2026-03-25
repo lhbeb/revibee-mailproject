@@ -18,6 +18,7 @@ export const logEmail = async (emailData) => {
       recipient_name: emailData.recipientName,
       product_name: emailData.productName,
       status: emailData.status || 'Success',
+      payload: emailData.payload || null,
     }]);
     if (error) {
       console.error('[logger] Supabase insert error:', error.message);
@@ -61,6 +62,7 @@ export const getLogs = async (senderEmail = null) => {
       productName: row.product_name,
       status: row.status,
       timestamp: row.created_at,
+      payload: row.payload,
     }));
   } catch (err) {
     console.error('Failed to fetch logs from Supabase:', err);

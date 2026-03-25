@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 const TYPE_CONFIG = {
   Shipping:     { color: 'bg-blue-100 text-blue-700',   icon: '📦' },
@@ -16,6 +16,7 @@ export default function SentEmailsDashboard() {
   const [filterType, setFilterType] = useState('All');
   const [filterSender, setFilterSender] = useState('All');
   const [search, setSearch] = useState('');
+  const [expandedRowId, setExpandedRowId] = useState(null);
 
   const fetchLogs = useCallback(async () => {
     setIsLoading(true);
@@ -161,28 +162,72 @@ export default function SentEmailsDashboard() {
                   <th className="px-5 py-3 text-left font-semibold">Type</th>
                   <th className="px-5 py-3 text-left font-semibold">Product</th>
                   <th className="px-5 py-3 text-left font-semibold">Sent From</th>
+                  <th className="px-5 py-3 text-right font-semibold">Details</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {filtered.map((log) => {
                   const cfg = TYPE_CONFIG[log.type] || { color: 'bg-slate-100 text-slate-600', icon: '📧' };
+                  const isExpanded = expandedRowId === log.id;
+                  
                   return (
-                    <tr key={log.id} className="hover:bg-slate-50 transition-colors">
-                      <td className="px-5 py-3.5 text-slate-500 whitespace-nowrap">{formatDate(log.timestamp)}</td>
-                      <td className="px-5 py-3.5">
-                        <p className="font-semibold text-[#090A28]">{log.recipientName || '—'}</p>
-                        <p className="text-slate-400 text-xs">{log.recipientEmail}</p>
-                      </td>
-                      <td className="px-5 py-3.5">
-                        <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold ${cfg.color}`}>
-                          {cfg.icon} {log.type}
-                        </span>
-                      </td>
-                      <td className="px-5 py-3.5 text-slate-600 max-w-[200px] truncate" title={log.productName}>
-                        {log.productName || '—'}
-                      </td>
-                      <td className="px-5 py-3.5 text-slate-400 text-xs whitespace-nowrap">{log.senderEmail}</td>
-                    </tr>
+                    <React.Fragment key={log.id}>
+                      <tr className={`hover:bg-slate-50 transition-colors ${isExpanded ? 'bg-slate-50' : ''}`}>
+                        <td className="px-5 py-3.5 text-slate-500 whitespace-nowrap">{formatDate(log.timestamp)}</td>
+                        <td className="px-5 py-3.5">
+                          <p className="font-semibold text-[#090A28]">{log.recipientName || '—'}</p>
+                          <p className="text-slate-400 text-xs">{log.recipientEmail}</p>
+                        </td>
+                        <td className="px-5 py-3.5">
+                          <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold ${cfg.color}`}>
+                            {cfg.icon} {log.type}
+                          </span>
+                        </td>
+                        <td className="px-5 py-3.5 text-slate-600 max-w-[200px] truncate" title={log.productName}>
+                          {log.productName || '—'}
+                        </td>
+                        <td className="px-5 py-3.5 text-slate-400 text-xs whitespace-nowrap">{log.senderEmail}</td>
+                        <td className="px-5 py-3.5 text-right whitespace-nowrap">
+                          <button
+                            onClick={() => setExpandedRowId(isExpanded ? null : log.id)}
+                            className="text-slate-400 hover:text-[#F5970C] p-2 rounded transition-colors"
+                            title="View full payload details"
+                          >
+                            {isExpanded ? '▼ Close' : '▶ Expand'}
+                          </button>
+                        </td>
+                      </tr>
+                      {isExpanded && (
+                        <tr className="bg-slate-50 border-t-0">
+                          <td colSpan="6" className="px-5 pb-4 pt-1">
+                            <div className="bg-white border text-left border-slate-200 rounded-lg p-5 shadow-sm relative overflow-hidden">
+                              <div className="absolute top-0 left-0 w-1 h-full bg-[#F5970C]"></div>
+                              <h4 className="font-bold text-[#090A28] mb-4 text-sm flex items-center gap-2">
+                                <span>📄</span> Request Payload Details
+                              </h4>
+                              {log.payload ? (
+                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-5 gap-x-6">
+                                  {Object.entries(log.payload).map(([key, value]) => {
+                                    if (value == null || value === '' || typeof value === 'object') return null;
+                                    // Skip redundant fields displayed in main row
+                                    if (['senderEmail', 'customerName', 'customerEmail', 'productName', 'message'].includes(key)) return null;
+                                    
+                                    return (
+                                      <div key={key}>
+                                        <span className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">{key.replace(/([A-Z])/g, ' $1').trim()}</span>
+                                        <span className="block text-sm text-slate-700 font-mono break-all">{value.toString()}</span>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              ) : (
+                                <div className="text-slate-400 text-sm italic py-2">No extended payload data was saved for this email.</div>
+                              )}
+                            </div>
+                          </td>
+                        </tr>
+                      )}
+                    </React.Fragment>
                   );
                 })}
               </tbody>

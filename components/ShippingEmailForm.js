@@ -47,12 +47,14 @@ export default function ShippingEmailForm() {
       const email = lines[1] || '';
       const name = lines[2] || '';
       const address = lines[3] || '';
+      const orderNum = lines[5] || '';
 
       const payload = {
         customerEmail: email,
         customerName: name, // even if Shipping API doesn't strictly need it
         customerAddress: address,
         productName: productLine,
+        orderNumber: orderNum,
         ...formData
       };
 
@@ -123,7 +125,7 @@ export default function ShippingEmailForm() {
             <label htmlFor="rawData" className="block text-sm font-medium text-gray-700">
               Order Details (Paste Block) *
             </label>
-            <span className="text-xs text-gray-400">Line 1: Product | Line 2: Email | Line 3: Name | Line 4: Address | Line 5: Link</span>
+            <span className="text-xs text-gray-400">Line 1: Product | Line 2: Email | Line 3: Name | Line 4: Address | Line 5: Link | Line 6: Order #</span>
           </div>
           <textarea
             id="rawData"
@@ -131,9 +133,9 @@ export default function ShippingEmailForm() {
             value={rawData}
             onChange={(e) => setRawData(e.target.value)}
             required
-            rows={6}
+            rows={7}
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#F5970C] focus:border-transparent transition duration-200 ease-in-out text-gray-900 bg-white resize-y font-mono text-sm leading-relaxed"
-            placeholder="Product Name : $Price&#10;customer@example.com&#10;John Doe&#10;123 Address St, City, ST 12345&#10;https://deeldepot.com/product/..."
+            placeholder="Product Name : $Price&#10;customer@example.com&#10;John Doe&#10;123 Address St, City, ST 12345&#10;https://deeldepot.com/product/...&#10;#9934"
             disabled={isLoading}
           />
         </div>

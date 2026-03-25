@@ -51,7 +51,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { customerEmail, customerAddress, productName, trackingNumber, senderEmail } = req.body;
+  const { customerEmail, customerAddress, productName, trackingNumber, senderEmail, orderNumber } = req.body;
 
   // Validate required fields
   if (!customerEmail || !customerAddress || !productName || !trackingNumber) {
@@ -141,10 +141,11 @@ export default async function handler(req, res) {
                 
                 <!-- Header -->
                 <tr class="header">
-                  <td style="background-color: #090A28; padding: 40px 32px; text-align: center;">
-                    <h1 style="color: #ffffff; font-size: 32px; font-weight: 700; margin: 0 0 12px 0; line-height: 1.2;">
+                  <td style="background-color: #090A28; padding: 40px 32px 30px; text-align: center;">
+                    <h1 style="color: #ffffff; font-size: 32px; font-weight: 700; margin: 0 0 8px 0; line-height: 1.2;">
                       Your order is on the way 🚀
                     </h1>
+                    ${orderNumber ? `<div style="color: rgba(255,255,255,0.7); font-size: 14px; font-weight: 500; letter-spacing: 0.5px;">Order ${orderNumber}</div>` : ''}
                   </td>
                 </tr>
                 
@@ -345,6 +346,7 @@ export default async function handler(req, res) {
       Great news! We've carefully packaged your item and handed it off to our shipping partner.
       
       Order Details:
+      ${orderNumber ? `Order Number: ${orderNumber}` : ''}
       Product: ${productName}
       Delivery Email: ${customerEmail}
       Delivery Address: ${customerAddress}

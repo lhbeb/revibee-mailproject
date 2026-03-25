@@ -8,7 +8,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { customerName, customerEmail, customerAddress, productName, senderEmail } = req.body;
+    const { customerName, customerEmail, customerAddress, productName, senderEmail, orderNumber } = req.body;
 
     // Validate required fields
     if (!customerEmail || !customerName || !productName) {
@@ -260,6 +260,7 @@ export default async function handler(req, res) {
           <div class="header">
             <h1 class="header-title">Order Confirmed!</h1>
             <p class="header-subtitle">Thank you for your purchase</p>
+            ${orderNumber ? `<div style="color: rgba(255,255,255,0.7); font-size: 14px; font-weight: 500; margin-top: 12px; letter-spacing: 0.5px;">Order ${orderNumber}</div>` : ''}
           </div>
           
           <div class="content">
@@ -358,6 +359,7 @@ export default async function handler(req, res) {
       Thank you for your purchase, ${customerName}.
       
       Your order for "${productName}" has been received.
+      ${orderNumber ? `\n      Order Number: ${orderNumber}` : ''}
       
       Shipping To: ${customerAddress || 'Address not provided'}
       

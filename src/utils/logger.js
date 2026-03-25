@@ -10,6 +10,7 @@ export const logEmail = async (emailData) => {
     return;
   }
   try {
+    console.log('[logger] Attempting to log email:', emailData.type, emailData.recipientEmail);
     const { error } = await supabase.from('sent_emails').insert([{
       type: emailData.type,
       sender_email: emailData.senderEmail,
@@ -19,10 +20,12 @@ export const logEmail = async (emailData) => {
       status: emailData.status || 'Success',
     }]);
     if (error) {
-      console.error('Supabase insert error:', error.message);
+      console.error('[logger] Supabase insert error:', error.message);
+    } else {
+      console.log('[logger] Successfully inserted log into Supabase!');
     }
   } catch (err) {
-    console.error('Failed to log email to Supabase:', err);
+    console.error('[logger] Failed to log email to Supabase:', err);
   }
 };
 

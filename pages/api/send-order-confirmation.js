@@ -65,7 +65,7 @@ export default async function handler(req, res) {
           /* Header */
           .header { 
             background: linear-gradient(135deg, #090A28 0%, #090A28 100%); 
-            color: white; 
+            color: #F5970C; 
             padding: 48px 32px; 
             text-align: center; 
             position: relative;
@@ -77,12 +77,14 @@ export default async function handler(req, res) {
             font-size: 32px; 
             font-weight: 700; 
             margin-bottom: 8px;
+            color: #F5970C !important;
             position: relative;
             z-index: 1;
           }
           .header-subtitle { 
             font-size: 18px; 
             opacity: 0.9;
+            color: #F5970C !important;
             font-weight: 400;
             position: relative;
             z-index: 1;
@@ -260,7 +262,7 @@ export default async function handler(req, res) {
           <div class="header">
             <h1 class="header-title">Order Confirmed!</h1>
             <p class="header-subtitle">Thank you for your purchase</p>
-            ${orderNumber ? `<div style="color: rgba(255,255,255,0.7); font-size: 14px; font-weight: 500; margin-top: 12px; letter-spacing: 0.5px;">Order ${orderNumber}</div>` : ''}
+            ${orderNumber ? `<div style="color: #F5970C; opacity: 0.9; font-size: 14px; font-weight: 500; margin-top: 12px; letter-spacing: 0.5px;">Order ${orderNumber}</div>` : ''}
           </div>
           
           <div class="content">
@@ -372,7 +374,7 @@ export default async function handler(req, res) {
     const mailOptions = {
       from: `"DeelDepot" <${account.user}>`,
       to: customerEmail,
-      subject: `Order Confirmation - ${productName} 🎉`,
+      subject: `Order Confirmation - ${orderNumber ? `${orderNumber} - ` : ''}${productName} 🎉`,
       html: htmlTemplate,
       text: textTemplate,
     };

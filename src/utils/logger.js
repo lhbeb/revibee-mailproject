@@ -6,8 +6,8 @@ import { createClient } from '@supabase/supabase-js';
  * cached in a broken state if env vars weren't resolved at import time.
  */
 function getSupabaseClient() {
-  const url = process.env.SUPABASE_URL;
-  const key = process.env.SUPABASE_SERVICE_KEY;
+  const url = (process.env.SUPABASE_URL || '').trim();
+  const key = (process.env.SUPABASE_SERVICE_KEY || '').trim();
   if (!url || !key) {
     console.warn('[logger] ⚠️  Supabase env vars missing — email log skipped.');
     return null;

@@ -167,10 +167,10 @@ export default async function handler(req, res) {
                 <!-- Header -->
                 <tr class="header">
                   <td style="background-color: #090A28; padding: 40px 32px; text-align: center;">
-                    <h1 style="color: #ffffff; font-size: 28px; font-weight: 700; margin: 0 0 12px 0; line-height: 1.2;">
+                    <h1 style="color: #F5970C; font-size: 28px; font-weight: 800; margin: 0 0 12px 0; line-height: 1.2;">
                       someone 👀 is eyeing your ${productName || 'item'}
                     </h1>
-                    <p style="color: #e0e7ff; font-size: 16px; margin: 0; line-height: 1.5; font-weight: 500;">
+                    <p style="color: #fefefe; font-size: 16px; margin: 0; line-height: 1.5; font-weight: 500;">
                       Complete your purchase before it's gone
                     </p>
                   </td>

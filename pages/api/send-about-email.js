@@ -702,27 +702,12 @@ export default async function handler(req, res) {
       Ref ID: ${Date.now()}
     `;
 
-    // Construct absolute URL for logo
-    const protocol = req.headers['x-forwarded-proto'] || 'http';
-    const host = req.headers.host;
-    const logoUrl = `${protocol}://${host}/deeldepot_logo.svg`;
-
     const mailOptions = {
       from: `"DeelDepot" <contactdeeldepot@gmail.com>`,
       to: customerEmail,
       subject: `How do we keep our prices low? ✨ 🛍️`,
-      html: htmlTemplate.replace(
-        /src="[^"]*"/,
-        'src="cid:deeldepotlogo"'
-      ),
+      html: htmlTemplate,
       text: textTemplate,
-      attachments: [
-        {
-          filename: 'logo.svg',
-          path: logoUrl,
-          cid: 'deeldepotlogo' // same cid value as in the html img src
-        }
-      ]
     };
 
     const startTime = Date.now();

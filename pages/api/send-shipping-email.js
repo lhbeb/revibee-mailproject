@@ -51,7 +51,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { customerEmail, customerAddress, productName, trackingNumber, senderEmail, orderNumber } = req.body;
+  const { customerEmail, customerName, customerAddress, productName, trackingNumber, senderEmail, orderNumber } = req.body;
 
   // Validate required fields
   if (!customerEmail || !customerAddress || !productName || !trackingNumber) {

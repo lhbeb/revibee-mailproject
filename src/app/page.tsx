@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import ShippingEmailForm from '../../components/ShippingEmailForm';
 import OrderConfirmationForm from '../../components/OrderConfirmationForm';
+import LocalPickupForm from '../../components/LocalPickupForm';
 import RefundEmailForm from '../../components/RefundEmailForm';
 import RecoveryEmail1Form from '../../components/RecoveryEmail1Form';
 import RecoveryEmail2Form from '../../components/RecoveryEmail2Form';
@@ -17,6 +18,7 @@ const NAV_GROUPS = [
     items: [
       { id: 'tracking',     icon: '📦', label: 'Shipping Confirmation',    sub: 'Send tracking details' },
       { id: 'confirmation', icon: '✅', label: 'Order Confirmation',        sub: 'Confirm order placement' },
+      { id: 'pickup',       icon: '🏪', label: 'Local Pickup',              sub: 'Ready for warehouse pickup' },
       { id: 'refund',       icon: '💰', label: 'Refund Email',              sub: 'Notify about refunds' },
     ],
   },
@@ -41,6 +43,7 @@ const ALL_ITEMS = NAV_GROUPS.flatMap(g => g.items);
 const FORM_MAP: Record<string, React.ReactNode> = {
   tracking:     <ShippingEmailForm />,
   confirmation: <OrderConfirmationForm />,
+  pickup:       <LocalPickupForm />,
   refund:       <RefundEmailForm />,
   recovery1:    <RecoveryEmail1Form />,
   recovery2:    <RecoveryEmail2Form />,

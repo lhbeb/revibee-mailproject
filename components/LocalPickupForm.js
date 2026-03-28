@@ -42,7 +42,7 @@ export default function LocalPickupForm() {
 
     try {
       // Re-use standard past block parsing
-      const lines = rawData.split('\\n').map(line => line.trim()).filter(line => line);
+      const lines = rawData.split('\n').map(line => line.trim()).filter(line => line);
       const productLine = lines[0] || '';
       const email = lines[1] || '';
       const name = lines[2] || '';

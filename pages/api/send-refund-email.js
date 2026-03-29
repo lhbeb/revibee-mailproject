@@ -34,9 +34,9 @@ function checkAuth(req) {
     const decoded = Buffer.from(session, 'base64').toString('utf-8');
     const [username, timestamp] = decoded.split(':');
 
-    // Check if session is still valid (24 hours)
+    // Check if session is still valid (7 days)
     const sessionAge = Date.now() - parseInt(timestamp);
-    const maxAge = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+    const maxAge = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
 
     if (sessionAge > maxAge) {
       return { authenticated: false, error: 'Session expired' };
@@ -72,8 +72,8 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Invalid email format' });
     }
 
-    // Validate refund amount
-    const amount = parseFloat(refundAmount);
+    // Validate refund amount — strip leading $ sign before parsing
+    const amount = parseFloat(String(refundAmount).replace(/^\$/, '').trim());
     if (isNaN(amount) || amount <= 0) {
       return res.status(400).json({ error: 'Invalid refund amount' });
     }

@@ -14,9 +14,9 @@ export default function handler(req, res) {
     const decoded = Buffer.from(session, 'base64').toString('utf-8');
     const [username, timestamp] = decoded.split(':');
     
-    // Check if session is still valid (24 hours)
+    // Check if session is still valid (7 days)
     const sessionAge = Date.now() - parseInt(timestamp);
-    const maxAge = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+    const maxAge = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
     
     if (sessionAge > maxAge) {
       return res.status(401).json({ authenticated: false, error: 'Session expired' });

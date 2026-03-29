@@ -12,11 +12,13 @@ export default function handler(req, res) {
 
   // Check credentials (hardcoded as requested)
   if (username === 'elmahboubi' && password === 'Localserver!!2') {
-    // Set session cookie (expires in 24 hours)
+    // Set session cookie (expires in 7 days)
     const sessionToken = Buffer.from(`${username}:${Date.now()}`).toString('base64');
+    const maxAgeSeconds = 7 * 24 * 60 * 60; // 7 days in seconds
+    const expires = new Date(Date.now() + maxAgeSeconds * 1000).toUTCString();
     
     res.setHeader('Set-Cookie', [
-      `session=${sessionToken}; HttpOnly; Path=/; Max-Age=86400; SameSite=Strict`
+      `session=${sessionToken}; HttpOnly; Path=/; Max-Age=${maxAgeSeconds}; Expires=${expires}; SameSite=Lax`
     ]);
 
     return res.status(200).json({ 

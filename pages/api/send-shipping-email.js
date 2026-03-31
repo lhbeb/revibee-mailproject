@@ -129,7 +129,7 @@ export default async function handler(req, res) {
           }
         </style>
       </head>
-      <body style="margin: 0; padding: 0; background-color: #f8f9fa; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.5; color: #090A28; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%;">
+      <body style="margin: 0; padding: 0; background-color: #f8f9fa; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.5; color: #090A28; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%;">
         
         <!-- Wrapper Table for Email Client Compatibility -->
         <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #f8f9fa;">
@@ -328,7 +328,7 @@ export default async function handler(req, res) {
                     
                     <div style="color: #f8fafc; font-size: 12px; margin-top: 24px; line-height: 1.4;">
                       This email was sent to ${customerEmail}<br>
-                      © 2025 DeelDepot. All rights reserved.
+                      © 2026 DeelDepot. All rights reserved.
                     </div>
                   </td>
                 </tr>

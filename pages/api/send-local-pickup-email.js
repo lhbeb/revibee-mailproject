@@ -41,7 +41,7 @@ export default async function handler(req, res) {
         <style>
           * { margin: 0; padding: 0; box-sizing: border-box; }
           body { 
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; 
             line-height: 1.6; 
             color: #374151; 
             margin: 0; 
@@ -220,7 +220,7 @@ export default async function handler(req, res) {
                 <tr>
                   <td style="background-color: #090A28; padding: 32px 24px; text-align: center;">
                     <div style="color: #e0e7ff; font-size: 14px; line-height: 1.5; margin-bottom: 16px;">
-                      © 2025 DeelDepot. All rights reserved.<br>
+                      © 2026 DeelDepot. All rights reserved.<br>
                       Thank you for choosing DeelDepot!<br>
                       Ref ID: ${Date.now()}
                     </div>
@@ -265,7 +265,7 @@ export default async function handler(req, res) {
       Phone: +1 717 648 4487
       Email: support@deeldepot.com
       
-      © 2025 DeelDepot. All rights reserved.
+      © 2026 DeelDepot. All rights reserved.
     `;
 
     const mailOptions = {

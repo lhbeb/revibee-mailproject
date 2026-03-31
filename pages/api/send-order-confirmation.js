@@ -44,7 +44,7 @@ export default async function handler(req, res) {
           /* Reset */
           * { margin: 0; padding: 0; box-sizing: border-box; }
           body { 
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; 
             line-height: 1.6; 
             color: #374151; 
             margin: 0; 
@@ -350,7 +350,7 @@ export default async function handler(req, res) {
               </div>
               
               <div class="copyright">
-                © 2024 DeelDepot.com. All rights reserved.<br>
+                © 2026 DeelDepot.com. All rights reserved.<br>
                 The smart way to buy quality items — for less.
               </div>
             </div>
@@ -373,7 +373,7 @@ export default async function handler(req, res) {
       
       Questions? Email contactdeeldepot@gmail.com
       
-      © 2024 DeelDepot.com. All rights reserved.
+      © 2026 DeelDepot.com. All rights reserved.
     `;
 
     // Email options

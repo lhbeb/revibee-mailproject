@@ -128,7 +128,7 @@ export default async function handler(req, res) {
           }
         </style>
       </head>
-      <body style="margin: 0; padding: 0; background-color: #f5f5f5; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; line-height: 1.6; color: #374151;">
+      <body style="margin: 0; padding: 0; background-color: #f5f5f5; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #374151;">
         <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
           <tr>
             <td style="padding: 20px 0; background-color: #f5f5f5;">
@@ -252,7 +252,7 @@ export default async function handler(req, res) {
                     <p style="color: #6b7280; font-size: 14px; margin-bottom: 16px;">If you have any questions about your refund, our customer service team is here to help.</p>
                     <p style="margin-bottom: 16px;"><a href="mailto:contactdeeldepot@gmail.com" style="color: #090A28; text-decoration: none; font-weight: 500; font-size: 14px;">📧 Email Support</a></p>
                     <p style="margin-bottom: 16px;"><a href="tel:+17176484487" style="color: #090A28; text-decoration: none; font-weight: 500; font-size: 14px;">📞 +17176484487</a></p>
-                    <p style="color: #9ca3af; font-size: 12px; margin-top: 16px; padding-top: 16px; border-top: 1px solid #e5e7eb;">© 2024 DeelDepot. All rights reserved.<br>The smart way to buy quality items — for less.</p>
+                    <p style="color: #9ca3af; font-size: 12px; margin-top: 16px; padding-top: 16px; border-top: 1px solid #e5e7eb;">© 2026 DeelDepot. All rights reserved.<br>The smart way to buy quality items — for less.</p>
                   </td>
                 </tr>
               </table>

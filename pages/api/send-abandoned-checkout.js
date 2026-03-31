@@ -138,7 +138,7 @@ export default async function handler(req, res) {
             margin: 0;
             padding: 0;
             background-color: #f8f9fa;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             line-height: 1.5;
             color: #090A28;
             -webkit-text-size-adjust: 100%;
@@ -154,7 +154,7 @@ export default async function handler(req, res) {
           }
         </style>
       </head>
-      <body style="margin: 0; padding: 0; background-color: #f8f9fa; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.5; color: #090A28;">
+      <body style="margin: 0; padding: 0; background-color: #f8f9fa; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.5; color: #090A28;">
         
         <!-- Wrapper Table -->
         <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #f8f9fa;">
@@ -167,8 +167,8 @@ export default async function handler(req, res) {
                 <!-- Header -->
                 <tr class="header">
                   <td style="background-color: #090A28; padding: 40px 32px; text-align: center;">
-                    <h1 style="color: #F5970C; font-size: 28px; font-weight: 800; margin: 0 0 12px 0; line-height: 1.2;">
-                      someone 👀 is eyeing your ${productName || 'item'}
+                    <h1 style="color: #ffffff; font-size: 28px; font-weight: 800; margin: 0 0 12px 0; line-height: 1.2;">
+                      someone 👀 is eyeing your <span style="color: #F5970C;">${productName || 'item'}</span>
                     </h1>
                     <p style="color: #fefefe; font-size: 16px; margin: 0; line-height: 1.5; font-weight: 500;">
                       Complete your purchase before it's gone
@@ -256,7 +256,7 @@ export default async function handler(req, res) {
                     </table>
                     
                     <div style="color: #9ca3af; font-size: 12px; line-height: 1.5;">
-                      © 2025 DeelDepot.com. All rights reserved.<br>
+                      © 2026 DeelDepot.com. All rights reserved.<br>
                       Thank you for your business.
                     </div>
                   </td>
@@ -291,7 +291,7 @@ export default async function handler(req, res) {
       📧 Email Support (support@deeldepot.com)
       📞 +17176484487
       
-      © 2025 DeelDepot.com. All rights reserved.
+      © 2026 DeelDepot.com. All rights reserved.
       Thank you for your business.
     `;
 

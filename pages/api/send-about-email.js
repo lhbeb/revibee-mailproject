@@ -720,6 +720,7 @@ export default async function handler(req, res) {
     // Log the sent email
     await logEmail({
       type: 'Marketing',
+      templateName: 'About DeelDepot',
       senderEmail: account.user,
       recipientEmail: customerEmail,
       recipientName: 'Customer',

@@ -299,6 +299,7 @@ export default async function handler(req, res) {
     // Log the sent email
     await logEmail({
       type: 'Recovery',
+      templateName: 'Recovery — Last Chance',
       senderEmail: account.user,
       recipientEmail: customerEmail,
       recipientName: customerName,

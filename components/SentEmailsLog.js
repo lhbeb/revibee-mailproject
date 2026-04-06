@@ -3,11 +3,14 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
 const TYPE_CONFIG = {
-  Shipping:     { color: 'bg-blue-100 text-blue-700',   icon: '📦' },
-  Confirmation: { color: 'bg-green-100 text-green-700', icon: '✅' },
-  Refund:       { color: 'bg-amber-100 text-amber-700', icon: '💰' },
-  Recovery:     { color: 'bg-purple-100 text-purple-700', icon: '🛒' },
-  Marketing:    { color: 'bg-teal-100 text-teal-700',   icon: '🏪' },
+  'Shipping Confirmation':     { color: 'bg-blue-100 text-blue-700',   icon: '📦' },
+  'Order Confirmation':        { color: 'bg-green-100 text-green-700', icon: '✅' },
+  'Local Pickup':              { color: 'bg-teal-100 text-teal-700',   icon: '🏪' },
+  'Refund Email':              { color: 'bg-amber-100 text-amber-700', icon: '💰' },
+  'Recovery — Urgent':         { color: 'bg-purple-100 text-purple-700', icon: '🛒' },
+  'Recovery — Friendly':       { color: 'bg-purple-100 text-purple-700', icon: '💚' },
+  'Recovery — Last Chance':    { color: 'bg-purple-100 text-purple-700', icon: '⏰' },
+  'About DeelDepot':           { color: 'bg-teal-100 text-teal-700',   icon: '🏪' },
 };
 
 export default function SentEmailsDashboard() {
@@ -43,11 +46,11 @@ export default function SentEmailsDashboard() {
   const allSenders = ['All', ...new Set(logs.map(l => l.senderEmail).filter(Boolean))];
   const allTypes   = ['All', ...new Set([
     ...Object.keys(TYPE_CONFIG), 
-    ...logs.map(l => l.type).filter(Boolean)
+    ...logs.map(l => l.templateName).filter(Boolean)
   ])];
 
   const filtered = logs.filter(log => {
-    const matchType   = filterType === 'All' || log.type === filterType;
+    const matchType   = filterType === 'All' || log.templateName === filterType;
     const matchSender = filterSender === 'All' || log.senderEmail === filterSender;
     const matchSearch = !search || 
       log.recipientEmail?.toLowerCase().includes(search.toLowerCase()) ||
@@ -68,7 +71,7 @@ export default function SentEmailsDashboard() {
     return logDate === new Date().toDateString();
   }).length;
   const typeCounts = Object.keys(TYPE_CONFIG).reduce((acc, t) => {
-    acc[t] = logs.filter(l => l.type === t).length;
+    acc[t] = logs.filter(l => l.templateName === t).length;
     return acc;
   }, {});
 
@@ -86,11 +89,19 @@ export default function SentEmailsDashboard() {
           <span className="text-xs text-[#090A28]/70 uppercase tracking-wider">Today</span>
         </div>
         <div className="bg-white border border-slate-200 rounded-xl p-4 flex flex-col gap-1">
-          <span className="text-3xl font-black text-[#090A28]">{typeCounts['Recovery'] || 0}</span>
+          <span className="text-3xl font-black text-[#090A28]">{
+            (typeCounts['Recovery — Urgent'] || 0) + 
+            (typeCounts['Recovery — Friendly'] || 0) + 
+            (typeCounts['Recovery — Last Chance'] || 0)
+          }</span>
           <span className="text-xs text-slate-500 uppercase tracking-wider">Recovery</span>
         </div>
         <div className="bg-white border border-slate-200 rounded-xl p-4 flex flex-col gap-1">
-          <span className="text-3xl font-black text-[#090A28]">{(typeCounts['Shipping'] || 0) + (typeCounts['Confirmation'] || 0)}</span>
+          <span className="text-3xl font-black text-[#090A28]">{
+            (typeCounts['Shipping Confirmation'] || 0) + 
+            (typeCounts['Order Confirmation'] || 0) +
+            (typeCounts['Local Pickup'] || 0)
+          }</span>
           <span className="text-xs text-slate-500 uppercase tracking-wider">Transactional</span>
         </div>
       </div>
@@ -167,7 +178,7 @@ export default function SentEmailsDashboard() {
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {filtered.map((log) => {
-                  const cfg = TYPE_CONFIG[log.type] || { color: 'bg-slate-100 text-slate-600', icon: '📧' };
+                  const cfg = TYPE_CONFIG[log.templateName] || { color: 'bg-slate-100 text-slate-600', icon: '📧' };
                   const isExpanded = expandedRowId === log.id;
                   
                   return (
@@ -180,7 +191,7 @@ export default function SentEmailsDashboard() {
                         </td>
                         <td className="px-5 py-3.5">
                           <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold ${cfg.color}`}>
-                            {cfg.icon} {log.type}
+                            {cfg.icon} {log.templateName}
                           </span>
                         </td>
                         <td className="px-5 py-3.5 text-slate-600 max-w-[200px] truncate" title={log.productName}>

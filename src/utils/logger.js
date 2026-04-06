@@ -29,6 +29,7 @@ export const logEmail = async (emailData) => {
     console.log('[logger] Logging email:', emailData.type, emailData.recipientEmail);
     const { error } = await client.from('sent_emails').insert([{
       type: emailData.type,
+      template_name: emailData.templateName || emailData.type,
       sender_email: emailData.senderEmail,
       recipient_email: emailData.recipientEmail,
       recipient_name: emailData.recipientName,
@@ -72,6 +73,7 @@ export const getLogs = async (senderEmail = null) => {
     return (data || []).map(row => ({
       id: row.id,
       type: row.type,
+      templateName: row.template_name || row.type,
       senderEmail: row.sender_email,
       recipientEmail: row.recipient_email,
       recipientName: row.recipient_name,

@@ -285,6 +285,7 @@ export default async function handler(req, res) {
     // Log the sent email to Supabase
     await logEmail({
       type: 'Transactional',
+      templateName: 'Local Pickup',
       senderEmail: account.user,
       recipientEmail: customerEmail,
       recipientName: customerName,

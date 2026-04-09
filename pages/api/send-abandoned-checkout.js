@@ -28,7 +28,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { customerName, customerEmail, productName, productLink, checkoutUrl, senderEmail } = req.body;
+    const { customerName, customerEmail, customerAddress, productName, productLink, checkoutUrl, senderEmail } = req.body;
     const normalizedProductLink = productLink?.trim() || '';
     const normalizedCheckoutUrl = checkoutUrl?.trim() || normalizedProductLink;
 
@@ -203,6 +203,18 @@ export default async function handler(req, res) {
                             ${customerName ? `Hi ${customerName},` : 'Hi there,'}<br><br>
                             The <strong>${productName || 'item'}</strong> you reserved is still in your cart—but we only have this one, and another shopper just entered checkout.
                           </p>
+
+                          ${customerAddress ? `
+                            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: 0 0 24px 0; background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px;">
+                              <tr>
+                                <td style="padding: 18px 20px; text-align: left;">
+                                  <div style="color: #090A28; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px;">Saved delivery address</div>
+                                  <div style="color: #374151; font-size: 15px; line-height: 1.6; white-space: pre-line;">${customerAddress}</div>
+                                  <div style="color: #6b7280; font-size: 13px; line-height: 1.5; margin-top: 10px;">We saved your delivery details so you can pick up right where you left off.</div>
+                                </td>
+                              </tr>
+                            </table>
+                          ` : ''}
                           
                           <p style="font-weight: 600; color: #1f2937; font-size: 18px; margin: 0 0 24px 0;">Claim it first:</p>
                           
@@ -281,6 +293,10 @@ export default async function handler(req, res) {
       ${customerName ? `Hi ${customerName},` : 'Hi there,'}
       
       The ${productName || 'item'} you reserved is still in your cart—but we only have this one, and another shopper just entered checkout.
+      ${customerAddress ? `
+      We saved your delivery address so you can continue from where you left off:
+      ${customerAddress}
+      ` : ''}
       
       Claim it first:
       Complete Purchase: ${normalizedCheckoutUrl}

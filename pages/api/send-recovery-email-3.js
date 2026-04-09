@@ -28,7 +28,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { customerName, customerEmail, productName, productLink, checkoutUrl, senderEmail } = req.body;
+    const { customerName, customerEmail, customerAddress, productName, productLink, checkoutUrl, senderEmail } = req.body;
     const normalizedProductLink = productLink?.trim() || '';
     const normalizedCheckoutUrl = checkoutUrl?.trim() || normalizedProductLink;
 
@@ -187,6 +187,18 @@ export default async function handler(req, res) {
                             ${customerName ? `${customerName},` : 'Hey there,'}<br><br>
                             This is your <strong>final reminder</strong> - the <strong>${productName || 'item'}</strong> in your cart is our last one in stock. We're holding it for you, but we can't guarantee it'll still be here in an hour.
                           </p>
+
+                          ${customerAddress ? `
+                            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: 0 0 24px 0; background-color: #ffffff; border: 1px solid #f3d1b0; border-radius: 12px;">
+                              <tr>
+                                <td style="padding: 18px 20px; text-align: left;">
+                                  <div style="color: #090A28; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px;">Saved delivery address</div>
+                                  <div style="color: #374151; font-size: 15px; line-height: 1.6; white-space: pre-line;">${customerAddress}</div>
+                                  <div style="color: #6b7280; font-size: 13px; line-height: 1.5; margin-top: 10px;">Your address is already saved, so you can jump straight back into checkout.</div>
+                                </td>
+                              </tr>
+                            </table>
+                          ` : ''}
                           
                           <p style="font-weight: 600; color: #1f2937; font-size: 18px; margin: 0 0 24px 0;">Secure it now before it's too late:</p>
                           
@@ -265,6 +277,10 @@ export default async function handler(req, res) {
       ${customerName ? `Hi ${customerName},` : 'Hi there,'}
       
       This is your final reminder - the ${productName || 'item'} in your cart is our last one in stock. We're holding it for you, but we can't guarantee it'll still be here in an hour.
+      ${customerAddress ? `
+      We saved your delivery address so you can continue from where you left off:
+      ${customerAddress}
+      ` : ''}
       
       Secure it now before it's too late:
       Secure My Item Now: ${normalizedCheckoutUrl}

@@ -46,12 +46,14 @@ export default function RecoveryEmail1Form() {
       const productLine = lines[0] || '';
       const email = lines[1] || '';
       const name = lines[2] || '';
+      const customerAddress = lines[3] || '';
       const productLink = lines[4] || '';
       const actualCheckoutLink = formData.actualCheckoutLink.trim();
 
       const payload = {
         customerEmail: email,
         customerName: name,
+        customerAddress,
         productName: productLine,
         checkoutUrl: actualCheckoutLink || productLink,
         productLink,
@@ -145,7 +147,7 @@ export default function RecoveryEmail1Form() {
             <label htmlFor="rawData" className="block text-sm font-medium text-gray-700">
               Order Details (Paste Block) *
             </label>
-            <span className="text-xs text-gray-400">Line 1: Product | Line 2: Email | Line 5: Link</span>
+            <span className="text-xs text-gray-400">Line 1: Product | Line 2: Email | Line 3: Name | Line 4: Address | Line 5: Link</span>
           </div>
           <textarea
             id="rawData"

@@ -26,10 +26,10 @@ export const logEmail = async (emailData) => {
   if (!client) return;
 
   try {
-    console.log('[logger] Logging email:', emailData.type, emailData.recipientEmail);
+    const templateName = emailData.templateName || emailData.type || 'Unknown Template';
+    console.log('[logger] Logging email template:', templateName, 'to:', emailData.recipientEmail);
     const { error } = await client.from('sent_emails').insert([{
-      type: emailData.type,
-      template_name: emailData.templateName || emailData.type,
+      type: templateName,
       sender_email: emailData.senderEmail,
       recipient_email: emailData.recipientEmail,
       recipient_name: emailData.recipientName,
@@ -70,18 +70,20 @@ export const getLogs = async (senderEmail = null) => {
       console.error('[logger] Supabase fetch error:', error.message);
       return [];
     }
-    return (data || []).map(row => ({
-      id: row.id,
-      type: row.type,
-      templateName: row.template_name || row.type,
-      senderEmail: row.sender_email,
-      recipientEmail: row.recipient_email,
-      recipientName: row.recipient_name,
-      productName: row.product_name,
-      status: row.status,
-      timestamp: row.created_at,
-      payload: row.payload,
-    }));
+    return (data || []).map(row => {
+      const templateName = row.templateName || row.template_name || row.type || 'Unknown';
+      return {
+        id: row.id,
+        templateName: templateName,
+        senderEmail: row.sender_email,
+        recipientEmail: row.recipient_email,
+        recipientName: row.recipient_name,
+        productName: row.product_name,
+        status: row.status,
+        timestamp: row.created_at,
+        payload: row.payload,
+      };
+    });
   } catch (err) {
     console.error('[logger] Fetch failed:', err);
     return [];

@@ -28,8 +28,9 @@ export default async function handler(req, res) {
     console.log('Email:', customerEmail);
     console.log('Product:', productName);
 
-    // Get the email account and create transporter
-    const account = senderEmail ? await getAccountByUser(senderEmail) : getRandomAccount();
+    // Get the email account - fall back to random if senderEmail is invalid/not found
+    let account = senderEmail ? await getAccountByUser(senderEmail) : null;
+    if (!account) account = getRandomAccount();
     const emailTransporter = createTransporter(account);
 
     // HTML email template - Refined for Email Client Compatibility
@@ -392,7 +393,6 @@ export default async function handler(req, res) {
 
     // Log the sent email
     await logEmail({
-      type: 'Confirmation',
       templateName: 'Order Confirmation',
       senderEmail: account.user,
       recipientEmail: customerEmail,

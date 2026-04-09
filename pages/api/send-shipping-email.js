@@ -388,7 +388,6 @@ export default async function handler(req, res) {
 
     // Log the sent email
     await logEmail({
-      type: 'Shipping',
       templateName: 'Shipping Confirmation',
       senderEmail: account.user,
       recipientEmail: customerEmail,

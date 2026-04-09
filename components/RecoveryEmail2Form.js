@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react';
 
 export default function RecoveryEmail2Form() {
   const [formData, setFormData] = useState({
-    senderEmail: ''
+    senderEmail: '',
+    actualCheckoutLink: ''
   });
   const [rawData, setRawData] = useState('');
   const [accounts, setAccounts] = useState([]);
@@ -45,14 +46,16 @@ export default function RecoveryEmail2Form() {
       const productLine = lines[0] || '';
       const email = lines[1] || '';
       const name = lines[2] || '';
-      const link = lines[4] || '';
+      const productLink = lines[4] || '';
+      const actualCheckoutLink = formData.actualCheckoutLink.trim();
 
       const payload = {
         customerEmail: email,
         customerName: name,
         productName: productLine,
-        checkoutUrl: link,
-        productLink: link,
+        checkoutUrl: actualCheckoutLink || productLink,
+        productLink,
+        actualCheckoutLink,
         ...formData
       };
 
@@ -69,7 +72,10 @@ export default function RecoveryEmail2Form() {
       if (response.ok) {
         setMessage({ type: 'success', content: 'Recovery email 2 sent successfully! 💚' });
         setRawData('');
-        setFormData({ senderEmail: formData.senderEmail });
+        setFormData({
+          senderEmail: formData.senderEmail,
+          actualCheckoutLink: ''
+        });
       } else {
         setMessage({
           type: 'error',
@@ -114,6 +120,23 @@ export default function RecoveryEmail2Form() {
             ))}
           </select>
           <p className="mt-1 text-xs text-gray-500">Leave as "Random" to let the system choose.</p>
+        </div>
+
+        <div>
+          <label htmlFor="actualCheckoutLink" className="block text-sm font-medium text-gray-700 mb-2">
+            External Checkout Link (Optional)
+          </label>
+          <input
+            id="actualCheckoutLink"
+            name="actualCheckoutLink"
+            type="url"
+            value={formData.actualCheckoutLink}
+            onChange={handleInputChange}
+            placeholder="https://checkout.example.com/..."
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent transition duration-200 ease-in-out text-gray-900 bg-white"
+            disabled={isLoading}
+          />
+          <p className="mt-1 text-xs text-gray-500">If blank, the product link from the pasted block will be used as the checkout link.</p>
         </div>
 
         {/* Order Details Paste Block */}

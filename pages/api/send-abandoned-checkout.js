@@ -29,11 +29,13 @@ export default async function handler(req, res) {
 
   try {
     const { customerName, customerEmail, productName, productLink, checkoutUrl, senderEmail } = req.body;
+    const normalizedProductLink = productLink?.trim() || '';
+    const normalizedCheckoutUrl = checkoutUrl?.trim() || normalizedProductLink;
 
     // Validate required fields
-    if (!customerEmail || !checkoutUrl) {
+    if (!customerEmail || !normalizedCheckoutUrl) {
       return res.status(400).json({
-        error: 'Missing required fields: customerEmail and checkoutUrl are required'
+        error: 'Missing required fields: customerEmail and either checkoutUrl or productLink are required'
       });
     }
 
@@ -49,12 +51,12 @@ export default async function handler(req, res) {
     let productImage = null;
 
     // Fetch product image if link is provided
-    if (productLink) {
+    if (normalizedProductLink) {
       try {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 5000); // 5s timeout
 
-        const response = await fetch(productLink, {
+        const response = await fetch(normalizedProductLink, {
           signal: controller.signal,
           headers: {
             'User-Agent': 'Mozilla/5.0 (compatible; DeelDepotBot/1.0;)'
@@ -84,7 +86,7 @@ export default async function handler(req, res) {
               productImage = firstImg;
             } else {
               try {
-                const url = new URL(productLink);
+                const url = new URL(normalizedProductLink);
                 productImage = `${url.protocol}//${url.host}${firstImg.startsWith('/') ? '' : '/'}${firstImg}`;
               } catch (e) {
                 // Ignore URL parsing errors
@@ -208,7 +210,7 @@ export default async function handler(req, res) {
                           <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center">
                             <tr>
                               <td style="background-color: #F5970C; border-radius: 8px; box-shadow: 0 4px 6px rgba(9, 10, 40, 0.2);">
-                                <a href="${checkoutUrl}" style="display: inline-block; padding: 16px 32px; color: #090A28; text-decoration: none; font-weight: 700; font-size: 16px; border-radius: 8px; background-color: #F5970C; border: 1px solid #F5970C;">
+                                <a href="${normalizedCheckoutUrl}" style="display: inline-block; padding: 16px 32px; color: #090A28; text-decoration: none; font-weight: 700; font-size: 16px; border-radius: 8px; background-color: #F5970C; border: 1px solid #F5970C;">
                                   <span style="color: #090A28;">Complete Purchase</span>
                                 </a>
                               </td>
@@ -281,7 +283,7 @@ export default async function handler(req, res) {
       The ${productName || 'item'} you reserved is still in your cart—but we only have this one, and another shopper just entered checkout.
       
       Claim it first:
-      Complete Purchase: ${checkoutUrl}
+      Complete Purchase: ${normalizedCheckoutUrl}
       
       Questions? Reply here or WhatsApp +1-717-648-4487.
       
@@ -314,7 +316,6 @@ export default async function handler(req, res) {
 
     // Log the sent email
     await logEmail({
-      type: 'Recovery',
       templateName: 'Recovery — Urgent',
       senderEmail: account.user,
       recipientEmail: customerEmail,

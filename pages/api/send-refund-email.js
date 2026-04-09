@@ -304,7 +304,6 @@ export default async function handler(req, res) {
 
     // Log the sent email
     await logEmail({
-      type: 'Refund',
       templateName: 'Refund Email',
       senderEmail: account.user,
       recipientEmail: customerEmail,

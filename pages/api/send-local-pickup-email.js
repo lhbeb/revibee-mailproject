@@ -26,8 +26,9 @@ export default async function handler(req, res) {
     console.log('Email:', customerEmail);
     console.log('Product:', productName);
 
-    // Get the email account and create transporter
-    const account = senderEmail ? await getAccountByUser(senderEmail) : getRandomAccount();
+    // Get the email account - fall back to random if senderEmail is invalid/not found
+    let account = senderEmail ? await getAccountByUser(senderEmail) : null;
+    if (!account) account = getRandomAccount();
     const emailTransporter = createTransporter(account);
 
     // HTML email template - DeelDepot Branded Design
@@ -284,7 +285,6 @@ export default async function handler(req, res) {
 
     // Log the sent email to Supabase
     await logEmail({
-      type: 'Transactional',
       templateName: 'Local Pickup',
       senderEmail: account.user,
       recipientEmail: customerEmail,

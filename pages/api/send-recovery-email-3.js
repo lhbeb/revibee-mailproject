@@ -29,11 +29,13 @@ export default async function handler(req, res) {
 
   try {
     const { customerName, customerEmail, productName, productLink, checkoutUrl, senderEmail } = req.body;
+    const normalizedProductLink = productLink?.trim() || '';
+    const normalizedCheckoutUrl = checkoutUrl?.trim() || normalizedProductLink;
 
     // Validate required fields
-    if (!customerEmail || !checkoutUrl) {
+    if (!customerEmail || !normalizedCheckoutUrl) {
       return res.status(400).json({
-        error: 'Missing required fields: customerEmail and checkoutUrl are required'
+        error: 'Missing required fields: customerEmail and either checkoutUrl or productLink are required'
       });
     }
 
@@ -49,9 +51,9 @@ export default async function handler(req, res) {
     let productImage = null;
 
     // Fetch product image if link is provided
-    if (productLink) {
+    if (normalizedProductLink) {
       try {
-        const response = await fetch(productLink);
+        const response = await fetch(normalizedProductLink);
         const html = await response.text();
         const $ = cheerio.load(html);
 
@@ -71,7 +73,7 @@ export default async function handler(req, res) {
             if (firstImg.startsWith('http')) {
               productImage = firstImg;
             } else {
-              const url = new URL(productLink);
+              const url = new URL(normalizedProductLink);
               productImage = `${url.protocol}//${url.host}${firstImg.startsWith('/') ? '' : '/'}${firstImg}`;
             }
           }
@@ -192,7 +194,7 @@ export default async function handler(req, res) {
                           <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center">
                             <tr>
                               <td style="background-color: #F5970C; border-radius: 8px; box-shadow: 0 4px 6px rgba(9, 10, 40, 0.2);">
-                                <a href="${checkoutUrl}" style="display: inline-block; padding: 16px 32px; color: #090A28; text-decoration: none; font-weight: 700; font-size: 16px; border-radius: 8px; background-color: #F5970C; border: 1px solid #F5970C;">
+                                <a href="${normalizedCheckoutUrl}" style="display: inline-block; padding: 16px 32px; color: #090A28; text-decoration: none; font-weight: 700; font-size: 16px; border-radius: 8px; background-color: #F5970C; border: 1px solid #F5970C;">
                                   <span style="color: #ffffff;">Secure My Item Now</span>
                                 </a>
                               </td>
@@ -265,7 +267,7 @@ export default async function handler(req, res) {
       This is your final reminder - the ${productName || 'item'} in your cart is our last one in stock. We're holding it for you, but we can't guarantee it'll still be here in an hour.
       
       Secure it now before it's too late:
-      Secure My Item Now: ${checkoutUrl}
+      Secure My Item Now: ${normalizedCheckoutUrl}
       
       Questions? Reply here or WhatsApp +1-717-648-4487.
       
@@ -298,7 +300,6 @@ export default async function handler(req, res) {
 
     // Log the sent email
     await logEmail({
-      type: 'Recovery',
       templateName: 'Recovery — Last Chance',
       senderEmail: account.user,
       recipientEmail: customerEmail,

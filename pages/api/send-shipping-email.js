@@ -151,7 +151,7 @@ export default async function handler(req, res) {
                 <!-- Header Bottom -->
                 <tr>
                   <td style="background-color: #090A28; padding: 24px 32px 40px; text-align: center;">
-                    <div style="color: #ffffff; font-size: 18px; font-weight: 600; margin: 0;">Thanks for shopping with us</div>
+                    <div style="color: #ffffff; font-size: 18px; font-weight: 600; margin: 0;">Shipping update for your order</div>
                     ${orderNumber ? `<div style="color: #ffffff; font-size: 18px; font-weight: 700; margin-top: 16px; letter-spacing: 0.5px;">Order ${orderNumber}</div>` : ''}
                   </td>
                 </tr>
@@ -182,7 +182,7 @@ export default async function handler(req, res) {
                     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-bottom: 24px;">
                       <tr>
                         <td style="color: #475569; font-size: 16px; line-height: 1.6; text-align: left;">
-                          Great news! We've carefully packaged your item and handed it off to our shipping partner.
+                          Your item has been packed and handed to the carrier. You can use the tracking details below to follow delivery progress.
                         </td>
                       </tr>
                     </table>
@@ -206,7 +206,7 @@ export default async function handler(req, res) {
                             <tr>
                               <td align="center">
                                 <h3 style="color: #090A28; font-size: 18px; font-weight: 600; margin: 0 0 8px 0; line-height: 1.4; text-align: center;">${productName}</h3>
-                                <p style="color: #64748b; font-size: 14px; margin: 0; line-height: 1.4; text-align: center;">Premium Quality • Expertly Inspected • Fast Shipping</p>
+                                <p style="color: #64748b; font-size: 14px; margin: 0; line-height: 1.4; text-align: center;">Order summary and delivery details</p>
                               </td>
                             </tr>
                           </table>
@@ -270,8 +270,8 @@ export default async function handler(req, res) {
                     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #f8fafc; border-radius: 16px; border: 1px solid #e2e8f0; margin: 32px 0;">
                       <tr>
                         <td style="padding: 28px 24px; text-align: center;">
-                          <h3 style="color: #090A28; font-size: 20px; font-weight: 700; margin: 0 0 8px 0;">🚚 Track Your Package</h3>
-                          <p style="color: #475569; font-size: 16px; margin: 0 0 20px 0;">Your package is on its way!</p>
+                          <h3 style="color: #090A28; font-size: 20px; font-weight: 700; margin: 0 0 8px 0;">Tracking Information</h3>
+                          <p style="color: #475569; font-size: 16px; margin: 0 0 20px 0;">Use the tracking number below to view the latest carrier updates.</p>
                           
                           <!-- Tracking Number -->
                           <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: 16px 0;">
@@ -309,7 +309,7 @@ export default async function handler(req, res) {
                 <!-- Footer -->
                 <tr>
                   <td style="background-color: #090A28; padding: 32px 24px; text-align: center;">
-                    <div style="color: #e0e7ff; font-size: 16px; margin: 0 0 20px 0; font-weight: 500;">The smart way to buy quality items — for less.</div>
+                    <div style="color: #e0e7ff; font-size: 16px; margin: 0 0 20px 0; font-weight: 500;">Thank you for ordering with DeelDepot.</div>
                     
                     <!-- Footer Links -->
                     <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="margin: 20px auto;">
@@ -345,12 +345,10 @@ export default async function handler(req, res) {
 
     // Plain text version for email clients that don't support HTML
     const textTemplate = `
-      DeelDepot - Your Order Has Shipped!
-      
-      The smart way to buy premium tech, cameras, and bikes — for less.
+      DeelDepot shipping update
       
       Your order is on the way.
-      Great news! We've carefully packaged your item and handed it off to our shipping partner.
+      Your item has been packed and handed to the carrier.
       
       Order Details:
       ${orderNumber ? `Order Number: ${orderNumber}` : ''}
@@ -360,14 +358,13 @@ export default async function handler(req, res) {
       Status: In Transit (3-7 Business Days)
       
       Tracking Information:
-      Your package is on its way!
       Tracking Number: ${trackingNumber}
       Track your package: ${trackingUrl}
       
       Questions about your order? Our support team is here to help. Thank you for choosing DeelDepot.
       
       ---
-      DeelDepot - The smart way to buy quality items for less
+      DeelDepot order support
       
       This email was sent to ${customerEmail}
       DeelDepot • Premium Pre-Owned Technology
@@ -377,7 +374,7 @@ export default async function handler(req, res) {
     const mailOptions = {
       from: `"DeelDepot" <${account.user}>`,
       to: customerEmail,
-      subject: `Your Order Has Shipped! 📦 - ${orderNumber ? `${orderNumber} - ` : ''}${productName}`,
+      subject: `Shipping Update - ${orderNumber ? `${orderNumber} - ` : ''}${productName}`,
       text: textTemplate,
       html: htmlTemplate,
     };

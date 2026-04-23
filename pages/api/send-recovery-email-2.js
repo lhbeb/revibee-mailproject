@@ -109,7 +109,7 @@ export default async function handler(req, res) {
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="format-detection" content="telephone=no, date=no, email=no, address=no">
-        <title>We Saved Your Cart - DeelDepot</title>
+        <title>Your Saved Cart - DeelDepot</title>
         <!--[if mso]>
         <noscript>
           <xml>
@@ -154,10 +154,10 @@ export default async function handler(req, res) {
                 <tr class="header">
                   <td style="background-color: #090A28; padding: 40px 32px; text-align: center;">
                     <h1 style="color: #ffffff; font-size: 28px; font-weight: 700; margin: 0 0 12px 0; line-height: 1.2;">
-                      We saved your cart for you! 💚
+                      Your cart is still available
                     </h1>
                     <p style="color: #f8fafc; font-size: 16px; margin: 0; line-height: 1.5; font-weight: 500;">
-                      No pressure - just a friendly reminder
+                      A quick reminder that your saved item is ready when you are
                     </p>
                   </td>
                 </tr>
@@ -185,7 +185,7 @@ export default async function handler(req, res) {
                           
                           <p style="color: #374151; font-size: 18px; line-height: 1.6; margin: 0 0 24px 0;">
                             ${customerName ? `Hi ${customerName},` : 'Hi there,'}<br><br>
-                            Looks like you got busy! We kept your <strong>${productName || 'item'}</strong> safe in your cart. Take your time - we're here whenever you're ready.
+                            Your <strong>${productName || 'item'}</strong> is still saved in your cart. When you are ready, you can continue from where you left off.
                           </p>
 
                           ${customerAddress ? `
@@ -272,11 +272,11 @@ export default async function handler(req, res) {
 
     // Plain text version
     const textTemplate = `
-      ${customerName ? `${customerName}, we saved your cart! 💚` : `We saved your cart! 💚`}
+      ${customerName ? `${customerName}, your saved cart is still available` : `Your saved cart is still available`}
       
       ${customerName ? `Hi ${customerName},` : 'Hi there,'}
       
-      Looks like you got busy! We kept your ${productName || 'item'} safe in your cart. Take your time - we're here whenever you're ready.
+      Your ${productName || 'item'} is still saved in your cart. When you are ready, you can continue from where you left off.
       ${customerAddress ? `
       We saved your delivery address so you can continue from where you left off:
       ${customerAddress}
@@ -301,7 +301,7 @@ export default async function handler(req, res) {
     const mailOptions = {
       from: `"DeelDepot" <${account.user}>`,
       to: customerEmail,
-      subject: `Did you forget something? 😊 ${customerName ? customerName : ''}`,
+      subject: `Your Saved Cart - ${productName || 'item'}`,
       html: htmlTemplate,
       text: textTemplate,
     };

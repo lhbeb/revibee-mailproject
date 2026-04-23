@@ -107,7 +107,7 @@ export default async function handler(req, res) {
       <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Refund Confirmation</title>
+        <title>Refund Update</title>
         <style>
           @media screen and (max-width: 600px) {
             .content-cell {
@@ -136,14 +136,14 @@ export default async function handler(req, res) {
                 <!-- Header Top -->
                 <tr>
                   <td style="background-color: #F5970C; padding: 40px 32px 24px; text-align: center;">
-                    <h1 style="color: #090A28; font-size: 32px; font-weight: 800; margin: 0;">Refund Processed</h1>
+                    <h1 style="color: #090A28; font-size: 32px; font-weight: 800; margin: 0;">Refund Update</h1>
                   </td>
                 </tr>
                 
                 <!-- Header Bottom -->
                 <tr>
                   <td style="background-color: #090A28; padding: 24px 32px 40px; text-align: center;">
-                    <div style="color: #ffffff; font-size: 18px; font-weight: 600; margin: 0;">We&apos;ve issued a refund for your order</div>
+                    <div style="color: #ffffff; font-size: 18px; font-weight: 600; margin: 0;">A refund has been issued for your order</div>
                   </td>
                 </tr>
                 <!-- Main Content -->
@@ -157,8 +157,8 @@ export default async function handler(req, res) {
                           <div style="width: 80px; height: 80px; background-color: #090A28; border-radius: 50%; display: table; margin: 0 auto 32px;">
                             <span style="display: table-cell; vertical-align: middle; text-align: center; color: white; font-size: 32px; font-weight: bold;">✓</span>
                           </div>
-                          <h2 style="font-size: 28px; font-weight: 600; color: #1f2937; text-align: center; margin-bottom: 12px;">Your Order Has Been Successfully Refunded</h2>
-                          <p style="font-size: 16px; color: #6b7280; text-align: center; margin-bottom: 32px;">We have processed a full refund for your order. The refund amount will appear in your original payment method.</p>
+                          <h2 style="font-size: 28px; font-weight: 600; color: #1f2937; text-align: center; margin-bottom: 12px;">Your refund is on the way</h2>
+                          <p style="font-size: 16px; color: #6b7280; text-align: center; margin-bottom: 32px;">We have submitted the refund for your order. The amount below should return to your original payment method shortly.</p>
                           
                           <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px; padding: 24px; text-align: center;">
                             <tr>
@@ -252,7 +252,7 @@ export default async function handler(req, res) {
                     <p style="color: #6b7280; font-size: 14px; margin-bottom: 16px;">If you have any questions about your refund, our customer service team is here to help.</p>
                     <p style="margin-bottom: 16px;"><a href="mailto:contactdeeldepot@gmail.com" style="color: #090A28; text-decoration: none; font-weight: 500; font-size: 14px;">📧 Email Support</a></p>
                     <p style="margin-bottom: 16px;"><a href="tel:+17176484487" style="color: #090A28; text-decoration: none; font-weight: 500; font-size: 14px;">📞 +17176484487</a></p>
-                    <p style="color: #9ca3af; font-size: 12px; margin-top: 16px; padding-top: 16px; border-top: 1px solid #e5e7eb;">© 2026 DeelDepot. All rights reserved.<br>The smart way to buy quality items — for less.</p>
+                    <p style="color: #9ca3af; font-size: 12px; margin-top: 16px; padding-top: 16px; border-top: 1px solid #e5e7eb;">© 2026 DeelDepot. All rights reserved.<br>Customer support for every order.</p>
                   </td>
                 </tr>
               </table>
@@ -267,14 +267,14 @@ export default async function handler(req, res) {
     const mailOptions = {
       from: `"DeelDepot" <${account.user}>`,
       to: customerEmail,
-      subject: 'Your Refund Has Been Processed',
+      subject: 'Refund Update for Your Order',
       html: htmlTemplate,
       text: `
-        Your Order Has Been Successfully Refunded
+        Refund Update
         
         Dear ${customerName},
         
-        Great news! Your order has been successfully refunded with a full refund.
+        We have submitted a refund for your order.
         
         Refund Details:
         - Product: ${productName}
@@ -290,7 +290,7 @@ export default async function handler(req, res) {
         Email: contactdeeldepot@gmail.com
         Phone: +17176484487
         
-        Thank you for your business!
+        Thank you,
         
         This email was sent to ${customerEmail}
       `

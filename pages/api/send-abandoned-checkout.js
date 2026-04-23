@@ -125,7 +125,7 @@ export default async function handler(req, res) {
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="format-detection" content="telephone=no, date=no, email=no, address=no">
-        <title>Complete Your Purchase - DeelDepot.com</title>
+        <title>Your Saved Item - DeelDepot.com</title>
         <!--[if mso]>
         <noscript>
           <xml>
@@ -170,10 +170,10 @@ export default async function handler(req, res) {
                 <tr class="header">
                   <td style="background-color: #090A28; padding: 40px 32px; text-align: center;">
                     <h1 style="color: #ffffff; font-size: 28px; font-weight: 800; margin: 0 0 12px 0; line-height: 1.2;">
-                      someone 👀 is eyeing your <span style="color: #F5970C;">${productName || 'item'}</span>
+                      Your saved item is still available
                     </h1>
                     <p style="color: #fefefe; font-size: 16px; margin: 0; line-height: 1.5; font-weight: 500;">
-                      Complete your purchase before it's gone
+                      Return to your saved item whenever you are ready
                     </p>
                   </td>
                 </tr>
@@ -201,7 +201,7 @@ export default async function handler(req, res) {
                           
                           <p style="color: #374151; font-size: 18px; line-height: 1.6; margin: 0 0 24px 0;">
                             ${customerName ? `Hi ${customerName},` : 'Hi there,'}<br><br>
-                            The <strong>${productName || 'item'}</strong> you reserved is still in your cart—but we only have this one, and another shopper just entered checkout.
+                            We saved your <strong>${productName || 'item'}</strong> in your cart so you can continue your order when it suits you.
                           </p>
 
                           ${customerAddress ? `
@@ -216,7 +216,7 @@ export default async function handler(req, res) {
                             </table>
                           ` : ''}
                           
-                          <p style="font-weight: 600; color: #1f2937; font-size: 18px; margin: 0 0 24px 0;">Claim it first:</p>
+                          <p style="font-weight: 600; color: #1f2937; font-size: 18px; margin: 0 0 24px 0;">Continue your order:</p>
                           
                           <!-- CTA Button -->
                           <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center">
@@ -288,17 +288,17 @@ export default async function handler(req, res) {
 
     // Plain text version
     const textTemplate = `
-      ${customerName ? `${customerName}, someone else is eyeing your ${productName || 'item'} 👀` : `Someone else is eyeing your ${productName || 'item'} 👀`}
+      ${customerName ? `${customerName}, your saved item is still available` : `Your saved item is still available`}
       
       ${customerName ? `Hi ${customerName},` : 'Hi there,'}
       
-      The ${productName || 'item'} you reserved is still in your cart—but we only have this one, and another shopper just entered checkout.
+      We saved your ${productName || 'item'} in your cart so you can continue your order when you are ready.
       ${customerAddress ? `
       We saved your delivery address so you can continue from where you left off:
       ${customerAddress}
       ` : ''}
       
-      Claim it first:
+      Continue your order:
       Complete Purchase: ${normalizedCheckoutUrl}
       
       Questions? Reply here or WhatsApp +1-717-648-4487.
@@ -317,7 +317,7 @@ export default async function handler(req, res) {
     const mailOptions = {
       from: `"DeelDepot" <${account.user}>`,
       to: customerEmail,
-      subject: `Hey 👋 ${customerName ? `${customerName}, ` : ''}Your ${productName || 'item'} is waiting!`,
+      subject: `Your Saved Item - ${productName || 'item'}`,
       html: htmlTemplate,
       text: textTemplate,
     };

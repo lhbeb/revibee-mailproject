@@ -109,7 +109,7 @@ export default async function handler(req, res) {
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="format-detection" content="telephone=no, date=no, email=no, address=no">
-        <title>Last Chance - Your Item is Going Fast! - DeelDepot</title>
+        <title>Saved Cart Reminder - DeelDepot</title>
         <!--[if mso]>
         <noscript>
           <xml>
@@ -154,10 +154,10 @@ export default async function handler(req, res) {
                 <tr class="header">
                   <td style="background-color: #090A28; padding: 40px 32px; text-align: center;">
                     <h1 style="color: #ffffff; font-size: 28px; font-weight: 700; margin: 0 0 12px 0; line-height: 1.2;">
-                      ⏰ Last chance! Your ${productName || 'item'} is almost gone
+                      A final reminder about your saved item
                     </h1>
                     <p style="color: #f8fafc; font-size: 16px; margin: 0; line-height: 1.5; font-weight: 500;">
-                      Only 1 left in stock - don't miss out!
+                      Your checkout details are still saved if you would like to continue
                     </p>
                   </td>
                 </tr>
@@ -185,7 +185,7 @@ export default async function handler(req, res) {
                           
                           <p style="color: #374151; font-size: 18px; line-height: 1.6; margin: 0 0 24px 0;">
                             ${customerName ? `${customerName},` : 'Hey there,'}<br><br>
-                            This is your <strong>final reminder</strong> - the <strong>${productName || 'item'}</strong> in your cart is our last one in stock. We're holding it for you, but we can't guarantee it'll still be here in an hour.
+                            This is a final reminder that your <strong>${productName || 'item'}</strong> is still saved in your cart. If you want to complete the order, you can continue using the link below.
                           </p>
 
                           ${customerAddress ? `
@@ -200,7 +200,7 @@ export default async function handler(req, res) {
                             </table>
                           ` : ''}
                           
-                          <p style="font-weight: 600; color: #1f2937; font-size: 18px; margin: 0 0 24px 0;">Secure it now before it's too late:</p>
+                          <p style="font-weight: 600; color: #1f2937; font-size: 18px; margin: 0 0 24px 0;">Continue to checkout:</p>
                           
                           <!-- CTA Button -->
                           <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center">
@@ -272,17 +272,17 @@ export default async function handler(req, res) {
 
     // Plain text version
     const textTemplate = `
-      ${customerName ? `${customerName}, last chance for your ${productName || 'item'}! ⏰` : `Last chance for your ${productName || 'item'}! ⏰`}
+      ${customerName ? `${customerName}, final reminder for your saved item` : `Final reminder for your saved item`}
       
       ${customerName ? `Hi ${customerName},` : 'Hi there,'}
       
-      This is your final reminder - the ${productName || 'item'} in your cart is our last one in stock. We're holding it for you, but we can't guarantee it'll still be here in an hour.
+      This is a final reminder that your ${productName || 'item'} is still saved in your cart. If you would like to complete the order, you can continue below.
       ${customerAddress ? `
       We saved your delivery address so you can continue from where you left off:
       ${customerAddress}
       ` : ''}
       
-      Secure it now before it's too late:
+      Continue to checkout:
       Secure My Item Now: ${normalizedCheckoutUrl}
       
       Questions? Reply here or WhatsApp +1-717-648-4487.
@@ -301,7 +301,7 @@ export default async function handler(req, res) {
     const mailOptions = {
       from: `"DeelDepot" <${account.user}>`,
       to: customerEmail,
-      subject: `⏰ Last Chance! ${customerName ? `${customerName}, ` : ''}Your ${productName || 'item'} is almost gone`,
+      subject: `Checkout Reminder - ${productName || 'item'}`,
       html: htmlTemplate,
       text: textTemplate,
     };

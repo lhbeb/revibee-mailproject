@@ -265,10 +265,10 @@ export default async function handler(req, res) {
       <body>
         <div class="container">
           <div class="header-top">
-            <h1 class="header-title">Order Confirmed!</h1>
+            <h1 class="header-title">Order Received</h1>
           </div>
           <div class="header-bottom">
-            <div class="header-subtitle">Thank you for your purchase</div>
+            <div class="header-subtitle">We have received your order details</div>
             ${orderNumber ? `<div class="header-order">Order ${orderNumber}</div>` : ''}
           </div>
           
@@ -276,8 +276,8 @@ export default async function handler(req, res) {
             <div class="confirmation-card">
               <!-- Using a span for the icon with explicit block display and dimensions -->
               <span class="confirmation-icon">📦</span>
-              <h2 style="font-size: 24px; font-weight: 600; color: #1f2937; margin-bottom: 16px;">Your order has been received</h2>
-              <p style="color: #6b7280; font-size: 16px;">We're preparing your item with care and attention to detail.</p>
+              <h2 style="font-size: 24px; font-weight: 600; color: #1f2937; margin-bottom: 16px;">We are preparing your order</h2>
+              <p style="color: #6b7280; font-size: 16px;">This email confirms that your order information has been received successfully.</p>
             </div>
 
             <div class="order-info">
@@ -352,7 +352,7 @@ export default async function handler(req, res) {
               
               <div class="copyright">
                 © 2026 DeelDepot.com. All rights reserved.<br>
-                The smart way to buy quality items — for less.
+                Thank you for ordering with DeelDepot.
               </div>
             </div>
           </div>
@@ -363,11 +363,11 @@ export default async function handler(req, res) {
 
     // Plain text version
     const textTemplate = `
-      Order Confirmed!
+      Order received
       
-      Thank you for your purchase, ${customerName}.
+      Hello ${customerName},
       
-      Your order for "${productName}" has been received.
+      We have received your order for "${productName}".
       ${orderNumber ? `\n      Order Number: ${orderNumber}` : ''}
       
       Shipping To: ${customerAddress || 'Address not provided'}
@@ -381,7 +381,7 @@ export default async function handler(req, res) {
     const mailOptions = {
       from: `"DeelDepot" <${account.user}>`,
       to: customerEmail,
-      subject: `Order Confirmation - ${orderNumber ? `${orderNumber} - ` : ''}${productName} 🎉`,
+      subject: `Order Received - ${orderNumber ? `${orderNumber} - ` : ''}${productName}`,
       html: htmlTemplate,
       text: textTemplate,
     };

@@ -67,7 +67,7 @@ export default async function handler(req, res) {
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="format-detection" content="telephone=no, date=no, email=no, address=no">
-        <title>✨ How do we keep our prices low? 🛍️</title>
+        <title>How DeelDepot sources inventory</title>
         <style>
           body {
             margin: 0;
@@ -248,7 +248,7 @@ export default async function handler(req, res) {
                 <tr>
                   <td style="padding: 24px 32px; text-align: center; background-color: #090A28;">
                     <h1 style="color: #ffffff; font-size: 24px; font-weight: 700; margin: 0;">
-                      How do we keep our prices low?
+                      How DeelDepot sources inventory
                     </h1>
                   </td>
                 </tr>
@@ -258,7 +258,7 @@ export default async function handler(req, res) {
                   <td class="content-cell" style="padding: 40px 32px;">
                     <p style="color: #374151; font-size: 18px; line-height: 1.8; margin: 0 0 20px 0;">
                       Hello,<br><br>
-                      Premium products below retail. Here's how we do it.
+                      Here is a short overview of how our inventory sourcing works.
                     </p>
                     
                     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #f8fafc; border-left: 4px solid #090A28; border-radius: 8px; margin: 24px 0;">
@@ -266,7 +266,7 @@ export default async function handler(req, res) {
                         <td style="padding: 20px;">
                           <p style="color: #090A28; font-size: 18px; font-weight: 600; margin: 0 0 8px 0;">Our Mission</p>
                           <p style="color: #090A28; font-size: 18px; margin: 0; line-height: 1.6;">
-                            Make premium products accessible to everyone without inflated retail costs.
+                            Offer well-described products at fair prices through disciplined sourcing and inspection.
                           </p>
                         </td>
                       </tr>
@@ -288,7 +288,7 @@ export default async function handler(req, res) {
                     </h2>
                     
                     <p style="color: #374151; font-size: 17px; line-height: 1.7; margin: 0 0 24px 0; text-align: center;">
-                      Our prices are often <strong>30-50% below normal retail</strong> because of how we source products:
+                      Our pricing comes from how we source, inspect, and list inventory:
                     </p>
                     
                     <!-- Strategy 1 -->
@@ -705,7 +705,7 @@ export default async function handler(req, res) {
     const mailOptions = {
       from: `"DeelDepot" <contactdeeldepot@gmail.com>`,
       to: customerEmail,
-      subject: `How do we keep our prices low? ✨ 🛍️`,
+      subject: `How DeelDepot Sources Inventory`,
       html: htmlTemplate,
       text: textTemplate,
     };

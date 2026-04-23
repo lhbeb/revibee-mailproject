@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import SenderEmailButtons from './SenderEmailButtons';
 
 export default function RecoveryEmail3Form() {
   const [formData, setFormData] = useState({
@@ -19,7 +20,14 @@ export default function RecoveryEmail3Form() {
         const response = await fetch('/api/get-accounts');
         if (response.ok) {
           const data = await response.json();
-          setAccounts(data.accounts || []);
+          const nextAccounts = data.accounts || [];
+          setAccounts(nextAccounts);
+          if (nextAccounts.length) {
+            setFormData(prev => ({
+              ...prev,
+              senderEmail: prev.senderEmail || nextAccounts[0].user
+            }));
+          }
         }
       } catch (error) {
         console.error('Failed to fetch email accounts:', error);
@@ -102,27 +110,12 @@ export default function RecoveryEmail3Form() {
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Sender Email Selection */}
-        <div>
-          <label htmlFor="senderEmail" className="block text-sm font-medium text-gray-700 mb-2">
-            Send From (Optional)
-          </label>
-          <select
-            id="senderEmail"
-            name="senderEmail"
-            value={formData.senderEmail}
-            onChange={handleInputChange}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent transition duration-200 ease-in-out text-gray-900 bg-white"
-            disabled={isLoading}
-          >
-            <option value="">Random (Auto-Rotate)</option>
-            {accounts.map((account, index) => (
-              <option key={index} value={account.user}>
-                {account.user}
-              </option>
-            ))}
-          </select>
-          <p className="mt-1 text-xs text-gray-500">Leave as "Random" to let the system choose.</p>
-        </div>
+        <SenderEmailButtons
+          accounts={accounts}
+          selectedEmail={formData.senderEmail}
+          onSelect={(email) => setFormData(prev => ({ ...prev, senderEmail: email }))}
+          disabled={isLoading}
+        />
 
         <div>
           <label htmlFor="actualCheckoutLink" className="block text-sm font-medium text-gray-700 mb-2">

@@ -6,6 +6,10 @@ const emailAccounts = [
   {
     user: 'heydeeldepot@gmail.com',
     pass: 'ckph mgay vioy jswd', // App Password
+  },
+  {
+    user: 'deeldepot@gmail.com',
+    pass: 'aoqy eizc zjsu npxv', // App Password
   }
 ];
 

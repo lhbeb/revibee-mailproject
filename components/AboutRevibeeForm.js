@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
+import SenderEmailButtons from './SenderEmailButtons';
 
 export default function AboutDeelDepotForm() {
     const [emailList, setEmailList] = useState('');
@@ -19,7 +20,11 @@ export default function AboutDeelDepotForm() {
                 const response = await fetch('/api/get-accounts');
                 if (response.ok) {
                     const data = await response.json();
-                    setAccounts(data.accounts || []);
+                    const nextAccounts = data.accounts || [];
+                    setAccounts(nextAccounts);
+                    if (nextAccounts.length) {
+                        setSenderEmail(prev => prev || nextAccounts[0].user);
+                    }
                 }
             } catch (error) {
                 console.error('Failed to fetch email accounts:', error);
@@ -151,27 +156,12 @@ export default function AboutDeelDepotForm() {
 
             <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Sender Email Selection */}
-                <div>
-                    <label htmlFor="senderEmail" className="block text-sm font-medium text-gray-700 mb-2">
-                        Send From (Optional)
-                    </label>
-                    <select
-                        id="senderEmail"
-                        name="senderEmail"
-                        value={senderEmail}
-                        onChange={(e) => setSenderEmail(e.target.value)}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#F5970C] focus:border-transparent transition duration-200 ease-in-out text-gray-900 bg-white"
-                        disabled={isLoading}
-                    >
-                        <option value="">Random (Auto-Rotate)</option>
-                        {accounts.map((account, index) => (
-                            <option key={index} value={account.user}>
-                                {account.user}
-                            </option>
-                        ))}
-                    </select>
-                    <p className="mt-1 text-xs text-gray-500">Leave as "Random" to let the system choose.</p>
-                </div>
+                <SenderEmailButtons
+                    accounts={accounts}
+                    selectedEmail={senderEmail}
+                    onSelect={setSenderEmail}
+                    disabled={isLoading}
+                />
 
                 <div>
                     <div className="flex justify-between items-center mb-2">

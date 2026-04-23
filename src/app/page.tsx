@@ -9,6 +9,7 @@ import RecoveryEmail1Form from '../../components/RecoveryEmail1Form';
 import RecoveryEmail2Form from '../../components/RecoveryEmail2Form';
 import RecoveryEmail3Form from '../../components/RecoveryEmail3Form';
 import AboutHappyDeelForm from '../../components/AboutHappyDeelForm';
+import ProductRecommendationsForm from '../../components/ProductRecommendationsForm';
 import SentEmailsLog from '../../components/SentEmailsLog';
 import LoginForm from '../../components/LoginForm';
 
@@ -33,7 +34,8 @@ const NAV_GROUPS = [
   {
     label: 'Marketing',
     items: [
-      { id: 'about', icon: '🏪', label: 'About DeelDepot', sub: 'Brand story email' },
+      { id: 'about',        icon: '🏪', label: 'About DeelDepot',          sub: 'Brand story email' },
+      { id: 'recommend',   icon: '✨', label: 'Product Recommendations',  sub: 'You might also like' },
     ],
   },
 ];
@@ -49,6 +51,7 @@ const FORM_MAP: Record<string, React.ReactNode> = {
   recovery2:    <RecoveryEmail2Form />,
   recovery3:    <RecoveryEmail3Form />,
   about:        <AboutHappyDeelForm />,
+  recommend:    <ProductRecommendationsForm />,
 };
 
 export default function Home() {

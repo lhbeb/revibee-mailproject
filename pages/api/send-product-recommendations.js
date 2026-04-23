@@ -49,7 +49,33 @@ async function scrapeProduct(url) {
       $('title').text().trim() ||
       null;
 
-    return { image, title };
+    // ── Price ──────────────────────────────────────────────────────────
+    let price =
+      $('meta[property="product:price:amount"]').attr('content') ||
+      $('meta[property="og:price:amount"]').attr('content') ||
+      null;
+
+    let currency =
+      $('meta[property="product:price:currency"]').attr('content') ||
+      $('meta[property="og:price:currency"]').attr('content') ||
+      '$';
+
+    let formattedPrice = null;
+    if (price) {
+      if (currency === 'USD' || currency === '$') {
+        formattedPrice = `$${price}`;
+      } else {
+        formattedPrice = `${price} ${currency}`;
+      }
+    } else {
+      let label1 = $('meta[name="twitter:label1"]').attr('content');
+      let data1 = $('meta[name="twitter:data1"]').attr('content');
+      if (label1 && label1.toLowerCase() === 'price' && data1) {
+        formattedPrice = data1;
+      }
+    }
+
+    return { image, title, price: formattedPrice };
   } catch (err) {
     console.warn(`[recommendations] Failed to scrape ${url}: ${err.message}`);
     return { image: null, title: null };
@@ -62,16 +88,20 @@ async function scrapeProduct(url) {
  * Renders a single product card cell for the email grid.
  * Table-based layout for maximum email client compatibility.
  */
-function renderProductCard({ url, image, title }) {
+function renderProductCard({ url, image, title, price }) {
   const displayTitle = title || 'View Product';
   // Truncate long titles
-  const shortTitle = displayTitle.length > 60 ? displayTitle.slice(0, 57) + '…' : displayTitle;
+  const shortTitle = displayTitle.length > 50 ? displayTitle.slice(0, 47) + '…' : displayTitle;
 
   const imgBlock = image
     ? `<img src="${image}" alt="${shortTitle.replace(/"/g, '&quot;')}"
           style="width:100%; height:180px; object-fit:cover; display:block; border-radius:8px 8px 0 0;">`
     : `<div style="width:100%; height:180px; background:#f1f5f9; border-radius:8px 8px 0 0;
                    display:flex; align-items:center; justify-content:center; font-size:48px;">🛍️</div>`;
+
+  const priceHTML = price 
+    ? `<p style="margin:4px 0 0 0; font-size:14px; font-weight:700; color:#F5970C;">${price}</p>` 
+    : '';
 
   return `
     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
@@ -84,6 +114,7 @@ function renderProductCard({ url, image, title }) {
         <td style="padding:14px 16px 6px 16px;">
           <p style="margin:0; font-size:13px; font-weight:600; color:#1f2937;
                     line-height:1.4; min-height:36px;">${shortTitle}</p>
+          ${priceHTML}
         </td>
       </tr>
       <tr>
@@ -111,18 +142,18 @@ function renderProductGrid(products) {
     const chunk = products.slice(i, i + COLS);
     const cells = chunk
       .map(p => `
-        <td width="48%" valign="top" style="padding:8px;">
+        <td class="prod-col" width="48%" valign="top" style="padding:8px;">
           ${renderProductCard(p)}
         </td>`)
-      .join(`<td width="4%" style="padding:0;"> </td>`);
+      .join(`<!-- spacer --><td class="prod-spacer" width="4%" style="padding:0; font-size:1px; line-height:1px;">&nbsp;</td>`);
 
     // If odd product on last row, add an empty cell to balance
     const emptyFill = chunk.length < COLS
-      ? `<td width="48%" style="padding:8px;"> </td><td width="4%"> </td>`
+      ? `<!-- spacer --><td class="prod-spacer" width="4%" style="padding:0; font-size:1px; line-height:1px;">&nbsp;</td><td class="prod-col" width="48%" style="padding:8px;"></td>`
       : '';
 
     rows.push(`
-      <tr>
+      <tr class="prod-row">
         ${cells}
         ${emptyFill}
       </tr>`);
@@ -161,8 +192,8 @@ export default async function handler(req, res) {
     // ── Scrape all product pages in parallel ────────────────────────────
     const scraped = await Promise.all(
       productLinks.map(async (url) => {
-        const { image, title } = await scrapeProduct(url);
-        return { url, image, title };
+        const { image, title, price } = await scrapeProduct(url);
+        return { url, image, title, price };
       })
     );
 
@@ -207,7 +238,9 @@ export default async function handler(req, res) {
     @media screen and (max-width:600px){
       .content-cell { padding:16px !important; }
       .header h1   { font-size:22px !important; }
-      .prod-col    { display:block !important; width:100% !important; }
+      .prod-row    { display:block !important; width:100% !important; }
+      .prod-col    { display:block !important; width:100% !important; box-sizing:border-box !important; padding:4px 0 16px 0 !important; }
+      .prod-spacer { display:none !important; }
     }
   </style>
 </head>

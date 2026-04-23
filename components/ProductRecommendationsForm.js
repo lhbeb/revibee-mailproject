@@ -49,10 +49,17 @@ export default function ProductRecommendationsForm() {
     setMessage({ type: '', content: '' });
 
     try {
-      // Parse customer block
+      // Support both the standard app paste block and the old lightweight mode.
       const customerLines = customerRaw.split('\n').map(l => l.trim()).filter(l => l);
-      const customerEmail = customerLines[0] || '';
-      const customerName  = customerLines[1] || '';
+      const firstLine = customerLines[0] || '';
+      const isLightweightMode = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(firstLine);
+
+      const customerEmail = isLightweightMode ? (customerLines[0] || '') : (customerLines[1] || '');
+      const customerName = isLightweightMode ? (customerLines[1] || '') : (customerLines[2] || '');
+      const sourceProductName = isLightweightMode ? '' : (customerLines[0] || '');
+      const customerAddress = isLightweightMode ? '' : (customerLines[3] || '');
+      const sourceProductLink = isLightweightMode ? '' : (customerLines[4] || '');
+      const orderNumber = isLightweightMode ? '' : (customerLines[5] || '');
 
       // Parse product links (one per line, must start with http)
       const productLinks = productLinksRaw
@@ -61,7 +68,7 @@ export default function ProductRecommendationsForm() {
         .filter(l => l.startsWith('http'));
 
       if (!customerEmail) {
-        setMessage({ type: 'error', content: 'Customer email is required (Line 1 of customer block).' });
+        setMessage({ type: 'error', content: 'Customer email is required. In the standard paste block it should be on Line 2.' });
         setIsLoading(false);
         return;
       }
@@ -74,6 +81,10 @@ export default function ProductRecommendationsForm() {
       const payload = {
         customerEmail,
         customerName,
+        sourceProductName,
+        customerAddress,
+        sourceProductLink,
+        orderNumber,
         productLinks,
         senderEmail: formData.senderEmail,
       };
@@ -126,18 +137,21 @@ export default function ProductRecommendationsForm() {
             <label htmlFor="customerRaw" className="block text-sm font-medium text-gray-700">
               Customer Info *
             </label>
-            <span className="text-xs text-gray-400">Line 1: Email | Line 2: Name (optional)</span>
+            <span className="text-xs text-gray-400">Standard block: Line 1 Product | Line 2 Email | Line 3 Name | Line 4 Address | Line 5 Link | Line 6 Order #</span>
           </div>
           <textarea
             id="customerRaw"
             value={customerRaw}
             onChange={(e) => setCustomerRaw(e.target.value)}
             required
-            rows={3}
+            rows={7}
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#F5970C] focus:border-transparent transition duration-200 ease-in-out text-gray-900 bg-white resize-y font-mono text-sm leading-relaxed"
-            placeholder={"customer@example.com\nJohn Doe"}
+            placeholder={"Product Name : $Price\ncustomer@example.com\nJohn Doe\n123 Address St, City, ST 12345\nhttps://deeldepot.com/product/...\n#10105"}
             disabled={isLoading}
           />
+          <p className="mt-1 text-xs text-gray-500">
+            You can also still use the short format: Line 1 email, Line 2 name.
+          </p>
         </div>
 
         {/* Product Links */}
@@ -204,7 +218,7 @@ export default function ProductRecommendationsForm() {
       <div className="mt-8 p-4 bg-amber-50 border border-amber-200 rounded-lg">
         <h3 className="text-sm font-semibold text-amber-800 mb-2">✨ How it works</h3>
         <ul className="text-sm text-amber-700 space-y-1">
-          <li>• Enter the customer&apos;s email (and optional name) in the top block</li>
+          <li>• Paste the same customer block you use in the other templates, or use the short 2-line format</li>
           <li>• Paste one product URL per line — minimum 1, no maximum</li>
           <li>• The system scrapes the product image &amp; title from each link automatically</li>
           <li>• A dynamic grid email is sent with a <strong>Get Deal</strong> button per product</li>

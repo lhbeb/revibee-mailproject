@@ -142,7 +142,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { customerEmail, customerName, productLinks, senderEmail } = req.body;
+    const { customerEmail, customerName, sourceProductName, productLinks, senderEmail } = req.body;
 
     // ── Validation ──────────────────────────────────────────────────────
     if (!customerEmail) {
@@ -179,8 +179,8 @@ export default async function handler(req, res) {
     // ── Build subject ───────────────────────────────────────────────────
     const firstName = customerName ? customerName.split(' ')[0] : null;
     const subject = firstName
-      ? `${firstName}, you might love these picks 🛍️`
-      : `Handpicked just for you — explore these deals 🛍️`;
+      ? `${firstName}, here are a few more items to explore`
+      : 'A few more items you may want to explore';
 
     // ── HTML email template ─────────────────────────────────────────────
     const htmlTemplate = `
@@ -245,7 +245,9 @@ export default async function handler(req, res) {
               <!-- Greeting -->
               <p style="margin:0 0 24px 0;font-size:16px;color:#374151;line-height:1.6;">
                 ${customerName ? `Hi ${customerName},` : 'Hi there,'}<br><br>
-                Here are some items from our store we thought you might like.
+                ${sourceProductName
+                  ? `Based on your interest in <strong>${sourceProductName}</strong>, here are a few more items from our store you may want to explore.`
+                  : 'Here are a few more items from our store you may want to explore.'}
                 Every product comes with <strong>fast, tracked shipping</strong> and our
                 <strong>30-day return guarantee</strong>.
               </p>
@@ -318,7 +320,9 @@ export default async function handler(req, res) {
     const textTemplate = [
       customerName ? `Hi ${customerName},` : 'Hi there,',
       '',
-      `Here are ${scraped.length} products we handpicked for you:`,
+      sourceProductName
+        ? `Based on your interest in ${sourceProductName}, here are ${scraped.length} more items to explore:`
+        : `Here are ${scraped.length} products we picked for you:`,
       '',
       ...scraped.map((p, i) => `${i + 1}. ${p.title || 'Product'}\n   ${p.url}`),
       '',

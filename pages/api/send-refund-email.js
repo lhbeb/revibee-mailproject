@@ -1,4 +1,4 @@
-import { getRandomAccount, createTransporter, getAccountByUser } from '../../src/config/emailAccounts';
+import { getRandomAccount, createTransporter, getAccountByUser, getSenderIdentity } from '../../src/config/emailAccounts';
 import { logEmail } from '../../src/utils/logger';
 
 // Reuse the transporter from other email endpoints
@@ -14,7 +14,7 @@ import { logEmail } from '../../src/utils/logger';
 //       maxConnections: 5, // Maximum concurrent connections
 //       maxMessages: 100, // Maximum messages per connection
 //       auth: {
-//         user: 'contactdeeldepot@gmail.com',
+//         user: 'orders@deeldepot.com',
 //         pass: 'gdui faql dedk yhxg',
 //       },
 //     });
@@ -99,6 +99,7 @@ export default async function handler(req, res) {
       console.log(`Using randomly selected email account: ${account.user}`);
     }
     const emailTransporter = createTransporter(account);
+    const senderIdentity = getSenderIdentity(account);
 
     // HTML email template - Redesigned based on design guidelines
     const htmlTemplate = `
@@ -250,7 +251,7 @@ export default async function handler(req, res) {
                   <td style="background: #f8fafc; padding: 32px; text-align: center; border-top: 1px solid #e5e7eb;">
                     <h3 style="color: #374151; font-size: 18px; font-weight: 600; margin-bottom: 16px;">Need Help?</h3>
                     <p style="color: #6b7280; font-size: 14px; margin-bottom: 16px;">If you have any questions about your refund, our customer service team is here to help.</p>
-                    <p style="margin-bottom: 16px;"><a href="mailto:contactdeeldepot@gmail.com" style="color: #090A28; text-decoration: none; font-weight: 500; font-size: 14px;">📧 Email Support</a></p>
+                    <p style="margin-bottom: 16px;"><a href="mailto:orders@deeldepot.com" style="color: #090A28; text-decoration: none; font-weight: 500; font-size: 14px;">📧 Email Support</a></p>
                     <p style="margin-bottom: 16px;"><a href="tel:+17176484487" style="color: #090A28; text-decoration: none; font-weight: 500; font-size: 14px;">📞 +17176484487</a></p>
                     <p style="color: #9ca3af; font-size: 12px; margin-top: 16px; padding-top: 16px; border-top: 1px solid #e5e7eb;">© 2026 DeelDepot. All rights reserved.<br>Customer support for every order.</p>
                   </td>
@@ -265,7 +266,8 @@ export default async function handler(req, res) {
 
     // Send the email
     const mailOptions = {
-      from: `"DeelDepot" <${account.user}>`,
+      from: `"${senderIdentity.fromName}" <${senderIdentity.fromEmail}>`,
+      replyTo: senderIdentity.fromEmail,
       to: customerEmail,
       subject: 'Refund Update for Your Order',
       html: htmlTemplate,
@@ -287,7 +289,7 @@ export default async function handler(req, res) {
         3. You'll see the transaction reflected in your account statement
         
         If you have any questions, please contact us:
-        Email: contactdeeldepot@gmail.com
+        Email: orders@deeldepot.com
         Phone: +17176484487
         
         Thank you,
@@ -305,7 +307,7 @@ export default async function handler(req, res) {
     // Log the sent email
     await logEmail({
       templateName: 'Refund Email',
-      senderEmail: account.user,
+      senderEmail: senderIdentity.fromEmail,
       recipientEmail: customerEmail,
       recipientName: customerName,
       productName: productName,

@@ -1,4 +1,4 @@
-import { getRandomAccount, createTransporter, getAccountByUser } from '../../src/config/emailAccounts';
+import { getRandomAccount, createTransporter, getAccountByUser, getSenderIdentity } from '../../src/config/emailAccounts';
 import { logEmail } from '../../src/utils/logger';
 import * as cheerio from 'cheerio';
 
@@ -13,7 +13,7 @@ import * as cheerio from 'cheerio';
 //       secure: true, // Use SSL
 //       secure: true, // Use SSL
 //       auth: {
-//         user: 'contactdeeldepot@gmail.com',
+//         user: 'orders@deeldepot.com',
 //         pass: 'gdui faql dedk yhxg',
 //       },
 //     });
@@ -100,6 +100,7 @@ export default async function handler(req, res) {
       console.log(`Using randomly selected email account: ${account.user}`);
     }
     const emailTransporter = createTransporter(account);
+    const senderIdentity = getSenderIdentity(account);
 
     // HTML email template - DeelDepot Branded Design (Table-Based for iOS Support)
     const htmlTemplate = `
@@ -243,7 +244,7 @@ export default async function handler(req, res) {
                     <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin-bottom: 24px;">
                       <tr>
                         <td style="padding: 8px 0;">
-                          <a href="mailto:contactdeeldepot@gmail.com" style="color: #090A28; text-decoration: none; font-weight: 500; font-size: 14px; display: block;">📧 Email Support</a>
+                          <a href="mailto:orders@deeldepot.com" style="color: #090A28; text-decoration: none; font-weight: 500; font-size: 14px; display: block;">📧 Email Support</a>
                         </td>
                       </tr>
                       <tr>
@@ -299,7 +300,8 @@ export default async function handler(req, res) {
 
     // Email options
     const mailOptions = {
-      from: `"DeelDepot" <${account.user}>`,
+      from: `"${senderIdentity.fromName}" <${senderIdentity.fromEmail}>`,
+      replyTo: senderIdentity.fromEmail,
       to: customerEmail,
       subject: `Checkout Reminder - ${productName || 'item'}`,
       html: htmlTemplate,
@@ -317,7 +319,7 @@ export default async function handler(req, res) {
     // Log the sent email
     await logEmail({
       templateName: 'Recovery — Last Chance',
-      senderEmail: account.user,
+      senderEmail: senderIdentity.fromEmail,
       recipientEmail: customerEmail,
       recipientName: customerName,
       productName: productName,

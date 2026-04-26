@@ -1,4 +1,4 @@
-import { getRandomAccount, createTransporter, getAccountByUser } from '../../src/config/emailAccounts';
+import { getRandomAccount, createTransporter, getAccountByUser, getSenderIdentity } from '../../src/config/emailAccounts';
 import { logEmail } from '../../src/utils/logger';
 
 export default async function handler(req, res) {
@@ -30,6 +30,7 @@ export default async function handler(req, res) {
     let account = senderEmail ? await getAccountByUser(senderEmail) : null;
     if (!account) account = getRandomAccount();
     const emailTransporter = createTransporter(account);
+    const senderIdentity = getSenderIdentity(account);
 
     // HTML email template - DeelDepot Branded Design
     const htmlTemplate = `
@@ -210,7 +211,7 @@ export default async function handler(req, res) {
                       <h4 style="font-size: 16px; color: #090A28; margin-bottom: 8px;">📞 Contact Information</h4>
                       <p style="font-size: 14px; color: #475569; line-height: 1.5;">
                         Phone: +1 717 648 4487<br>
-                        Email: support@deeldepot.com
+                        Email: orders@deeldepot.com
                       </p>
                     </div>
 
@@ -264,13 +265,14 @@ export default async function handler(req, res) {
       
       📞 Contact Information
       Phone: +1 717 648 4487
-      Email: support@deeldepot.com
+      Email: orders@deeldepot.com
       
       © 2026 DeelDepot. All rights reserved.
     `;
 
     const mailOptions = {
-      from: `"DeelDepot Local" <${account.user}>`,
+      from: `"${senderIdentity.fromName || 'DeelDepot Local'}" <${senderIdentity.fromEmail}>`,
+      replyTo: senderIdentity.fromEmail,
       to: customerEmail,
       subject: `Local Pickup Details - ${productName}`,
       text: textTemplate,
@@ -286,7 +288,7 @@ export default async function handler(req, res) {
     // Log the sent email to Supabase
     await logEmail({
       templateName: 'Local Pickup',
-      senderEmail: account.user,
+      senderEmail: senderIdentity.fromEmail,
       recipientEmail: customerEmail,
       recipientName: customerName,
       productName: productName,

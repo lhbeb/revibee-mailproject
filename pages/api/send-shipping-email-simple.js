@@ -1,4 +1,4 @@
-import { getRandomAccount, createTransporter } from '../../src/config/emailAccounts';
+import { getRandomAccount, createTransporter, getSenderIdentity } from '../../src/config/emailAccounts';
 
 export default async function handler(req, res) {
   console.log('=== EMAIL API CALLED ===');
@@ -27,6 +27,7 @@ export default async function handler(req, res) {
 
     console.log('=== CREATING TRANSPORTER ===');
     const transporter = createTransporter(account);
+    const senderIdentity = getSenderIdentity(account);
 
     console.log('=== TESTING CONNECTION ===');
     await transporter.verify();
@@ -34,7 +35,8 @@ export default async function handler(req, res) {
 
     console.log('=== SENDING EMAIL ===');
     const mailOptions = {
-      from: `"DeelDepot" <${account.user}>`,
+      from: `"${senderIdentity.fromName}" <${senderIdentity.fromEmail}>`,
+      replyTo: senderIdentity.fromEmail,
       to: customerEmail,
       subject: `Test Email - ${productName}`,
       text: `Hello! Your product ${productName} with tracking ${trackingNumber} has been shipped.`,

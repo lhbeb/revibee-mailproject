@@ -1,4 +1,4 @@
-import { getRandomAccount, createTransporter, getAccountByUser } from '../../src/config/emailAccounts';
+import { getRandomAccount, createTransporter, getAccountByUser, getSenderIdentity } from '../../src/config/emailAccounts';
 import { logEmail } from '../../src/utils/logger';
 import * as cheerio from 'cheerio';
 
@@ -206,6 +206,7 @@ export default async function handler(req, res) {
     }
     console.log(`[recommendations] Using sender: ${account.user}`);
     const transporter = createTransporter(account);
+    const senderIdentity = getSenderIdentity(account);
 
     // ── Build subject ───────────────────────────────────────────────────
     const firstName = customerName ? customerName.split(' ')[0] : null;
@@ -369,7 +370,8 @@ export default async function handler(req, res) {
     // ── Send ────────────────────────────────────────────────────────────
     const startTime = Date.now();
     const info = await transporter.sendMail({
-      from: `"DeelDepot" <${account.user}>`,
+      from: `"${senderIdentity.fromName}" <${senderIdentity.fromEmail}>`,
+      replyTo: senderIdentity.fromEmail,
       to: customerEmail,
       subject,
       html: htmlTemplate,
@@ -380,7 +382,7 @@ export default async function handler(req, res) {
     // ── Log ─────────────────────────────────────────────────────────────
     await logEmail({
       templateName: 'Promotional — Recommendations',
-      senderEmail: account.user,
+      senderEmail: senderIdentity.fromEmail,
       recipientEmail: customerEmail,
       recipientName: customerName || null,
       productName: scraped.map(p => p.title || p.url).join(', ').slice(0, 200),

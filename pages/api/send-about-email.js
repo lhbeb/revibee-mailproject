@@ -1,4 +1,4 @@
-import { getRandomAccount, createTransporter, getAccountByUser } from '../../src/config/emailAccounts';
+import { getRandomAccount, createTransporter, getAccountByUser, getSenderIdentity } from '../../src/config/emailAccounts';
 import { logEmail } from '../../src/utils/logger';
 
 // Reuse the transporter
@@ -11,7 +11,7 @@ import { logEmail } from '../../src/utils/logger';
 //       port: 465,
 //       secure: true,
 //       auth: {
-//         user: 'contactdeeldepot@gmail.com',
+//         user: 'orders@deeldepot.com',
 //         pass: 'pqdc drxx ltlo xapr',
 //       },
 //     });
@@ -58,6 +58,7 @@ export default async function handler(req, res) {
       console.log(`Using randomly selected email account: ${account.user}`);
     }
     const emailTransporter = createTransporter(account);
+    const senderIdentity = getSenderIdentity(account);
 
     // Comprehensive About DeelDepot HTML Template
     const htmlTemplate = `
@@ -603,7 +604,7 @@ export default async function handler(req, res) {
                       <tr>
                         <td style="padding: 12px 0;">
                           <strong style="color: #090A28; font-size: 16px;">Email:</strong><br>
-                          <a href="mailto:contactdeeldepot@gmail.com" style="color: #090A28; text-decoration: none; font-size: 16px;">contactdeeldepot@gmail.com</a>
+                          <a href="mailto:orders@deeldepot.com" style="color: #090A28; text-decoration: none; font-size: 16px;">orders@deeldepot.com</a>
                         </td>
                       </tr>
                       <tr>
@@ -689,7 +690,7 @@ export default async function handler(req, res) {
       CONTACT INFORMATION
       Address: 1420 N McKinley Ave, Los Angeles, CA 90059, United States
       Phone: +1 717 648 4487
-      Email: contactdeeldepot@gmail.com
+      Email: orders@deeldepot.com
       
       Business Hours:
       Mon-Fri: 9:00 AM - 5:00 PM EST
@@ -703,7 +704,8 @@ export default async function handler(req, res) {
     `;
 
     const mailOptions = {
-      from: `"DeelDepot" <contactdeeldepot@gmail.com>`,
+      from: `"${senderIdentity.fromName}" <${senderIdentity.fromEmail}>`,
+      replyTo: senderIdentity.fromEmail,
       to: customerEmail,
       subject: `How DeelDepot Sources Inventory`,
       html: htmlTemplate,
@@ -720,7 +722,7 @@ export default async function handler(req, res) {
     // Log the sent email
     await logEmail({
       templateName: 'About DeelDepot',
-      senderEmail: account.user,
+      senderEmail: senderIdentity.fromEmail,
       recipientEmail: customerEmail,
       recipientName: 'Customer',
       productName: 'About DeelDepot',

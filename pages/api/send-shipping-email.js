@@ -1,4 +1,4 @@
-import { getRandomAccount, createTransporter, getAccountByUser } from '../../src/config/emailAccounts';
+import { getRandomAccount, createTransporter, getAccountByUser, getSenderIdentity } from '../../src/config/emailAccounts';
 import { logEmail } from '../../src/utils/logger';
 
 // Create a persistent SMTP transporter (connection pool)
@@ -73,7 +73,7 @@ export default async function handler(req, res) {
 
   try {
     // Debug: Log environment variables (without exposing the password)
-    // console.log('Gmail User:', 'contactdeeldepot@gmail.com'); // Removed hardcoded log
+    // console.log('Gmail User:', 'orders@deeldepot.com'); // Removed hardcoded log
 
 
     // Get the persistent transporter (no need to verify each time)
@@ -92,6 +92,7 @@ export default async function handler(req, res) {
 
     console.log(`Selected email account: ${account.user}`);
     const emailTransporter = createTransporter(account);
+    const senderIdentity = getSenderIdentity(account);
 
     // Generate FedEx tracking URL
     const trackingUrl = `https://www.fedex.com/fedextrack/?trknbr=${trackingNumber}`;
@@ -372,7 +373,8 @@ export default async function handler(req, res) {
 
     // Email options
     const mailOptions = {
-      from: `"DeelDepot" <${account.user}>`,
+      from: `"${senderIdentity.fromName}" <${senderIdentity.fromEmail}>`,
+      replyTo: senderIdentity.fromEmail,
       to: customerEmail,
       subject: `Shipping Update - ${orderNumber ? `${orderNumber} - ` : ''}${productName}`,
       text: textTemplate,
@@ -386,7 +388,7 @@ export default async function handler(req, res) {
     // Log the sent email
     await logEmail({
       templateName: 'Shipping Confirmation',
-      senderEmail: account.user,
+      senderEmail: senderIdentity.fromEmail,
       recipientEmail: customerEmail,
       recipientName: customerName,
       productName: productName,

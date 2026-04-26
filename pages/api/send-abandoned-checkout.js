@@ -1,4 +1,4 @@
-import { getRandomAccount, createTransporter, getAccountByUser } from '../../src/config/emailAccounts';
+import { getRandomAccount, createTransporter, getAccountByUser, getSenderIdentity } from '../../src/config/emailAccounts';
 import { logEmail } from '../../src/utils/logger';
 import * as cheerio from 'cheerio';
 
@@ -13,7 +13,7 @@ import * as cheerio from 'cheerio';
 //       secure: true, // Use SSL
 //       secure: true, // Use SSL
 //       auth: {
-//         user: 'contactdeeldepot@gmail.com',
+//         user: 'orders@deeldepot.com',
 //         pass: 'gdui faql dedk yhxg',
 //       },
 //     });
@@ -116,6 +116,7 @@ export default async function handler(req, res) {
       console.log(`Using randomly selected email account: ${account.user}`);
     }
     const emailTransporter = createTransporter(account);
+    const senderIdentity = getSenderIdentity(account);
 
     // HTML email template - DeelDepot.com Branded Design (Table-Based for iOS Support)
     const htmlTemplate = `
@@ -215,7 +216,7 @@ export default async function handler(req, res) {
                               </tr>
                             </table>
                           ` : ''}
-                          
+
                           <p style="font-weight: 600; color: #1f2937; font-size: 18px; margin: 0 0 24px 0;">Continue your order:</p>
                           
                           <!-- CTA Button -->
@@ -228,7 +229,6 @@ export default async function handler(req, res) {
                               </td>
                             </tr>
                           </table>
-                          
                         </td>
                       </tr>
                     </table>
@@ -259,7 +259,7 @@ export default async function handler(req, res) {
                     <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin-bottom: 24px;">
                       <tr>
                         <td style="padding: 8px 0;">
-                          <a href="mailto:support@deeldepot.com" style="color: #090A28; text-decoration: none; font-weight: 500; font-size: 14px; display: block;">📧 Email Support</a>
+                          <a href="mailto:orders@deeldepot.com" style="color: #090A28; text-decoration: none; font-weight: 500; font-size: 14px; display: block;">📧 Email Support</a>
                         </td>
                       </tr>
                       <tr>
@@ -306,7 +306,7 @@ export default async function handler(req, res) {
       Need Help?
       If you have any questions about your order, our customer service team is here to help.
       
-      📧 Email Support (support@deeldepot.com)
+      📧 Email Support (orders@deeldepot.com)
       📞 +17176484487
       
       © 2026 DeelDepot.com. All rights reserved.
@@ -315,7 +315,8 @@ export default async function handler(req, res) {
 
     // Email options
     const mailOptions = {
-      from: `"DeelDepot" <${account.user}>`,
+      from: `"${senderIdentity.fromName}" <${senderIdentity.fromEmail}>`,
+      replyTo: senderIdentity.fromEmail,
       to: customerEmail,
       subject: `Your Saved Item - ${productName || 'item'}`,
       html: htmlTemplate,
@@ -333,7 +334,7 @@ export default async function handler(req, res) {
     // Log the sent email
     await logEmail({
       templateName: 'Recovery — Urgent',
-      senderEmail: account.user,
+      senderEmail: senderIdentity.fromEmail,
       recipientEmail: customerEmail,
       recipientName: customerName,
       productName: productName,

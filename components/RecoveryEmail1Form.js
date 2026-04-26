@@ -10,6 +10,7 @@ export default function RecoveryEmail1Form() {
   });
   const [rawData, setRawData] = useState('');
   const [accounts, setAccounts] = useState([]);
+  const [accountsError, setAccountsError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState({ type: '', content: '' });
 
@@ -18,19 +19,27 @@ export default function RecoveryEmail1Form() {
     const fetchAccounts = async () => {
       try {
         const response = await fetch('/api/get-accounts');
-        if (response.ok) {
-          const data = await response.json();
-          const nextAccounts = data.accounts || [];
-          setAccounts(nextAccounts);
-          if (nextAccounts.length) {
-            setFormData(prev => ({
-              ...prev,
-              senderEmail: prev.senderEmail || nextAccounts[0].user
-            }));
-          }
+        if (!response.ok) {
+          throw new Error(`Failed to load sender accounts (${response.status})`);
+        }
+
+        const data = await response.json();
+        const nextAccounts = data.accounts || [];
+        setAccounts(nextAccounts);
+        setAccountsError('');
+
+        if (nextAccounts.length) {
+          setFormData(prev => ({
+            ...prev,
+            senderEmail: prev.senderEmail || nextAccounts[0].user
+          }));
+        } else {
+          setAccountsError('No sender email accounts are configured.');
         }
       } catch (error) {
         console.error('Failed to fetch email accounts:', error);
+        setAccounts([]);
+        setAccountsError('Could not load sender accounts. Make sure the app server is running, then refresh.');
       }
     };
     fetchAccounts();
@@ -50,6 +59,14 @@ export default function RecoveryEmail1Form() {
     setMessage({ type: '', content: '' });
 
     try {
+      if (!accounts.length) {
+        setMessage({
+          type: 'error',
+          content: accountsError || 'No sender accounts are available right now.'
+        });
+        return;
+      }
+
       const lines = rawData.split('\n').map(line => line.trim()).filter(line => line);
       const productLine = lines[0] || '';
       const email = lines[1] || '';
@@ -116,6 +133,11 @@ export default function RecoveryEmail1Form() {
           onSelect={(email) => setFormData(prev => ({ ...prev, senderEmail: email }))}
           disabled={isLoading}
         />
+        {accountsError && (
+          <div className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+            {accountsError}
+          </div>
+        )}
 
         <div>
           <label htmlFor="actualCheckoutLink" className="block text-sm font-medium text-gray-700 mb-2">
@@ -158,10 +180,12 @@ export default function RecoveryEmail1Form() {
         {/* Submit Button */}
         <button
           type="submit"
-          disabled={isLoading}
+          disabled={isLoading || !accounts.length}
           className={`w-full py-3 px-4 rounded-lg font-medium text-white transition duration-200 ease-in-out ${isLoading
             ? 'bg-gray-400 cursor-not-allowed'
-            : 'bg-orange-600 hover:bg-orange-700 focus:ring-2 focus:ring-orange-500 focus:ring-offset-2'
+            : !accounts.length
+              ? 'bg-gray-400 cursor-not-allowed'
+              : 'bg-orange-600 hover:bg-orange-700 focus:ring-2 focus:ring-orange-500 focus:ring-offset-2'
             }`}
         >
           {isLoading ? 'Sending...' : '🛒 Send Recovery Email 1'}

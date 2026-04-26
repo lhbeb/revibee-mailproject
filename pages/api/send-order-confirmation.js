@@ -1,4 +1,4 @@
-import { getRandomAccount, createTransporter, getAccountByUser } from '../../src/config/emailAccounts';
+import { getRandomAccount, createTransporter, getAccountByUser, getSenderIdentity } from '../../src/config/emailAccounts';
 import { logEmail } from '../../src/utils/logger';
 
 export default async function handler(req, res) {
@@ -32,6 +32,7 @@ export default async function handler(req, res) {
     let account = senderEmail ? await getAccountByUser(senderEmail) : null;
     if (!account) account = getRandomAccount();
     const emailTransporter = createTransporter(account);
+    const senderIdentity = getSenderIdentity(account);
 
     // HTML email template - Refined for Email Client Compatibility
     const htmlTemplate = `
@@ -343,7 +344,7 @@ export default async function handler(req, res) {
               
               <div class="contact-info">
                 <div class="contact-link-wrapper">
-                  <a href="mailto:contactdeeldepot@gmail.com" class="contact-link">📧 Email Support</a>
+                  <a href="mailto:orders@deeldepot.com" class="contact-link">📧 Email Support</a>
                 </div>
                 <div class="contact-link-wrapper">
                   <a href="tel:+17176484487" class="contact-link">📞 +17176484487</a>
@@ -372,14 +373,15 @@ export default async function handler(req, res) {
       
       Shipping To: ${customerAddress || 'Address not provided'}
       
-      Questions? Email contactdeeldepot@gmail.com
+      Questions? Email orders@deeldepot.com
       
       © 2026 DeelDepot.com. All rights reserved.
     `;
 
     // Email options
     const mailOptions = {
-      from: `"DeelDepot" <${account.user}>`,
+      from: `"${senderIdentity.fromName}" <${senderIdentity.fromEmail}>`,
+      replyTo: senderIdentity.fromEmail,
       to: customerEmail,
       subject: `Order Received - ${orderNumber ? `${orderNumber} - ` : ''}${productName}`,
       html: htmlTemplate,
@@ -394,7 +396,7 @@ export default async function handler(req, res) {
     // Log the sent email
     await logEmail({
       templateName: 'Order Confirmation',
-      senderEmail: account.user,
+      senderEmail: senderIdentity.fromEmail,
       recipientEmail: customerEmail,
       recipientName: customerName,
       productName: productName,

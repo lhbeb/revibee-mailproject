@@ -15,16 +15,17 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { recipients, subject, body, senderEmail } = req.body;
+    const { recipients, customerEmail, cc, subject, body, senderEmail } = req.body;
+    const normalizedRecipients = recipients || [customerEmail, cc].filter(Boolean).join(', ');
 
-    if (!recipients || !subject || !body) {
+    if (!normalizedRecipients || !subject || !body) {
       return res.status(400).json({
         error: 'Missing required fields: recipients, subject, and body are required',
       });
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const recipientList = parseRecipientList(recipients);
+    const recipientList = parseRecipientList(normalizedRecipients);
     if (!recipientList.length) {
       return res.status(400).json({ error: 'At least one recipient email is required' });
     }

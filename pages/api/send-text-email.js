@@ -15,8 +15,8 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { recipients, customerEmail, cc, subject, body, senderEmail } = req.body;
-    const normalizedRecipients = recipients || [customerEmail, cc].filter(Boolean).join(', ');
+    const { recipients, customerEmail: legacyCustomerEmail, cc, subject, body, senderEmail } = req.body;
+    const normalizedRecipients = recipients || [legacyCustomerEmail, cc].filter(Boolean).join(', ');
 
     if (!normalizedRecipients || !subject || !body) {
       return res.status(400).json({

@@ -7,6 +7,7 @@ const TYPE_CONFIG = {
   'Order Confirmation':        { color: 'bg-green-100 text-green-700', icon: '✅' },
   'Local Pickup':              { color: 'bg-teal-100 text-teal-700',   icon: '🏪' },
   'Refund Email':              { color: 'bg-amber-100 text-amber-700', icon: '💰' },
+  'Text Email':                { color: 'bg-slate-100 text-slate-700', icon: '✉️' },
   'Recovery — Urgent':         { color: 'bg-purple-100 text-purple-700', icon: '🛒' },
   'Recovery — Friendly':       { color: 'bg-purple-100 text-purple-700', icon: '💚' },
   'Recovery — Last Chance':    { color: 'bg-purple-100 text-purple-700', icon: '⏰' },

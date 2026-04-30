@@ -10,6 +10,7 @@ import RecoveryEmail2Form from '../../components/RecoveryEmail2Form';
 import RecoveryEmail3Form from '../../components/RecoveryEmail3Form';
 import AboutHappyDeelForm from '../../components/AboutHappyDeelForm';
 import ProductRecommendationsForm from '../../components/ProductRecommendationsForm';
+import TextEmailForm from '../../components/TextEmailForm';
 import SentEmailsLog from '../../components/SentEmailsLog';
 import LoginForm from '../../components/LoginForm';
 
@@ -21,6 +22,7 @@ const NAV_GROUPS = [
       { id: 'confirmation', icon: '✅', label: 'Order Confirmation',        sub: 'Confirm order placement' },
       { id: 'pickup',       icon: '🏪', label: 'Local Pickup',              sub: 'Ready for warehouse pickup' },
       { id: 'refund',       icon: '💰', label: 'Refund Email',              sub: 'Notify about refunds' },
+      { id: 'text',         icon: '✉️', label: 'Text Email',                sub: 'Send a custom plain email' },
     ],
   },
   {
@@ -47,6 +49,7 @@ const FORM_MAP: Record<string, React.ReactNode> = {
   confirmation: <OrderConfirmationForm />,
   pickup:       <LocalPickupForm />,
   refund:       <RefundEmailForm />,
+  text:         <TextEmailForm />,
   recovery1:    <RecoveryEmail1Form />,
   recovery2:    <RecoveryEmail2Form />,
   recovery3:    <RecoveryEmail3Form />,

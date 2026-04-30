@@ -1,9 +1,9 @@
 import { getRandomAccount, createTransporter, getAccountByUser } from '../../src/config/emailAccounts';
 import { logEmail } from '../../src/utils/logger';
 
-function parseCcList(cc) {
-  if (!cc) return [];
-  return cc
+function parseRecipientList(recipients) {
+  if (!recipients) return [];
+  return recipients
     .split(/[,\n;]/)
     .map((value) => value.trim())
     .filter(Boolean);
@@ -15,24 +15,26 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { customerEmail, cc, subject, body, senderEmail } = req.body;
+    const { recipients, subject, body, senderEmail } = req.body;
 
-    if (!customerEmail || !subject || !body) {
+    if (!recipients || !subject || !body) {
       return res.status(400).json({
-        error: 'Missing required fields: customerEmail, subject, and body are required',
+        error: 'Missing required fields: recipients, subject, and body are required',
       });
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(customerEmail)) {
-      return res.status(400).json({ error: 'Invalid recipient email format' });
+    const recipientList = parseRecipientList(recipients);
+    if (!recipientList.length) {
+      return res.status(400).json({ error: 'At least one recipient email is required' });
+    }
+    const invalidRecipient = recipientList.find((email) => !emailRegex.test(email));
+    if (invalidRecipient) {
+      return res.status(400).json({ error: `Invalid recipient email format: ${invalidRecipient}` });
     }
 
-    const ccList = parseCcList(cc);
-    const invalidCc = ccList.find((email) => !emailRegex.test(email));
-    if (invalidCc) {
-      return res.status(400).json({ error: `Invalid CC email format: ${invalidCc}` });
-    }
+    const customerEmail = recipientList[0];
+    const ccList = recipientList.slice(1);
 
     let account = senderEmail ? getAccountByUser(senderEmail) : null;
     if (!account) account = getRandomAccount();
@@ -54,7 +56,7 @@ export default async function handler(req, res) {
       productName: subject,
       status: 'Success',
       payload: {
-        customerEmail,
+        recipients: recipientList,
         cc: ccList,
         subject,
       },

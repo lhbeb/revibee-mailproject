@@ -6,8 +6,7 @@ import SenderEmailButtons from './SenderEmailButtons';
 export default function TextEmailForm() {
   const [formData, setFormData] = useState({
     senderEmail: '',
-    customerEmail: '',
-    cc: '',
+    recipients: '',
     subject: '',
     body: '',
   });
@@ -65,8 +64,7 @@ export default function TextEmailForm() {
         setMessage({ type: 'success', content: 'Text email sent successfully!' });
         setFormData(prev => ({
           ...prev,
-          customerEmail: '',
-          cc: '',
+          recipients: '',
           subject: '',
           body: '',
         }));
@@ -95,37 +93,21 @@ export default function TextEmailForm() {
         />
 
         <div>
-          <label htmlFor="customerEmail" className="block text-sm font-medium text-gray-700 mb-2">
-            To *
+          <label htmlFor="recipients" className="block text-sm font-medium text-gray-700 mb-2">
+            Recipients *
           </label>
           <input
-            id="customerEmail"
-            name="customerEmail"
-            type="email"
-            value={formData.customerEmail}
+            id="recipients"
+            name="recipients"
+            type="text"
+            value={formData.recipients}
             onChange={handleInputChange}
             required
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#F5970C] focus:border-transparent transition duration-200 ease-in-out text-gray-900 bg-white"
-            placeholder="customer@example.com"
+            placeholder="customer@example.com, manager@example.com"
             disabled={isLoading}
           />
-        </div>
-
-        <div>
-          <label htmlFor="cc" className="block text-sm font-medium text-gray-700 mb-2">
-            CC
-          </label>
-          <input
-            id="cc"
-            name="cc"
-            type="text"
-            value={formData.cc}
-            onChange={handleInputChange}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#F5970C] focus:border-transparent transition duration-200 ease-in-out text-gray-900 bg-white"
-            placeholder="manager@example.com, support@example.com"
-            disabled={isLoading}
-          />
-          <p className="mt-1 text-xs text-gray-500">Separate multiple CC addresses with commas.</p>
+          <p className="mt-1 text-xs text-gray-500">Separate multiple email addresses with commas. The first address is used as `To` and the rest are sent as `CC`.</p>
         </div>
 
         <div>

@@ -1,4 +1,4 @@
-import { getRandomAccount, createTransporter, getAccountByUser } from '../../src/config/emailAccounts';
+import { getRandomAccount, createTransporter, getAccountByUser, getSenderIdentity } from '../../src/config/emailAccounts';
 import { logEmail } from '../../src/utils/logger';
 
 function parseRecipientList(recipients) {
@@ -41,8 +41,9 @@ export default async function handler(req, res) {
     if (!account) account = getRandomAccount();
 
     const transporter = createTransporter(account);
+    const senderIdentity = getSenderIdentity(account, 'DeelDepot');
     const info = await transporter.sendMail({
-      from: `"DeelDepot" <${account.user}>`,
+      from: `"${senderIdentity.fromName}" <${senderIdentity.fromEmail}>`,
       to: customerEmail,
       cc: ccList.length ? ccList.join(', ') : undefined,
       subject,

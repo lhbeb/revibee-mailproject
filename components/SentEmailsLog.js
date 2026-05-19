@@ -11,7 +11,7 @@ const TYPE_CONFIG = {
   'Recovery — Urgent':         { color: 'bg-purple-100 text-purple-700', icon: '🛒' },
   'Recovery — Friendly':       { color: 'bg-purple-100 text-purple-700', icon: '💚' },
   'Recovery — Last Chance':    { color: 'bg-purple-100 text-purple-700', icon: '⏰' },
-  'About DeelDepot':           { color: 'bg-teal-100 text-teal-700',   icon: '🏪' },
+  'About Casoodo':             { color: 'bg-teal-100 text-teal-700',   icon: '🏪' },
 };
 
 export default function SentEmailsDashboard() {

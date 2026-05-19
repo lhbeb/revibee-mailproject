@@ -146,7 +146,7 @@ export default function ProductRecommendationsForm() {
             required
             rows={7}
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#F5970C] focus:border-transparent transition duration-200 ease-in-out text-gray-900 bg-white resize-y font-mono text-sm leading-relaxed"
-            placeholder={"Product Name : $Price\ncustomer@example.com\nJohn Doe\n123 Address St, City, ST 12345\nhttps://deeldepot.com/product/...\n#10105"}
+            placeholder={"Product Name : $Price\ncustomer@example.com\nJohn Doe\n123 Address St, City, ST 12345\nhttps://casoodo.com/product/...\n#10105"}
             disabled={isLoading}
           />
           <p className="mt-1 text-xs text-gray-500">
@@ -172,7 +172,7 @@ export default function ProductRecommendationsForm() {
             required
             rows={8}
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#F5970C] focus:border-transparent transition duration-200 ease-in-out text-gray-900 bg-white resize-y font-mono text-sm leading-relaxed"
-            placeholder={"https://deeldepot.com/products/item-one\nhttps://deeldepot.com/products/item-two\nhttps://deeldepot.com/products/item-three\nhttps://deeldepot.com/products/item-four\nhttps://deeldepot.com/products/item-five\nhttps://deeldepot.com/products/item-six"}
+            placeholder={"https://casoodo.com/products/item-one\nhttps://casoodo.com/products/item-two\nhttps://casoodo.com/products/item-three\nhttps://casoodo.com/products/item-four\nhttps://casoodo.com/products/item-five\nhttps://casoodo.com/products/item-six"}
             disabled={isLoading}
           />
           <p className="mt-1 text-xs text-gray-500">

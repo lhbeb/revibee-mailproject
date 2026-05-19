@@ -60,7 +60,7 @@ export default async function handler(req, res) {
     const emailTransporter = createTransporter(account);
     const senderIdentity = getSenderIdentity(account);
 
-    // Comprehensive About DeelDepot HTML Template
+    // Comprehensive About Casoodo HTML Template
     const htmlTemplate = `
       <!DOCTYPE html>
       <html lang="en">
@@ -68,7 +68,7 @@ export default async function handler(req, res) {
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="format-detection" content="telephone=no, date=no, email=no, address=no">
-        <title>How DeelDepot sources inventory</title>
+        <title>How Casoodo sources inventory</title>
         <style>
           body {
             margin: 0;
@@ -249,7 +249,7 @@ export default async function handler(req, res) {
                 <tr>
                   <td style="padding: 24px 32px; text-align: center; background-color: #090A28;">
                     <h1 style="color: #ffffff; font-size: 24px; font-weight: 700; margin: 0;">
-                      How DeelDepot sources inventory
+                      How Casoodo sources inventory
                     </h1>
                   </td>
                 </tr>
@@ -274,8 +274,8 @@ export default async function handler(req, res) {
                     </table>
 
                     <div style="text-align: center; margin: 32px 0;">
-                      <a href="https://www.deeldepot.com" style="background-color: #F5970C; color: #090A28; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 18px; display: inline-block; box-shadow: 0 4px 6px -1px rgba(9, 10, 40, 0.5);">
-                        Visit DeelDepot
+                      <a href="https://www.casoodo.com" style="background-color: #F5970C; color: #090A28; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 18px; display: inline-block; box-shadow: 0 4px 6px -1px rgba(9, 10, 40, 0.5);">
+                        Visit Casoodo
                       </a>
                     </div>
                   </td>
@@ -604,7 +604,7 @@ export default async function handler(req, res) {
                       <tr>
                         <td style="padding: 12px 0;">
                           <strong style="color: #090A28; font-size: 16px;">Email:</strong><br>
-                          <a href="mailto:orders@deeldepot.com" style="color: #090A28; text-decoration: none; font-size: 16px;">orders@deeldepot.com</a>
+                          <a href="mailto:${senderIdentity.fromEmail}" style="color: #090A28; text-decoration: none; font-size: 16px;">${senderIdentity.fromEmail}</a>
                         </td>
                       </tr>
                       <tr>
@@ -619,8 +619,8 @@ export default async function handler(req, res) {
                     
                     <div style="text-align: center; margin-top: 24px; padding-top: 24px; border-top: 1px solid #e2e8f0;">
                       <p style="color: #9ca3af; font-size: 12px; margin: 0;">
-                        © 2026 DeelDepot. All rights reserved.<br>
-                        Thank you for choosing DeelDepot!<br>
+                        © 2026 Casoodo. All rights reserved.<br>
+                        Thank you for choosing Casoodo!<br>
                         <span style="color: #cbd5e1; font-size: 10px;">Ref ID: ${Date.now()}</span>
                       </p>
                     </div>
@@ -643,7 +643,7 @@ export default async function handler(req, res) {
       
       Hello,
       
-      Welcome to DeelDepot - a place where shoppers can find quality products at fair, transparent prices. We offer a curated mix of electronics, photography gear, fashion, bicycles, tools, home equipment, and more.
+      Welcome to Casoodo - a place where shoppers can find quality products at fair, transparent prices. We offer a curated mix of electronics, photography gear, fashion, bicycles, tools, home equipment, and more.
       
       OUR MISSION
       Make premium products accessible to everyone without inflated retail costs.
@@ -690,15 +690,15 @@ export default async function handler(req, res) {
       CONTACT INFORMATION
       Address: 1420 N McKinley Ave, Los Angeles, CA 90059, United States
       Phone: +1 717 648 4487
-      Email: orders@deeldepot.com
+      Email: ${senderIdentity.fromEmail}
       
       Business Hours:
       Mon-Fri: 9:00 AM - 5:00 PM EST
       Saturday: 10:00 AM - 3:00 PM EST
       Sunday: Closed
       
-      © 2026 DeelDepot. All rights reserved.
-      Thank you for choosing DeelDepot!
+      © 2026 Casoodo. All rights reserved.
+      Thank you for choosing Casoodo!
       
       Ref ID: ${Date.now()}
     `;
@@ -707,7 +707,7 @@ export default async function handler(req, res) {
       from: `"${senderIdentity.fromName}" <${senderIdentity.fromEmail}>`,
       replyTo: senderIdentity.fromEmail,
       to: customerEmail,
-      subject: `How DeelDepot Sources Inventory`,
+      subject: `How Casoodo Sources Inventory`,
       html: htmlTemplate,
       text: textTemplate,
     };
@@ -721,18 +721,18 @@ export default async function handler(req, res) {
 
     // Log the sent email
     await logEmail({
-      templateName: 'About DeelDepot',
+      templateName: 'About Casoodo',
       senderEmail: senderIdentity.fromEmail,
       recipientEmail: customerEmail,
       recipientName: 'Customer',
-      productName: 'About DeelDepot',
+      productName: 'About Casoodo',
       status: 'Success'
     });
     console.log(`Email sent in ${endTime - startTime}ms`);
 
     res.status(200).json({
       success: true,
-      message: 'About DeelDepot email sent successfully!',
+      message: 'About Casoodo email sent successfully!',
       messageId: info.messageId
     });
 

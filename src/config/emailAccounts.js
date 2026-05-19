@@ -9,7 +9,7 @@ const emailAccounts = [
     provider: 'gmail',
     label: 'Gmail - deeldepot@gmail.com',
     fromEmail: 'deeldepot@gmail.com',
-    fromName: 'DeelDepot',
+    fromName: 'Casoodo',
   },
   {
     user: 'heydeeldepot@gmail.com',
@@ -17,18 +17,18 @@ const emailAccounts = [
     provider: 'gmail',
     label: 'Gmail - heydeeldepot@gmail.com',
     fromEmail: 'heydeeldepot@gmail.com',
-    fromName: 'DeelDepot',
+    fromName: 'Casoodo',
   },
   {
     user: 'a9501e001@smtp-brevo.com',
     pass: 'XR4GVaCMgkK9jpY6',
     provider: 'brevo',
-    label: 'SMTP orders@deeldepot.com',
+    label: 'SMTP - Orders Inbox',
     host: 'smtp-relay.brevo.com',
     port: 587,
     secure: false,
     fromEmail: 'orders@deeldepot.com',
-    fromName: 'DeelDepot Marketplace',
+    fromName: 'Casoodo Marketplace',
   },
 ];
 
@@ -96,7 +96,7 @@ export function getAccountByUser(email) {
   return emailAccounts.find(account => account.user === email) || null;
 }
 
-export function getSenderIdentity(account, fallbackName = 'DeelDepot') {
+export function getSenderIdentity(account, fallbackName = 'Casoodo') {
   return {
     fromEmail: account.fromEmail || account.user,
     fromName: account.fromName || fallbackName,

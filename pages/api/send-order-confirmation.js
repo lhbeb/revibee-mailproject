@@ -41,7 +41,7 @@ export default async function handler(req, res) {
       <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Order Confirmation - DeelDepot.com</title>
+        <title>Order Confirmation - Casoodo.com</title>
         <style>
           /* Reset */
           * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -344,7 +344,7 @@ export default async function handler(req, res) {
               
               <div class="contact-info">
                 <div class="contact-link-wrapper">
-                  <a href="mailto:orders@deeldepot.com" class="contact-link">📧 Email Support</a>
+                  <a href="mailto:${senderIdentity.fromEmail}" class="contact-link">📧 Email Support</a>
                 </div>
                 <div class="contact-link-wrapper">
                   <a href="tel:+17176484487" class="contact-link">📞 +17176484487</a>
@@ -352,8 +352,8 @@ export default async function handler(req, res) {
               </div>
               
               <div class="copyright">
-                © 2026 DeelDepot.com. All rights reserved.<br>
-                Thank you for ordering with DeelDepot.
+                © 2026 Casoodo.com. All rights reserved.<br>
+                Thank you for ordering with Casoodo.
               </div>
             </div>
           </div>
@@ -373,9 +373,9 @@ export default async function handler(req, res) {
       
       Shipping To: ${customerAddress || 'Address not provided'}
       
-      Questions? Email orders@deeldepot.com
+      Questions? Reply to this email
       
-      © 2026 DeelDepot.com. All rights reserved.
+      © 2026 Casoodo.com. All rights reserved.
     `;
 
     // Email options

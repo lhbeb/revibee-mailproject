@@ -3,7 +3,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import SenderEmailButtons from './SenderEmailButtons';
 
-export default function AboutDeelDepotForm() {
+export default function AboutCasoodoForm() {
     const [emailList, setEmailList] = useState('');
     const [senderEmail, setSenderEmail] = useState('');
     const [accounts, setAccounts] = useState([]);
@@ -147,7 +147,7 @@ export default function AboutDeelDepotForm() {
         <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8">
             <div className="text-center mb-8">
                 <h2 className="text-2xl font-bold text-gray-800 mb-2">
-                    About DeelDepot Email - Bulk Send
+                    About Casoodo Email - Bulk Send
                 </h2>
                 <p className="text-gray-600 text-sm">
                     Send comprehensive business model explanation to multiple customers

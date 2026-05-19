@@ -41,7 +41,7 @@ export default async function handler(req, res) {
     if (!account) account = getRandomAccount();
 
     const transporter = createTransporter(account);
-    const senderIdentity = getSenderIdentity(account, 'DeelDepot');
+    const senderIdentity = getSenderIdentity(account, 'Casoodo');
     const info = await transporter.sendMail({
       from: `"${senderIdentity.fromName}" <${senderIdentity.fromEmail}>`,
       to: customerEmail,

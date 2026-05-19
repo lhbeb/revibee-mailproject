@@ -32,14 +32,14 @@ export default async function handler(req, res) {
     const emailTransporter = createTransporter(account);
     const senderIdentity = getSenderIdentity(account);
 
-    // HTML email template - DeelDepot Branded Design
+    // HTML email template - Casoodo branded design
     const htmlTemplate = `
       <!DOCTYPE html>
       <html lang="en">
       <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Local Pickup Details - DeelDepot.com</title>
+        <title>Local Pickup Details - Casoodo.com</title>
         <style>
           * { margin: 0; padding: 0; box-sizing: border-box; }
           body { 
@@ -190,7 +190,7 @@ export default async function handler(req, res) {
                         <td width="50%" valign="top" style="padding-right: 12px;">
                           <h4 style="font-size: 16px; color: #090A28; margin-bottom: 12px;">🏢 Warehouse Location</h4>
                           <p style="font-size: 14px; color: #475569; line-height: 1.5;">
-                            DeelDepot Warehouse<br>
+                            Casoodo Warehouse<br>
                             1420 N McKinley Ave<br>
                             Los Angeles, CA 90059<br>
                             United States
@@ -211,7 +211,7 @@ export default async function handler(req, res) {
                       <h4 style="font-size: 16px; color: #090A28; margin-bottom: 8px;">📞 Contact Information</h4>
                       <p style="font-size: 14px; color: #475569; line-height: 1.5;">
                         Phone: +1 717 648 4487<br>
-                        Email: orders@deeldepot.com
+                        Email: Reply to this email
                       </p>
                     </div>
 
@@ -222,8 +222,8 @@ export default async function handler(req, res) {
                 <tr>
                   <td style="background-color: #090A28; padding: 32px 24px; text-align: center;">
                     <div style="color: #e0e7ff; font-size: 14px; line-height: 1.5; margin-bottom: 16px;">
-                      © 2026 DeelDepot. All rights reserved.<br>
-                      Thank you for choosing DeelDepot!<br>
+                      © 2026 Casoodo. All rights reserved.<br>
+                      Thank you for choosing Casoodo!<br>
                       Ref ID: ${Date.now()}
                     </div>
                   </td>
@@ -265,13 +265,13 @@ export default async function handler(req, res) {
       
       📞 Contact Information
       Phone: +1 717 648 4487
-      Email: orders@deeldepot.com
+      Email: Reply to this email
       
-      © 2026 DeelDepot. All rights reserved.
+      © 2026 Casoodo. All rights reserved.
     `;
 
     const mailOptions = {
-      from: `"${senderIdentity.fromName || 'DeelDepot Local'}" <${senderIdentity.fromEmail}>`,
+      from: `"${senderIdentity.fromName || 'Casoodo Local'}" <${senderIdentity.fromEmail}>`,
       replyTo: senderIdentity.fromEmail,
       to: customerEmail,
       subject: `Local Pickup Details - ${productName}`,

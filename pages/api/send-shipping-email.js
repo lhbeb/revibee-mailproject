@@ -105,7 +105,7 @@ export default async function handler(req, res) {
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="format-detection" content="telephone=no, date=no, email=no, address=no">
-        <title>Your Order Has Shipped - DeelDepot</title>
+        <title>Your Order Has Shipped - Casoodo</title>
         <!--[if mso]>
         <noscript>
           <xml>
@@ -299,7 +299,7 @@ export default async function handler(req, res) {
                     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: 32px 0;">
                       <tr>
                         <td style="color: #475569; font-size: 16px; line-height: 1.6; text-align: left;">
-                          We take the risk out of used gear with expert inspection and reliable service on every order. Questions about your order? Our support team is here to help. Thank you for choosing <strong>DeelDepot</strong>!
+                          We take the risk out of used gear with expert inspection and reliable service on every order. Questions about your order? Our support team is here to help. Thank you for choosing <strong>Casoodo</strong>!
                         </td>
                       </tr>
                     </table>
@@ -310,26 +310,26 @@ export default async function handler(req, res) {
                 <!-- Footer -->
                 <tr>
                   <td style="background-color: #090A28; padding: 32px 24px; text-align: center;">
-                    <div style="color: #e0e7ff; font-size: 16px; margin: 0 0 20px 0; font-weight: 500;">Thank you for ordering with DeelDepot.</div>
+                    <div style="color: #e0e7ff; font-size: 16px; margin: 0 0 20px 0; font-weight: 500;">Thank you for ordering with Casoodo.</div>
                     
                     <!-- Footer Links -->
                     <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="margin: 20px auto;">
                       <tr>
                         <td style="padding: 0 12px;">
-                          <a href="https://www.deeldepot.com/contact" style="color: #f8fafc; text-decoration: none; font-size: 14px; font-weight: 500;">Support</a>
+                          <a href="https://www.casoodo.com/contact" style="color: #f8fafc; text-decoration: none; font-size: 14px; font-weight: 500;">Support</a>
                         </td>
                         <td style="padding: 0 12px;">
-                          <a href="https://www.deeldepot.com/track" style="color: #f8fafc; text-decoration: none; font-size: 14px; font-weight: 500;">Track Orders</a>
+                          <a href="https://www.casoodo.com/track" style="color: #f8fafc; text-decoration: none; font-size: 14px; font-weight: 500;">Track Orders</a>
                         </td>
                         <td style="padding: 0 12px;">
-                          <a href="https://www.deeldepot.com/return-policy" style="color: #f8fafc; text-decoration: none; font-size: 14px; font-weight: 500;">Returns</a>
+                          <a href="https://www.casoodo.com/return-policy" style="color: #f8fafc; text-decoration: none; font-size: 14px; font-weight: 500;">Returns</a>
                         </td>
                       </tr>
                     </table>
                     
                     <div style="color: #f8fafc; font-size: 12px; margin-top: 24px; line-height: 1.4;">
                       This email was sent to ${customerEmail}<br>
-                      © 2026 DeelDepot. All rights reserved.
+                      © 2026 Casoodo. All rights reserved.
                     </div>
                   </td>
                 </tr>
@@ -346,7 +346,7 @@ export default async function handler(req, res) {
 
     // Plain text version for email clients that don't support HTML
     const textTemplate = `
-      DeelDepot shipping update
+      Casoodo shipping update
       
       Your order is on the way.
       Your item has been packed and handed to the carrier.
@@ -362,13 +362,13 @@ export default async function handler(req, res) {
       Tracking Number: ${trackingNumber}
       Track your package: ${trackingUrl}
       
-      Questions about your order? Our support team is here to help. Thank you for choosing DeelDepot.
+      Questions about your order? Our support team is here to help. Thank you for choosing Casoodo.
       
       ---
-      DeelDepot order support
+      Casoodo order support
       
       This email was sent to ${customerEmail}
-      DeelDepot • Premium Pre-Owned Technology
+      Casoodo • Premium Pre-Owned Technology
     `;
 
     // Email options

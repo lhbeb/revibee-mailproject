@@ -59,7 +59,7 @@ export default async function handler(req, res) {
         const response = await fetch(normalizedProductLink, {
           signal: controller.signal,
           headers: {
-            'User-Agent': 'Mozilla/5.0 (compatible; DeelDepotBot/1.0;)'
+            'User-Agent': 'Mozilla/5.0 (compatible; CasoodoBot/1.0;)'
           }
         });
         clearTimeout(timeoutId);
@@ -118,7 +118,7 @@ export default async function handler(req, res) {
     const emailTransporter = createTransporter(account);
     const senderIdentity = getSenderIdentity(account);
 
-    // HTML email template - DeelDepot.com Branded Design (Table-Based for iOS Support)
+    // HTML email template - Casoodo branded design (table-based for iOS support)
     const htmlTemplate = `
       <!DOCTYPE html>
       <html lang="en">
@@ -126,7 +126,7 @@ export default async function handler(req, res) {
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="format-detection" content="telephone=no, date=no, email=no, address=no">
-        <title>Your Saved Item - DeelDepot.com</title>
+        <title>Your Saved Item - Casoodo.com</title>
         <!--[if mso]>
         <noscript>
           <xml>
@@ -237,7 +237,7 @@ export default async function handler(req, res) {
                     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-top: 32px; text-align: center;">
                       <tr>
                         <td style="color: #6b7280; font-size: 14px;">
-                          <p style="margin: 0 0 8px 0;"><strong>Why DeelDepot.com?</strong></p>
+                          <p style="margin: 0 0 8px 0;"><strong>Why Casoodo.com?</strong></p>
                           <p style="margin: 0 0 16px 0;">We inspect every item to ensure quality. 30-day returns. Fast shipping.</p>
                           <p style="margin: 0; color: #6b7280; font-size: 14px;">
                             Questions? Reply here or <a href="https://wa.me/17176484487" style="color: #090A28; text-decoration: none;">WhatsApp +1-717-648-4487</a>.
@@ -259,7 +259,7 @@ export default async function handler(req, res) {
                     <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin-bottom: 24px;">
                       <tr>
                         <td style="padding: 8px 0;">
-                          <a href="mailto:orders@deeldepot.com" style="color: #090A28; text-decoration: none; font-weight: 500; font-size: 14px; display: block;">📧 Email Support</a>
+                          <a href="mailto:${senderIdentity.fromEmail}" style="color: #090A28; text-decoration: none; font-weight: 500; font-size: 14px; display: block;">📧 Email Support</a>
                         </td>
                       </tr>
                       <tr>
@@ -270,7 +270,7 @@ export default async function handler(req, res) {
                     </table>
                     
                     <div style="color: #9ca3af; font-size: 12px; line-height: 1.5;">
-                      © 2026 DeelDepot.com. All rights reserved.<br>
+                      © 2026 Casoodo.com. All rights reserved.<br>
                       Thank you for your business.
                     </div>
                   </td>
@@ -306,10 +306,10 @@ export default async function handler(req, res) {
       Need Help?
       If you have any questions about your order, our customer service team is here to help.
       
-      📧 Email Support (orders@deeldepot.com)
+      📧 Email Support: Reply to this email
       📞 +17176484487
       
-      © 2026 DeelDepot.com. All rights reserved.
+      © 2026 Casoodo.com. All rights reserved.
       Thank you for your business.
     `;
 

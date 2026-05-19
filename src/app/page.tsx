@@ -36,7 +36,7 @@ const NAV_GROUPS = [
   {
     label: 'Marketing',
     items: [
-      { id: 'about',        icon: '🏪', label: 'About DeelDepot',          sub: 'Brand story email' },
+      { id: 'about',        icon: '🏪', label: 'About Casoodo',            sub: 'Brand story email' },
       { id: 'recommend',   icon: '✨', label: 'Product Recommendations',  sub: 'You might also like' },
     ],
   },

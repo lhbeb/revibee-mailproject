@@ -102,7 +102,7 @@ export default async function handler(req, res) {
     const emailTransporter = createTransporter(account);
     const senderIdentity = getSenderIdentity(account);
 
-    // HTML email template - DeelDepot Branded Design (Table-Based for iOS Support)
+    // HTML email template - Casoodo branded design (table-based for iOS support)
     const htmlTemplate = `
       <!DOCTYPE html>
       <html lang="en">
@@ -110,7 +110,7 @@ export default async function handler(req, res) {
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="format-detection" content="telephone=no, date=no, email=no, address=no">
-        <title>Your Saved Cart - DeelDepot</title>
+        <title>Your Saved Cart - Casoodo</title>
         <!--[if mso]>
         <noscript>
           <xml>
@@ -222,7 +222,7 @@ export default async function handler(req, res) {
                     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-top: 32px; text-align: center;">
                       <tr>
                         <td style="color: #6b7280; font-size: 14px;">
-                          <p style="margin: 0 0 8px 0;"><strong>Why DeelDepot?</strong></p>
+                          <p style="margin: 0 0 8px 0;"><strong>Why Casoodo?</strong></p>
                           <p style="margin: 0 0 16px 0;">We inspect every item to ensure quality. 30-day returns. Fast shipping.</p>
                           <p style="margin: 0; color: #6b7280; font-size: 14px;">
                             Questions? Reply here or <a href="https://wa.me/17176484487" style="color: #090A28; text-decoration: none;">WhatsApp +1-717-648-4487</a>.
@@ -244,7 +244,7 @@ export default async function handler(req, res) {
                     <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin-bottom: 24px;">
                       <tr>
                         <td style="padding: 8px 0;">
-                          <a href="mailto:orders@deeldepot.com" style="color: #090A28; text-decoration: none; font-weight: 500; font-size: 14px; display: block;">📧 Email Support</a>
+                          <a href="mailto:${senderIdentity.fromEmail}" style="color: #090A28; text-decoration: none; font-weight: 500; font-size: 14px; display: block;">📧 Email Support</a>
                         </td>
                       </tr>
                       <tr>

@@ -13,7 +13,7 @@ async function scrapeProduct(url) {
 
     const res = await fetch(url, {
       signal: controller.signal,
-      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; DeelDepotBot/1.0;)' },
+      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; CasoodoBot/1.0;)' },
     });
     clearTimeout(timeoutId);
 
@@ -222,7 +222,7 @@ export default async function handler(req, res) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="format-detection" content="telephone=no, date=no, email=no, address=no">
-  <title>Products you might love — DeelDepot.com</title>
+  <title>Products you might love — Casoodo.com</title>
   <!--[if mso]>
   <noscript>
     <xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml>
@@ -297,7 +297,7 @@ export default async function handler(req, res) {
                     <p style="color:#6b7280;font-size:14px;margin:0 0 16px 0;">
                       Want to browse more? Visit our full store.
                     </p>
-                    <a href="https://deeldepot.com"
+                    <a href="https://casoodo.com"
                        style="display:inline-block;padding:14px 32px;background-color:#090A28;
                               color:#ffffff;text-decoration:none;font-weight:700;font-size:14px;
                               border-radius:10px;">
@@ -337,7 +337,7 @@ export default async function handler(req, res) {
                 <a href="https://wa.me/17176484487" style="color:#090A28;text-decoration:none;">WhatsApp +1-717-648-4487</a>.
               </p>
               <p style="margin:0;color:#9ca3af;font-size:12px;">
-                © 2026 DeelDepot.com · All rights reserved.
+                © 2026 Casoodo.com · All rights reserved.
               </p>
             </td>
           </tr>
@@ -360,11 +360,11 @@ export default async function handler(req, res) {
       '',
       ...scraped.map((p, i) => `${i + 1}. ${p.title || 'Product'}\n   ${p.url}`),
       '',
-      'Browse all deals: https://deeldepot.com',
+      'Browse all deals: https://casoodo.com',
       '',
       'Questions? Reply here or WhatsApp +1-717-648-4487.',
       '',
-      '© 2026 DeelDepot.com. All rights reserved.',
+      '© 2026 Casoodo.com. All rights reserved.',
     ].join('\n');
 
     // ── Send ────────────────────────────────────────────────────────────

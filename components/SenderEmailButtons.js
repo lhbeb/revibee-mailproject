@@ -81,8 +81,8 @@ export default function SenderEmailButtons({
                     disabled={disabled}
                     className={`min-h-[72px] rounded-xl border px-4 py-3 text-left text-sm font-medium transition duration-200 ease-in-out ${
                       isSelected
-                        ? 'border-[#090A28] bg-[#090A28] text-white shadow-sm'
-                        : 'border-gray-300 bg-white text-gray-700 hover:border-[#F5970C] hover:bg-amber-50'
+                        ? 'border-[#003099] bg-[#003099] text-white shadow-sm'
+                        : 'border-gray-300 bg-white text-gray-700 hover:border-[#FFFBB6] hover:bg-[#F0F6FF]'
                     } ${disabled ? 'cursor-not-allowed opacity-60' : ''}`}
                   >
                     <span className="block text-sm font-semibold leading-tight">

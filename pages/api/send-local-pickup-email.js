@@ -53,7 +53,7 @@ export default async function handler(req, res) {
           .container { 
             max-width: 600px; 
             margin: 0 auto; 
-            background-color: #ffffff; 
+            background-color: #F0F6FF; 
             border-radius: 12px;
             overflow: hidden;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
@@ -61,12 +61,12 @@ export default async function handler(req, res) {
           .step-item {
             margin-bottom: 12px;
             padding: 16px;
-            background: #f8fafc;
+            background: #F0F6FF;
             border-radius: 8px;
-            border-left: 4px solid #090A28;
+            border-left: 4px solid #003099;
           }
           .step-number {
-            background: #090A28;
+            background: #003099;
             color: white;
             width: 28px;
             height: 28px;
@@ -80,8 +80,8 @@ export default async function handler(req, res) {
           }
           a.btn-orange {
             display: inline-block;
-            background-color: #F5970C;
-            color: #090A28;
+            background-color: #FFFBB6;
+            color: #070B17;
             text-decoration: none;
             padding: 14px 28px;
             font-weight: 600;
@@ -98,8 +98,8 @@ export default async function handler(req, res) {
                 
                 <!-- Header Top -->
                 <tr>
-                  <td style="background-color: #F5970C; padding: 40px 32px 24px; text-align: center;">
-                    <h1 style="color: #090A28; font-size: 32px; font-weight: 800; margin: 0; line-height: 1.2;">
+                  <td style="background-color: #FFFBB6; padding: 40px 32px 24px; text-align: center;">
+                    <h1 style="color: #070B17; font-size: 32px; font-weight: 800; margin: 0; line-height: 1.2;">
                       Local Pickup Details
                     </h1>
                   </td>
@@ -107,8 +107,8 @@ export default async function handler(req, res) {
                 
                 <!-- Header Bottom -->
                 <tr>
-                  <td style="background-color: #090A28; padding: 24px 32px 40px; text-align: center;">
-                    <div style="color: #ffffff; font-size: 16px; font-weight: 500; margin: 0;">Pickup instructions for this item are included below.</div>
+                  <td style="background-color: #003099; padding: 24px 32px 40px; text-align: center;">
+                    <div style="color: #F0F6FF; font-size: 16px; font-weight: 500; margin: 0;">Pickup instructions for this item are included below.</div>
                   </td>
                 </tr>
                 
@@ -129,7 +129,7 @@ export default async function handler(req, res) {
                           <td width="40" valign="top"><div class="step-number">1</div></td>
                           <td>
                             <strong>Visit Our Warehouse</strong><br>
-                            Come to our warehouse at 1420 N McKinley Ave, Los Angeles during business hours.
+                            Come to our warehouse at 415 Codoni Ave, Modesto during business hours.
                           </td>
                         </tr></table>
                       </div>
@@ -176,8 +176,8 @@ export default async function handler(req, res) {
                     </div>
 
                     <!-- Alternate option -->
-                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 24px; margin-bottom: 32px; text-align: center;">
-                      <h3 style="font-size: 18px; font-weight: 600; color: #090A28; margin-bottom: 8px;">Need Shipping Instead?</h3>
+                    <div style="background: #F0F6FF; border: 1px solid #e2e8f0; border-radius: 12px; padding: 24px; margin-bottom: 32px; text-align: center;">
+                      <h3 style="font-size: 18px; font-weight: 600; color: #070B17; margin-bottom: 8px;">Need Shipping Instead?</h3>
                       <p style="color: #475569; font-size: 15px; margin-bottom: 16px;">
                         If pickup is not convenient, you can place the order online and choose shipping instead.
                       </p>
@@ -188,16 +188,16 @@ export default async function handler(req, res) {
                     <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin-bottom: 24px;">
                       <tr>
                         <td width="50%" valign="top" style="padding-right: 12px;">
-                          <h4 style="font-size: 16px; color: #090A28; margin-bottom: 12px;">🏢 Warehouse Location</h4>
+                          <h4 style="font-size: 16px; color: #070B17; margin-bottom: 12px;">🏢 Warehouse Location</h4>
                           <p style="font-size: 14px; color: #475569; line-height: 1.5;">
                             Casoodo Warehouse<br>
-                            1420 N McKinley Ave<br>
-                            Los Angeles, CA 90059<br>
-                            United States
+                            415 Codoni Ave<br>
+                            Modesto, CA 95357<br>
+                            USA
                           </p>
                         </td>
                         <td width="50%" valign="top" style="padding-left: 12px; border-left: 1px solid #e2e8f0;">
-                          <h4 style="font-size: 16px; color: #090A28; margin-bottom: 12px;">⏰ Business Hours</h4>
+                          <h4 style="font-size: 16px; color: #070B17; margin-bottom: 12px;">⏰ Business Hours</h4>
                           <p style="font-size: 14px; color: #475569; line-height: 1.5;">
                             <strong>Mon - Fri:</strong> 9:00 AM - 5:00 PM EST<br>
                             <strong>Saturday:</strong> 10:00 AM - 3:00 PM EST<br>
@@ -208,9 +208,9 @@ export default async function handler(req, res) {
                     </table>
 
                     <div style="border-top: 1px solid #e2e8f0; padding-top: 24px; margin-top: 24px;">
-                      <h4 style="font-size: 16px; color: #090A28; margin-bottom: 8px;">📞 Contact Information</h4>
+                      <h4 style="font-size: 16px; color: #070B17; margin-bottom: 8px;">📞 Contact Information</h4>
                       <p style="font-size: 14px; color: #475569; line-height: 1.5;">
-                        Phone: +1 717 648 4487<br>
+                        Phone: +1 318 657 4299<br>
                         Email: Reply to this email
                       </p>
                     </div>
@@ -220,8 +220,8 @@ export default async function handler(req, res) {
 
                 <!-- Footer -->
                 <tr>
-                  <td style="background-color: #090A28; padding: 32px 24px; text-align: center;">
-                    <div style="color: #e0e7ff; font-size: 14px; line-height: 1.5; margin-bottom: 16px;">
+                  <td style="background-color: #003099; padding: 32px 24px; text-align: center;">
+                    <div style="color: #F0F6FF; font-size: 14px; line-height: 1.5; margin-bottom: 16px;">
                       © 2026 Casoodo. All rights reserved.<br>
                       Thank you for choosing Casoodo!<br>
                       Ref ID: ${Date.now()}
@@ -245,7 +245,7 @@ export default async function handler(req, res) {
       Your selected item "${productName}" can be picked up from our warehouse.
       
       🏢 Our Warehouse Location
-      1420 N McKinley Ave, Los Angeles, CA 90059, United States
+      415 Codoni Ave, Modesto, CA 95357, USA
       
       How Local Pickup Works:
       1. Visit Our Warehouse during business hours.
@@ -264,7 +264,7 @@ export default async function handler(req, res) {
       Sunday: Closed
       
       📞 Contact Information
-      Phone: +1 717 648 4487
+      Phone: +1 318 657 4299
       Email: Reply to this email
       
       © 2026 Casoodo. All rights reserved.

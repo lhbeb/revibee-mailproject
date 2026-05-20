@@ -130,20 +130,20 @@ export default async function handler(req, res) {
           }
         </style>
       </head>
-      <body style="margin: 0; padding: 0; background-color: #f8f9fa; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.5; color: #090A28; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%;">
+      <body style="margin: 0; padding: 0; background-color: #F0F6FF; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.5; color: #070B17; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%;">
         
         <!-- Wrapper Table for Email Client Compatibility -->
-        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #f8f9fa;">
+        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #F0F6FF;">
           <tr>
             <td align="center" style="padding: 20px 10px;">
               
               <!-- Main Container -->
-              <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="max-width: 600px; background: #ffffff; border-radius: 16px; overflow: hidden; border: 1px solid #e2e8f0;">
+              <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="max-width: 600px; background: #F0F6FF; border-radius: 16px; overflow: hidden; border: 1px solid #e2e8f0;">
                 
                 <!-- Header Top -->
                 <tr>
-                  <td style="background-color: #F5970C; padding: 40px 32px 24px; text-align: center;">
-                    <h1 style="color: #090A28; font-size: 32px; font-weight: 800; margin: 0; line-height: 1.2;">
+                  <td style="background-color: #FFFBB6; padding: 40px 32px 24px; text-align: center;">
+                    <h1 style="color: #070B17; font-size: 32px; font-weight: 800; margin: 0; line-height: 1.2;">
                       Your order is on the way 🚀
                     </h1>
                   </td>
@@ -151,9 +151,9 @@ export default async function handler(req, res) {
                 
                 <!-- Header Bottom -->
                 <tr>
-                  <td style="background-color: #090A28; padding: 24px 32px 40px; text-align: center;">
-                    <div style="color: #ffffff; font-size: 18px; font-weight: 600; margin: 0;">Shipping update for your order</div>
-                    ${orderNumber ? `<div style="color: #ffffff; font-size: 18px; font-weight: 700; margin-top: 16px; letter-spacing: 0.5px;">Order ${orderNumber}</div>` : ''}
+                  <td style="background-color: #003099; padding: 24px 32px 40px; text-align: center;">
+                    <div style="color: #F0F6FF; font-size: 18px; font-weight: 600; margin: 0;">Shipping update for your order</div>
+                    ${orderNumber ? `<div style="color: #F0F6FF; font-size: 18px; font-weight: 700; margin-top: 16px; letter-spacing: 0.5px;">Order ${orderNumber}</div>` : ''}
                   </td>
                 </tr>
                 
@@ -164,14 +164,14 @@ export default async function handler(req, res) {
                     <!-- Status Indicator -->
                     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-bottom: 32px;">
                       <tr>
-                        <td style="padding: 16px 20px; background-color: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;">
+                        <td style="padding: 16px 20px; background-color: #F0F6FF; border-radius: 12px; border: 1px solid #e2e8f0;">
                           <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                             <tr>
                               <td style="width: 20px; vertical-align: middle;">
-                                <div style="width: 8px; height: 8px; background-color: #090A28; border-radius: 50%; display: inline-block;"></div>
+                                <div style="width: 8px; height: 8px; background-color: #003099; border-radius: 50%; display: inline-block;"></div>
                               </td>
                               <td style="vertical-align: middle;">
-                                <div style="color: #090A28; font-weight: 600; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px; margin: 0;">SHIPPED</div>
+                                <div style="color: #070B17; font-weight: 600; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px; margin: 0;">SHIPPED</div>
                               </td>
                             </tr>
                           </table>
@@ -189,7 +189,7 @@ export default async function handler(req, res) {
                     </table>
                     
                     <!-- Order Card -->
-                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #f8fafc; border-radius: 16px; border: 1px solid #e2e8f0; margin: 24px 0;">
+                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #F0F6FF; border-radius: 16px; border: 1px solid #e2e8f0; margin: 24px 0;">
                       
                       <!-- Product Section -->
                       <tr>
@@ -197,16 +197,16 @@ export default async function handler(req, res) {
                           <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                             <tr>
                               <td align="center" style="padding-bottom: 16px;">
-                                <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="width: 64px; height: 64px; background-color: #090A28; border-radius: 12px; margin: 0 auto;">
+                                <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="width: 64px; height: 64px; background-color: #003099; border-radius: 12px; margin: 0 auto;">
                                   <tr>
-                                    <td style="text-align: center; vertical-align: middle; font-size: 28px; color: #ffffff; line-height: 1;">📦</td>
+                                    <td style="text-align: center; vertical-align: middle; font-size: 28px; color: #F0F6FF; line-height: 1;">📦</td>
                                   </tr>
                                 </table>
                               </td>
                             </tr>
                             <tr>
                               <td align="center">
-                                <h3 style="color: #090A28; font-size: 18px; font-weight: 600; margin: 0 0 8px 0; line-height: 1.4; text-align: center;">${productName}</h3>
+                                <h3 style="color: #070B17; font-size: 18px; font-weight: 600; margin: 0 0 8px 0; line-height: 1.4; text-align: center;">${productName}</h3>
                                 <p style="color: #64748b; font-size: 14px; margin: 0; line-height: 1.4; text-align: center;">Order summary and delivery details</p>
                               </td>
                             </tr>
@@ -226,10 +226,10 @@ export default async function handler(req, res) {
                         <td style="padding: 24px;">
                           
                           <!-- Delivery Email Card -->
-                          <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 16px;">
+                          <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #F0F6FF; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 16px;">
                             <tr>
                               <td style="padding: 20px;">
-                                <div style="color: #090A28; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 8px 0;">Delivery Email</div>
+                                <div style="color: #070B17; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 8px 0;">Delivery Email</div>
                                 <div style="color: #475569; font-size: 14px; line-height: 1.5; margin: 0; word-break: break-all;">
                                   ${customerEmail}
                                 </div>
@@ -238,10 +238,10 @@ export default async function handler(req, res) {
                           </table>
                           
                           <!-- Status Card -->
-                          <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 16px;">
+                          <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #F0F6FF; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 16px;">
                             <tr>
                               <td style="padding: 20px;">
-                                <div style="color: #090A28; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 8px 0;">Status</div>
+                                <div style="color: #070B17; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 8px 0;">Status</div>
                                 <div style="color: #475569; font-size: 14px; line-height: 1.5; margin: 0;">
                                   In Transit<br>
                                   3-7 Business Days
@@ -251,10 +251,10 @@ export default async function handler(req, res) {
                           </table>
                           
                           <!-- Delivery Address Card -->
-                          <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0;">
+                          <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #F0F6FF; border-radius: 12px; border: 1px solid #e2e8f0;">
                             <tr>
                               <td style="padding: 20px;">
-                                <div style="color: #090A28; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 8px 0;">Delivery Address</div>
+                                <div style="color: #070B17; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 8px 0;">Delivery Address</div>
                                 <div style="color: #475569; font-size: 14px; line-height: 1.6; margin: 0;">
                                   ${customerAddress}
                                 </div>
@@ -268,16 +268,16 @@ export default async function handler(req, res) {
                     </table>
                     
                     <!-- Tracking Card -->
-                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #f8fafc; border-radius: 16px; border: 1px solid #e2e8f0; margin: 32px 0;">
+                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #F0F6FF; border-radius: 16px; border: 1px solid #e2e8f0; margin: 32px 0;">
                       <tr>
                         <td style="padding: 28px 24px; text-align: center;">
-                          <h3 style="color: #090A28; font-size: 20px; font-weight: 700; margin: 0 0 8px 0;">Tracking Information</h3>
+                          <h3 style="color: #070B17; font-size: 20px; font-weight: 700; margin: 0 0 8px 0;">Tracking Information</h3>
                           <p style="color: #475569; font-size: 16px; margin: 0 0 20px 0;">Use the tracking number below to view the latest carrier updates.</p>
                           
                           <!-- Tracking Number -->
                           <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: 16px 0;">
                             <tr>
-                              <td style="background-color: #ffffff; color: #090A28; padding: 16px; border-radius: 8px; font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, monospace; font-size: 16px; font-weight: 600; border: 1px solid #cbd5e1; letter-spacing: 1px; text-align: center; word-break: break-all;">
+                              <td style="background-color: #F0F6FF; color: #070B17; padding: 16px; border-radius: 8px; font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, monospace; font-size: 16px; font-weight: 600; border: 1px solid #cbd5e1; letter-spacing: 1px; text-align: center; word-break: break-all;">
                                 ${trackingNumber}
                               </td>
                             </tr>
@@ -286,8 +286,8 @@ export default async function handler(req, res) {
                           <!-- Track Package Button -->
                           <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="margin: 20px auto 0 auto;">
                             <tr>
-                              <td style="background-color: #F5970C; border-radius: 8px; text-align: center;">
-                                <a href="${trackingUrl}" style="display: inline-block; padding: 14px 28px; color: #090A28; text-decoration: none; font-weight: 600; font-size: 16px; border-radius: 8px;">Track Package</a>
+                              <td style="background-color: #FFFBB6; border-radius: 8px; text-align: center;">
+                                <a href="${trackingUrl}" style="display: inline-block; padding: 14px 28px; color: #070B17; text-decoration: none; font-weight: 600; font-size: 16px; border-radius: 8px;">Track Package</a>
                               </td>
                             </tr>
                           </table>
@@ -309,25 +309,25 @@ export default async function handler(req, res) {
                 
                 <!-- Footer -->
                 <tr>
-                  <td style="background-color: #090A28; padding: 32px 24px; text-align: center;">
-                    <div style="color: #e0e7ff; font-size: 16px; margin: 0 0 20px 0; font-weight: 500;">Thank you for ordering with Casoodo.</div>
+                  <td style="background-color: #003099; padding: 32px 24px; text-align: center;">
+                    <div style="color: #F0F6FF; font-size: 16px; margin: 0 0 20px 0; font-weight: 500;">Thank you for ordering with Casoodo.</div>
                     
                     <!-- Footer Links -->
                     <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="margin: 20px auto;">
                       <tr>
                         <td style="padding: 0 12px;">
-                          <a href="https://www.casoodo.com/contact" style="color: #f8fafc; text-decoration: none; font-size: 14px; font-weight: 500;">Support</a>
+                          <a href="https://www.casoodo.com/contact" style="color: #F0F6FF; text-decoration: none; font-size: 14px; font-weight: 500;">Support</a>
                         </td>
                         <td style="padding: 0 12px;">
-                          <a href="https://www.casoodo.com/track" style="color: #f8fafc; text-decoration: none; font-size: 14px; font-weight: 500;">Track Orders</a>
+                          <a href="https://www.casoodo.com/track" style="color: #F0F6FF; text-decoration: none; font-size: 14px; font-weight: 500;">Track Orders</a>
                         </td>
                         <td style="padding: 0 12px;">
-                          <a href="https://www.casoodo.com/return-policy" style="color: #f8fafc; text-decoration: none; font-size: 14px; font-weight: 500;">Returns</a>
+                          <a href="https://www.casoodo.com/return-policy" style="color: #F0F6FF; text-decoration: none; font-size: 14px; font-weight: 500;">Returns</a>
                         </td>
                       </tr>
                     </table>
                     
-                    <div style="color: #f8fafc; font-size: 12px; margin-top: 24px; line-height: 1.4;">
+                    <div style="color: #F0F6FF; font-size: 12px; margin-top: 24px; line-height: 1.4;">
                       This email was sent to ${customerEmail}<br>
                       © 2026 Casoodo. All rights reserved.
                     </div>

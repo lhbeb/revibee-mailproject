@@ -128,7 +128,7 @@ export default function RecoveryEmail3Form() {
             value={formData.actualCheckoutLink}
             onChange={handleInputChange}
             placeholder="https://checkout.example.com/..."
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent transition duration-200 ease-in-out text-gray-900 bg-white"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FFFBB6] focus:border-transparent transition duration-200 ease-in-out text-gray-900 bg-white"
             disabled={isLoading}
           />
           <p className="mt-1 text-xs text-gray-500">If blank, the product link from the pasted block will be used as the checkout link.</p>
@@ -149,7 +149,7 @@ export default function RecoveryEmail3Form() {
             onChange={(e) => setRawData(e.target.value)}
             required
             rows={6}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent transition duration-200 ease-in-out text-gray-900 bg-white resize-y font-mono text-sm leading-relaxed"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FFFBB6] focus:border-transparent transition duration-200 ease-in-out text-gray-900 bg-white resize-y font-mono text-sm leading-relaxed"
             placeholder="Product Name : $Price&#10;customer@example.com&#10;John Doe&#10;123 Address St, City, ST 12345&#10;https://casoodo.com/product/..."
             disabled={isLoading}
           />
@@ -161,7 +161,7 @@ export default function RecoveryEmail3Form() {
           disabled={isLoading}
           className={`w-full py-3 px-4 rounded-lg font-medium text-white transition duration-200 ease-in-out ${isLoading
             ? 'bg-gray-400 cursor-not-allowed'
-            : 'bg-red-600 hover:bg-red-700 focus:ring-2 focus:ring-red-500 focus:ring-offset-2'
+            : 'bg-[#003099] hover:bg-[#070B17] focus:ring-2 focus:ring-[#FFFBB6] focus:ring-offset-2'
             }`}
         >
           {isLoading ? 'Sending...' : '⏰ Send Recovery Email 3'}

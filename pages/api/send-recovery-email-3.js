@@ -124,10 +124,10 @@ export default async function handler(req, res) {
           body {
             margin: 0;
             padding: 0;
-            background-color: #f8f9fa;
+            background-color: #F0F6FF;
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             line-height: 1.5;
-            color: #090A28;
+            color: #070B17;
             -webkit-text-size-adjust: 100%;
             -ms-text-size-adjust: 100%;
           }
@@ -141,23 +141,23 @@ export default async function handler(req, res) {
           }
         </style>
       </head>
-      <body style="margin: 0; padding: 0; background-color: #f8f9fa; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.5; color: #090A28;">
+      <body style="margin: 0; padding: 0; background-color: #F0F6FF; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.5; color: #070B17;">
         
         <!-- Wrapper Table -->
-        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #f8f9fa;">
+        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #F0F6FF;">
           <tr>
             <td align="center" style="padding: 20px 10px;">
               
               <!-- Main Container -->
-              <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="max-width: 600px; background: #ffffff; border-radius: 16px; overflow: hidden; border: 1px solid #e2e8f0;">
+              <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="max-width: 600px; background: #F0F6FF; border-radius: 16px; overflow: hidden; border: 1px solid #e2e8f0;">
                 
                 <!-- Header -->
                 <tr class="header">
-                  <td style="background-color: #090A28; padding: 40px 32px; text-align: center;">
-                    <h1 style="color: #ffffff; font-size: 28px; font-weight: 700; margin: 0 0 12px 0; line-height: 1.2;">
+                  <td style="background-color: #003099; padding: 40px 32px; text-align: center;">
+                    <h1 style="color: #F0F6FF; font-size: 28px; font-weight: 700; margin: 0 0 12px 0; line-height: 1.2;">
                       A final reminder about your saved item
                     </h1>
-                    <p style="color: #f8fafc; font-size: 16px; margin: 0; line-height: 1.5; font-weight: 500;">
+                    <p style="color: #F0F6FF; font-size: 16px; margin: 0; line-height: 1.5; font-weight: 500;">
                       Your checkout details are still saved if you would like to continue
                     </p>
                   </td>
@@ -168,7 +168,7 @@ export default async function handler(req, res) {
                   <td class="content-cell" style="padding: 32px 24px;">
                     
                     <!-- Abandoned Item Card -->
-                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px; margin-bottom: 32px;">
+                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #F0F6FF; border: 1px solid #e2e8f0; border-radius: 16px; margin-bottom: 32px;">
                       <tr>
                         <td style="padding: 32px; text-align: center;">
                           <!-- Product Image or Icon -->
@@ -178,7 +178,7 @@ export default async function handler(req, res) {
                                 ${productImage ? `
                                   <img src="${productImage}" alt="${productName || 'Product'}" style="width: 200px; height: auto; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); display: block;">
                                 ` : `
-                                  <div style="width: 64px; height: 64px; background: #ffffff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px;">🛒</div>
+                                  <div style="width: 64px; height: 64px; background: #F0F6FF; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px;">🛒</div>
                                 `}
                               </td>
                             </tr>
@@ -190,10 +190,10 @@ export default async function handler(req, res) {
                           </p>
 
                           ${customerAddress ? `
-                            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: 0 0 24px 0; background-color: #ffffff; border: 1px solid #f3d1b0; border-radius: 12px;">
+                            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: 0 0 24px 0; background-color: #F0F6FF; border: 1px solid #f3d1b0; border-radius: 12px;">
                               <tr>
                                 <td style="padding: 18px 20px; text-align: left;">
-                                  <div style="color: #090A28; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px;">Saved delivery address</div>
+                                  <div style="color: #070B17; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px;">Saved delivery address</div>
                                   <div style="color: #374151; font-size: 15px; line-height: 1.6; white-space: pre-line;">${customerAddress}</div>
                                   <div style="color: #6b7280; font-size: 13px; line-height: 1.5; margin-top: 10px;">Your address is already saved, so you can jump straight back into checkout.</div>
                                 </td>
@@ -206,9 +206,9 @@ export default async function handler(req, res) {
                           <!-- CTA Button -->
                           <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center">
                             <tr>
-                              <td style="background-color: #F5970C; border-radius: 8px; box-shadow: 0 4px 6px rgba(9, 10, 40, 0.2);">
-                                <a href="${normalizedCheckoutUrl}" style="display: inline-block; padding: 16px 32px; color: #090A28; text-decoration: none; font-weight: 700; font-size: 16px; border-radius: 8px; background-color: #F5970C; border: 1px solid #F5970C;">
-                                  <span style="color: #ffffff;">Secure My Item Now</span>
+                              <td style="background-color: #FFFBB6; border-radius: 8px; box-shadow: 0 4px 6px rgba(7, 11, 23, 0.2);">
+                                <a href="${normalizedCheckoutUrl}" style="display: inline-block; padding: 16px 32px; color: #070B17; text-decoration: none; font-weight: 700; font-size: 16px; border-radius: 8px; background-color: #FFFBB6; border: 1px solid #FFFBB6;">
+                                  <span style="color: #070B17;">Secure My Item Now</span>
                                 </a>
                               </td>
                             </tr>
@@ -225,7 +225,7 @@ export default async function handler(req, res) {
                           <p style="margin: 0 0 8px 0;"><strong>Why Casoodo?</strong></p>
                           <p style="margin: 0 0 16px 0;">We inspect every item to ensure quality. 30-day returns. Fast shipping.</p>
                           <p style="margin: 0; color: #6b7280; font-size: 14px;">
-                            Questions? Reply here or <a href="https://wa.me/17176484487" style="color: #090A28; text-decoration: none;">WhatsApp +1-717-648-4487</a>.
+                            Questions? Reply here or <a href="https://wa.me/13186574299" style="color: #070B17; text-decoration: none;">WhatsApp +1 318 657 4299</a>.
                           </p>
                         </td>
                       </tr>
@@ -236,7 +236,7 @@ export default async function handler(req, res) {
                 
                 <!-- Footer -->
                 <tr>
-                  <td style="background-color: #f8fafc; padding: 32px 24px; text-align: center; border-top: 1px solid #e5e7eb;">
+                  <td style="background-color: #F0F6FF; padding: 32px 24px; text-align: center; border-top: 1px solid #e5e7eb;">
                     <h3 style="color: #1f2937; font-size: 18px; font-weight: 600; margin: 0 0 8px 0;">Need Help?</h3>
                     <p style="color: #6b7280; font-size: 14px; margin: 0 0 24px 0;">If you have any questions about your order, our customer service team is here to help.</p>
                     
@@ -244,12 +244,12 @@ export default async function handler(req, res) {
                     <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin-bottom: 24px;">
                       <tr>
                         <td style="padding: 8px 0;">
-                          <a href="mailto:${senderIdentity.fromEmail}" style="color: #090A28; text-decoration: none; font-weight: 500; font-size: 14px; display: block;">📧 Email Support</a>
+                          <a href="mailto:${senderIdentity.fromEmail}" style="color: #070B17; text-decoration: none; font-weight: 500; font-size: 14px; display: block;">📧 Email Support</a>
                         </td>
                       </tr>
                       <tr>
                         <td style="padding: 8px 0;">
-                          <a href="tel:+17176484487" style="color: #090A28; text-decoration: none; font-weight: 500; font-size: 14px; display: block;">📞 +17176484487</a>
+                          <a href="tel:+13186574299" style="color: #070B17; text-decoration: none; font-weight: 500; font-size: 14px; display: block;">📞 +1 318 657 4299</a>
                         </td>
                       </tr>
                     </table>
@@ -286,13 +286,13 @@ export default async function handler(req, res) {
       Continue to checkout:
       Secure My Item Now: ${normalizedCheckoutUrl}
       
-      Questions? Reply here or WhatsApp +1-717-648-4487.
+      Questions? Reply here or WhatsApp +1 318 657 4299.
       
       Need Help?
       If you have any questions about your order, our customer service team is here to help.
       
       📧 Email Support
-      📞 +17176484487
+      📞 +1 318 657 4299
       
       © 2026 Customer Service. All rights reserved.
       Thank you for your business.

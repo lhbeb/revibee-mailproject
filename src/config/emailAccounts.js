@@ -4,20 +4,13 @@ import nodemailer from 'nodemailer';
 // Add as many accounts as you need here
 const emailAccounts = [
   {
-    user: 'deeldepot@gmail.com',
-    pass: 'aoqy eizc zjsu npxv', // App Password
+    user: 'contactcasoodo@gmail.com',
+    pass: 'bumw tyas vcea uvqg', // App Password
     provider: 'gmail',
-    label: 'Gmail - deeldepot@gmail.com',
-    fromEmail: 'deeldepot@gmail.com',
+    label: 'Gmail - contactcasoodo@gmail.com',
+    fromEmail: 'contactcasoodo@gmail.com',
     fromName: 'Casoodo',
-  },
-  {
-    user: 'heydeeldepot@gmail.com',
-    pass: 'ckph mgay vioy jswd', // App Password
-    provider: 'gmail',
-    label: 'Gmail - heydeeldepot@gmail.com',
-    fromEmail: 'heydeeldepot@gmail.com',
-    fromName: 'Casoodo',
+    active: true,
   },
   {
     user: 'a9501e001@smtp-brevo.com',
@@ -29,6 +22,7 @@ const emailAccounts = [
     secure: false,
     fromEmail: 'orders@deeldepot.com',
     fromName: 'Casoodo Marketplace',
+    active: false,
   },
 ];
 
@@ -38,6 +32,7 @@ const emailAccounts = [
  */
 export function getRandomAccount() {
   const validAccounts = emailAccounts.filter(account =>
+    account.active !== false &&
     account.user && account.pass &&
     !account.user.includes('example.com') &&
     !account.user.includes('another.email')
@@ -77,7 +72,7 @@ export function createTransporter(account) {
  */
 export function getPublicAccounts() {
   return emailAccounts
-    .filter(account => account.user && account.pass) // Only valid accounts
+    .filter(account => account.active !== false && account.user && account.pass) // Only active valid accounts
     .map(account => ({
       user: account.user,
       provider: account.provider || 'smtp',
@@ -93,7 +88,7 @@ export function getPublicAccounts() {
  */
 export function getAccountByUser(email) {
   if (!email) return null;
-  return emailAccounts.find(account => account.user === email) || null;
+  return emailAccounts.find(account => account.user === email && account.active !== false) || null;
 }
 
 export function getSenderIdentity(account, fallbackName = 'Casoodo') {

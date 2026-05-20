@@ -100,13 +100,13 @@ function renderProductCard({ url, image, title, price }) {
                    display:flex; align-items:center; justify-content:center; font-size:48px;">🛍️</div>`;
 
   const priceHTML = price 
-    ? `<p style="margin:4px 0 0 0; font-size:14px; font-weight:700; color:#F5970C;">${price}</p>` 
+    ? `<p style="margin:4px 0 0 0; font-size:14px; font-weight:700; color:#FFFBB6;">${price}</p>` 
     : '';
 
   return `
     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
            style="border:1px solid #e2e8f0; border-radius:12px; overflow:hidden;
-                  background:#ffffff; box-shadow:0 1px 4px rgba(0,0,0,0.06);">
+                  background:#F0F6FF; box-shadow:0 1px 4px rgba(0,0,0,0.06);">
       <tr>
         <td style="padding:0;">${imgBlock}</td>
       </tr>
@@ -120,9 +120,9 @@ function renderProductCard({ url, image, title, price }) {
       <tr>
         <td style="padding:10px 16px 16px 16px; text-align:center;">
           <a href="${url}"
-             style="display:inline-block; padding:10px 22px; background-color:#F5970C;
-                    color:#090A28; text-decoration:none; font-weight:700; font-size:13px;
-                    border-radius:8px; border:1px solid #F5970C;">
+             style="display:inline-block; padding:10px 22px; background-color:#FFFBB6;
+                    color:#070B17; text-decoration:none; font-weight:700; font-size:13px;
+                    border-radius:8px; border:1px solid #FFFBB6;">
             Get Deal
           </a>
         </td>
@@ -231,9 +231,9 @@ export default async function handler(req, res) {
   <style>
     body {
       margin:0; padding:0;
-      background-color:#f8f9fa;
+      background-color:#F0F6FF;
       font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
-      line-height:1.5; color:#090A28;
+      line-height:1.5; color:#070B17;
       -webkit-text-size-adjust:100%; -ms-text-size-adjust:100%;
     }
     @media screen and (max-width:600px){
@@ -245,27 +245,27 @@ export default async function handler(req, res) {
     }
   </style>
 </head>
-<body style="margin:0;padding:0;background-color:#f8f9fa;">
+<body style="margin:0;padding:0;background-color:#F0F6FF;">
 
   <!-- Wrapper -->
-  <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color:#f8f9fa;">
+  <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color:#F0F6FF;">
     <tr>
       <td align="center" style="padding:20px 10px;">
 
         <!-- Container -->
         <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
-               style="max-width:620px;background:#ffffff;border-radius:20px;overflow:hidden;border:1px solid #e2e8f0;">
+               style="max-width:620px;background:#F0F6FF;border-radius:20px;overflow:hidden;border:1px solid #e2e8f0;">
 
           <!-- Header -->
           <tr class="header">
-            <td style="background-color:#090A28;padding:36px 32px;text-align:center;">
-              <p style="margin:0 0 10px 0;font-size:13px;font-weight:600;color:#F5970C;text-transform:uppercase;letter-spacing:0.1em;">
+            <td style="background-color:#070B17;padding:36px 32px;text-align:center;">
+              <p style="margin:0 0 10px 0;font-size:13px;font-weight:600;color:#FFFBB6;text-transform:uppercase;letter-spacing:0.1em;">
                 Handpicked for you
               </p>
-              <h1 style="color:#ffffff;font-size:26px;font-weight:800;margin:0 0 14px 0;line-height:1.25;">
-                ${firstName ? `${firstName}, you might love these` : 'Products you might love'} <span style="color:#F5970C;">✨</span>
+              <h1 style="color:#F0F6FF;font-size:26px;font-weight:800;margin:0 0 14px 0;line-height:1.25;">
+                ${firstName ? `${firstName}, you might love these` : 'Products you might love'} <span style="color:#FFFBB6;">✨</span>
               </h1>
-              <p style="color:#ffffff99;font-size:15px;margin:0;line-height:1.5;">
+              <p style="color:#F0F6FF99;font-size:15px;margin:0;line-height:1.5;">
                 We curated ${scraped.length} item${scraped.length !== 1 ? 's' : ''} we think you&rsquo;ll be interested in.
                 Click any product to explore the deal.
               </p>
@@ -298,8 +298,8 @@ export default async function handler(req, res) {
                       Want to browse more? Visit our full store.
                     </p>
                     <a href="https://casoodo.com"
-                       style="display:inline-block;padding:14px 32px;background-color:#090A28;
-                              color:#ffffff;text-decoration:none;font-weight:700;font-size:14px;
+                       style="display:inline-block;padding:14px 32px;background-color:#070B17;
+                              color:#F0F6FF;text-decoration:none;font-weight:700;font-size:14px;
                               border-radius:10px;">
                       Browse All Deals
                     </a>
@@ -331,10 +331,10 @@ export default async function handler(req, res) {
 
           <!-- Footer -->
           <tr>
-            <td style="padding:24px 32px;text-align:center;background-color:#f8fafc;border-top:1px solid #e5e7eb;">
+            <td style="padding:24px 32px;text-align:center;background-color:#F0F6FF;border-top:1px solid #e5e7eb;">
               <p style="margin:0 0 8px 0;font-size:13px;color:#6b7280;">
                 Questions? Reply to this email or&nbsp;
-                <a href="https://wa.me/17176484487" style="color:#090A28;text-decoration:none;">WhatsApp +1-717-648-4487</a>.
+                <a href="https://wa.me/13186574299" style="color:#070B17;text-decoration:none;">WhatsApp +1 318 657 4299</a>.
               </p>
               <p style="margin:0;color:#9ca3af;font-size:12px;">
                 © 2026 Casoodo.com · All rights reserved.
@@ -362,7 +362,7 @@ export default async function handler(req, res) {
       '',
       'Browse all deals: https://casoodo.com',
       '',
-      'Questions? Reply here or WhatsApp +1-717-648-4487.',
+      'Questions? Reply here or WhatsApp +1 318 657 4299.',
       '',
       '© 2026 Casoodo.com. All rights reserved.',
     ].join('\n');

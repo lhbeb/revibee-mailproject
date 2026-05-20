@@ -127,7 +127,7 @@ export default function ShippingEmailForm() {
             onChange={(e) => setRawData(e.target.value)}
             required
             rows={7}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#F5970C] focus:border-transparent transition duration-200 ease-in-out text-gray-900 bg-white resize-y font-mono text-sm leading-relaxed"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FFFBB6] focus:border-transparent transition duration-200 ease-in-out text-gray-900 bg-white resize-y font-mono text-sm leading-relaxed"
             placeholder="Product Name : $Price&#10;customer@example.com&#10;John Doe&#10;123 Address St, City, ST 12345&#10;https://casoodo.com/product/...&#10;#9934"
             disabled={isLoading}
           />
@@ -146,7 +146,7 @@ export default function ShippingEmailForm() {
             onChange={handleInputChange}
             required
             maxLength={22}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 ease-in-out text-gray-900 bg-white"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FFFBB6] focus:border-transparent transition duration-200 ease-in-out text-gray-900 bg-white"
             placeholder="e.g., 1Z999AA1234567890"
             disabled={isLoading}
           />
@@ -156,9 +156,9 @@ export default function ShippingEmailForm() {
         <button
           type="submit"
           disabled={isLoading}
-          className={`w-full py-3 px-4 rounded-lg font-bold text-[#090A28] transition duration-200 ease-in-out ${isLoading
+          className={`w-full py-3 px-4 rounded-lg font-bold text-[#003099] transition duration-200 ease-in-out ${isLoading
             ? 'bg-gray-400 cursor-not-allowed'
-            : 'bg-[#F5970C] hover:bg-[#e08800] focus:ring-2 focus:ring-[#F5970C] focus:ring-offset-2'
+            : 'bg-[#FFFBB6] hover:bg-[#f3ee8f] focus:ring-2 focus:ring-[#FFFBB6] focus:ring-offset-2'
             }`}
         >
           {isLoading ? (

@@ -3,15 +3,15 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
 const TYPE_CONFIG = {
-  'Shipping Confirmation':     { color: 'bg-blue-100 text-blue-700',   icon: '📦' },
-  'Order Confirmation':        { color: 'bg-green-100 text-green-700', icon: '✅' },
-  'Local Pickup':              { color: 'bg-teal-100 text-teal-700',   icon: '🏪' },
-  'Refund Email':              { color: 'bg-amber-100 text-amber-700', icon: '💰' },
-  'Text Email':                { color: 'bg-slate-100 text-slate-700', icon: '✉️' },
-  'Recovery — Urgent':         { color: 'bg-purple-100 text-purple-700', icon: '🛒' },
-  'Recovery — Friendly':       { color: 'bg-purple-100 text-purple-700', icon: '💚' },
-  'Recovery — Last Chance':    { color: 'bg-purple-100 text-purple-700', icon: '⏰' },
-  'About Casoodo':             { color: 'bg-teal-100 text-teal-700',   icon: '🏪' },
+  'Shipping Confirmation':     { color: 'bg-[#F0F6FF] text-[#003099]', icon: '📦' },
+  'Order Confirmation':        { color: 'bg-[#FFFBB6] text-[#003099]', icon: '✅' },
+  'Local Pickup':              { color: 'bg-[#F0F6FF] text-[#070B17]', icon: '🏪' },
+  'Refund Email':              { color: 'bg-[#FFFBB6] text-[#070B17]', icon: '💰' },
+  'Text Email':                { color: 'bg-[#F0F6FF] text-[#070B17]', icon: '✉️' },
+  'Recovery — Urgent':         { color: 'bg-[#003099] text-[#F0F6FF]', icon: '🛒' },
+  'Recovery — Friendly':       { color: 'bg-[#F0F6FF] text-[#003099]', icon: '💚' },
+  'Recovery — Last Chance':    { color: 'bg-[#070B17] text-[#F0F6FF]', icon: '⏰' },
+  'About Casoodo':             { color: 'bg-[#003099] text-[#F0F6FF]', icon: '🏪' },
 };
 
 export default function SentEmailsDashboard() {
@@ -81,16 +81,16 @@ export default function SentEmailsDashboard() {
 
       {/* Stats Bar */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div className="bg-[#090A28] text-white rounded-xl p-4 flex flex-col gap-1">
+        <div className="bg-[#003099] text-white rounded-xl p-4 flex flex-col gap-1">
           <span className="text-3xl font-black">{total}</span>
           <span className="text-xs text-white/60 uppercase tracking-wider">Total Sent</span>
         </div>
-        <div className="bg-[#F5970C] text-[#090A28] rounded-xl p-4 flex flex-col gap-1">
+        <div className="bg-[#FFFBB6] text-[#003099] rounded-xl p-4 flex flex-col gap-1">
           <span className="text-3xl font-black">{todayCount}</span>
-          <span className="text-xs text-[#090A28]/70 uppercase tracking-wider">Today</span>
+          <span className="text-xs text-[#003099]/70 uppercase tracking-wider">Today</span>
         </div>
         <div className="bg-white border border-slate-200 rounded-xl p-4 flex flex-col gap-1">
-          <span className="text-3xl font-black text-[#090A28]">{
+          <span className="text-3xl font-black text-[#003099]">{
             (typeCounts['Recovery — Urgent'] || 0) + 
             (typeCounts['Recovery — Friendly'] || 0) + 
             (typeCounts['Recovery — Last Chance'] || 0)
@@ -98,7 +98,7 @@ export default function SentEmailsDashboard() {
           <span className="text-xs text-slate-500 uppercase tracking-wider">Recovery</span>
         </div>
         <div className="bg-white border border-slate-200 rounded-xl p-4 flex flex-col gap-1">
-          <span className="text-3xl font-black text-[#090A28]">{
+          <span className="text-3xl font-black text-[#003099]">{
             (typeCounts['Shipping Confirmation'] || 0) + 
             (typeCounts['Order Confirmation'] || 0) +
             (typeCounts['Local Pickup'] || 0)
@@ -117,7 +117,7 @@ export default function SentEmailsDashboard() {
             placeholder="Search recipient or product..."
             value={search}
             onChange={e => setSearch(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#F5970C]"
+            className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#FFFBB6]"
           />
         </div>
 
@@ -125,7 +125,7 @@ export default function SentEmailsDashboard() {
         <select
           value={filterType}
           onChange={e => setFilterType(e.target.value)}
-          className="px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#F5970C]"
+          className="px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#FFFBB6]"
         >
           {allTypes.map(t => <option key={t}>{t}</option>)}
         </select>
@@ -134,7 +134,7 @@ export default function SentEmailsDashboard() {
         <select
           value={filterSender}
           onChange={e => setFilterSender(e.target.value)}
-          className="px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#F5970C] max-w-[200px] truncate"
+          className="px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#FFFBB6] max-w-[200px] truncate"
         >
           {allSenders.map(s => <option key={s}>{s}</option>)}
         </select>
@@ -143,7 +143,7 @@ export default function SentEmailsDashboard() {
         <button
           onClick={fetchLogs}
           disabled={isLoading}
-          className="px-4 py-2 bg-[#090A28] text-white rounded-lg text-sm font-medium hover:bg-[#1a1c4a] transition-colors disabled:opacity-50"
+          className="px-4 py-2 bg-[#003099] text-white rounded-lg text-sm font-medium hover:bg-[#1a1c4a] transition-colors disabled:opacity-50"
         >
           {isLoading ? '⏳' : '↻'} Refresh
         </button>
@@ -162,7 +162,7 @@ export default function SentEmailsDashboard() {
           <div className="flex flex-col items-center justify-center h-48 text-slate-400 gap-3">
             <span className="text-4xl">📭</span>
             <p className="text-sm font-medium">No emails match your filters</p>
-            <button onClick={() => { setSearch(''); setFilterType('All'); setFilterSender('All'); }} className="text-xs text-[#F5970C] hover:underline">Clear filters</button>
+            <button onClick={() => { setSearch(''); setFilterType('All'); setFilterSender('All'); }} className="text-xs text-[#003099] hover:underline">Clear filters</button>
           </div>
         ) : (
           <div className="overflow-x-auto">
@@ -179,7 +179,7 @@ export default function SentEmailsDashboard() {
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {filtered.map((log) => {
-                  const cfg = TYPE_CONFIG[log.templateName] || { color: 'bg-slate-100 text-slate-600', icon: '📧' };
+                  const cfg = TYPE_CONFIG[log.templateName] || { color: 'bg-[#F0F6FF] text-slate-600', icon: '📧' };
                   const isExpanded = expandedRowId === log.id;
                   
                   return (
@@ -187,7 +187,7 @@ export default function SentEmailsDashboard() {
                       <tr className={`hover:bg-slate-50 transition-colors ${isExpanded ? 'bg-slate-50' : ''}`}>
                         <td className="px-5 py-3.5 text-slate-500 whitespace-nowrap">{formatDate(log.timestamp)}</td>
                         <td className="px-5 py-3.5">
-                          <p className="font-semibold text-[#090A28]">{log.recipientName || '—'}</p>
+                          <p className="font-semibold text-[#003099]">{log.recipientName || '—'}</p>
                           <p className="text-slate-400 text-xs">{log.recipientEmail}</p>
                         </td>
                         <td className="px-5 py-3.5">
@@ -202,7 +202,7 @@ export default function SentEmailsDashboard() {
                         <td className="px-5 py-3.5 text-right whitespace-nowrap">
                           <button
                             onClick={() => setExpandedRowId(isExpanded ? null : log.id)}
-                            className="text-slate-400 hover:text-[#F5970C] p-2 rounded transition-colors"
+                            className="text-slate-400 hover:text-[#003099] p-2 rounded transition-colors"
                             title="View full payload details"
                           >
                             {isExpanded ? '▼ Close' : '▶ Expand'}
@@ -213,8 +213,8 @@ export default function SentEmailsDashboard() {
                         <tr className="bg-slate-50 border-t-0">
                           <td colSpan="6" className="px-5 pb-4 pt-1">
                             <div className="bg-white border text-left border-slate-200 rounded-lg p-5 shadow-sm relative overflow-hidden">
-                              <div className="absolute top-0 left-0 w-1 h-full bg-[#F5970C]"></div>
-                              <h4 className="font-bold text-[#090A28] mb-4 text-sm flex items-center gap-2">
+                              <div className="absolute top-0 left-0 w-1 h-full bg-[#FFFBB6]"></div>
+                              <h4 className="font-bold text-[#003099] mb-4 text-sm flex items-center gap-2">
                                 <span>📄</span> Request Payload Details
                               </h4>
                               {log.payload ? (

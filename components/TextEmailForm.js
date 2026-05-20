@@ -103,7 +103,7 @@ export default function TextEmailForm() {
             value={formData.recipients}
             onChange={handleInputChange}
             required
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#F5970C] focus:border-transparent transition duration-200 ease-in-out text-gray-900 bg-white"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FFFBB6] focus:border-transparent transition duration-200 ease-in-out text-gray-900 bg-white"
             placeholder="customer@example.com, manager@example.com"
             disabled={isLoading}
           />
@@ -121,7 +121,7 @@ export default function TextEmailForm() {
             value={formData.subject}
             onChange={handleInputChange}
             required
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#F5970C] focus:border-transparent transition duration-200 ease-in-out text-gray-900 bg-white"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FFFBB6] focus:border-transparent transition duration-200 ease-in-out text-gray-900 bg-white"
             placeholder="Your custom subject"
             disabled={isLoading}
           />
@@ -138,7 +138,7 @@ export default function TextEmailForm() {
             onChange={handleInputChange}
             required
             rows={12}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#F5970C] focus:border-transparent transition duration-200 ease-in-out text-gray-900 bg-white resize-y font-mono text-sm leading-relaxed"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FFFBB6] focus:border-transparent transition duration-200 ease-in-out text-gray-900 bg-white resize-y font-mono text-sm leading-relaxed"
             placeholder={"Hello,\n\nThis is a plain text email.\n\nBest regards,"}
             disabled={isLoading}
           />
@@ -150,7 +150,7 @@ export default function TextEmailForm() {
           className={`w-full py-3 px-4 rounded-lg font-bold transition duration-200 ease-in-out ${
             isLoading
               ? 'bg-gray-400 cursor-not-allowed text-white'
-              : 'bg-[#F5970C] hover:bg-[#e08800] text-[#090A28] focus:ring-2 focus:ring-[#F5970C] focus:ring-offset-2'
+              : 'bg-[#FFFBB6] hover:bg-[#f3ee8f] text-[#003099] focus:ring-2 focus:ring-[#FFFBB6] focus:ring-offset-2'
           }`}
         >
           {isLoading ? 'Sending…' : '✉️ Send Text Email'}

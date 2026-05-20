@@ -145,7 +145,7 @@ export default function ProductRecommendationsForm() {
             onChange={(e) => setCustomerRaw(e.target.value)}
             required
             rows={7}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#F5970C] focus:border-transparent transition duration-200 ease-in-out text-gray-900 bg-white resize-y font-mono text-sm leading-relaxed"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FFFBB6] focus:border-transparent transition duration-200 ease-in-out text-gray-900 bg-white resize-y font-mono text-sm leading-relaxed"
             placeholder={"Product Name : $Price\ncustomer@example.com\nJohn Doe\n123 Address St, City, ST 12345\nhttps://casoodo.com/product/...\n#10105"}
             disabled={isLoading}
           />
@@ -159,7 +159,7 @@ export default function ProductRecommendationsForm() {
           <div className="flex items-center justify-between mb-2">
             <label htmlFor="productLinksRaw" className="block text-sm font-medium text-gray-700">
               Product Links *
-              <span className="ml-2 text-[10px] font-bold bg-[#090A28] text-white px-2 py-0.5 rounded-full">
+              <span className="ml-2 text-[10px] font-bold bg-[#003099] text-white px-2 py-0.5 rounded-full">
                 {productCount} product{productCount !== 1 ? 's' : ''}
               </span>
             </label>
@@ -171,7 +171,7 @@ export default function ProductRecommendationsForm() {
             onChange={(e) => setProductLinksRaw(e.target.value)}
             required
             rows={8}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#F5970C] focus:border-transparent transition duration-200 ease-in-out text-gray-900 bg-white resize-y font-mono text-sm leading-relaxed"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FFFBB6] focus:border-transparent transition duration-200 ease-in-out text-gray-900 bg-white resize-y font-mono text-sm leading-relaxed"
             placeholder={"https://casoodo.com/products/item-one\nhttps://casoodo.com/products/item-two\nhttps://casoodo.com/products/item-three\nhttps://casoodo.com/products/item-four\nhttps://casoodo.com/products/item-five\nhttps://casoodo.com/products/item-six"}
             disabled={isLoading}
           />
@@ -187,7 +187,7 @@ export default function ProductRecommendationsForm() {
           className={`w-full py-3 px-4 rounded-lg font-bold transition duration-200 ease-in-out ${
             isLoading || productCount === 0
               ? 'bg-gray-400 cursor-not-allowed text-white'
-              : 'bg-[#F5970C] hover:bg-[#e08800] text-[#090A28] focus:ring-2 focus:ring-[#F5970C] focus:ring-offset-2'
+              : 'bg-[#FFFBB6] hover:bg-[#f3ee8f] text-[#003099] focus:ring-2 focus:ring-[#FFFBB6] focus:ring-offset-2'
           }`}
         >
           {isLoading ? (

@@ -58,7 +58,7 @@ export default async function handler(req, res) {
           .container { 
             max-width: 600px; 
             margin: 0 auto; 
-            background-color: #ffffff; 
+            background-color: #F0F6FF; 
             border-radius: 12px;
             overflow: hidden;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
@@ -66,12 +66,12 @@ export default async function handler(req, res) {
           
           /* Header */
           .header-top { 
-            background-color: #F5970C; 
+            background-color: #FFFBB6; 
             padding: 40px 32px 24px; 
             text-align: center; 
           }
           .header-bottom { 
-            background-color: #090A28; 
+            background-color: #003099; 
             padding: 24px 32px 40px; 
             text-align: center; 
           }
@@ -80,16 +80,16 @@ export default async function handler(req, res) {
             font-size: 32px; 
             font-weight: 800; 
             margin: 0;
-            color: #090A28 !important;
+            color: #070B17 !important;
           }
           .header-subtitle { 
             font-size: 18px; 
-            color: #ffffff !important;
+            color: #F0F6FF !important;
             font-weight: 600;
             margin: 0;
           }
           .header-order {
-            color: #ffffff !important; 
+            color: #F0F6FF !important; 
             font-size: 18px; 
             font-weight: 700; 
             margin-top: 16px; 
@@ -103,7 +103,7 @@ export default async function handler(req, res) {
           
           /* Confirmation Card */
           .confirmation-card {
-            background-color: #f8fafc;
+            background-color: #F0F6FF;
             border: 1px solid #e2e8f0;
             border-radius: 16px;
             padding: 32px;
@@ -116,7 +116,7 @@ export default async function handler(req, res) {
             width: 64px;
             height: 64px;
             line-height: 64px; /* Vertically center text */
-            background-color: #090A28; /* Solid color fallback */
+            background-color: #003099; /* Solid color fallback */
             border-radius: 50%;
             display: inline-block; /* Better structure */
             text-align: center; /* Horizontally center text */
@@ -167,9 +167,9 @@ export default async function handler(req, res) {
           .step-item {
             margin-bottom: 12px;
             padding: 12px;
-            background: #f8fafc;
+            background: #F0F6FF;
             border-radius: 8px;
-            border-left: 3px solid #090A28;
+            border-left: 3px solid #003099;
           }
           .step-table {
             width: 100%;
@@ -182,7 +182,7 @@ export default async function handler(req, res) {
           
           /* Step Number - Fixed centering */
           .step-number {
-            background: #090A28;
+            background: #003099;
             color: white;
             width: 24px;
             height: 24px;
@@ -203,27 +203,27 @@ export default async function handler(req, res) {
           
           /* Delivery Info */
           .delivery-info {
-            background: #f8fafc;
+            background: #F0F6FF;
             border: 1px solid #e2e8f0;
             border-radius: 12px;
             padding: 24px;
             margin-bottom: 32px;
           }
           .delivery-info h3 {
-            color: #090A28;
+            color: #070B17;
             font-size: 16px;
             font-weight: 600;
             margin-bottom: 8px;
           }
           .delivery-info p {
-            color: #090A28;
+            color: #070B17;
             font-size: 14px;
             margin: 0;
           }
           
           /* Footer */
           .footer { 
-            background: #f8fafc; 
+            background: #F0F6FF; 
             padding: 32px; 
             text-align: center; 
             border-top: 1px solid #e5e7eb;
@@ -248,7 +248,7 @@ export default async function handler(req, res) {
             margin-bottom: 8px;
           }
           .contact-link { 
-            color: #090A28; 
+            color: #070B17; 
             text-decoration: none;  
             font-weight: 500; 
             font-size: 14px;
@@ -347,7 +347,7 @@ export default async function handler(req, res) {
                   <a href="mailto:${senderIdentity.fromEmail}" class="contact-link">📧 Email Support</a>
                 </div>
                 <div class="contact-link-wrapper">
-                  <a href="tel:+17176484487" class="contact-link">📞 +17176484487</a>
+                  <a href="tel:+13186574299" class="contact-link">📞 +1 318 657 4299</a>
                 </div>
               </div>
               

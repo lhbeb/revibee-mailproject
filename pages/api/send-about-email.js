@@ -73,10 +73,10 @@ export default async function handler(req, res) {
           body {
             margin: 0;
             padding: 0;
-            background-color: #f8f9fa;
+            background-color: #F0F6FF;
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             line-height: 1.6;
-            color: #090A28;
+            color: #070B17;
             -webkit-text-size-adjust: 100%;
             -ms-text-size-adjust: 100%;
           }
@@ -159,85 +159,54 @@ export default async function handler(req, res) {
           }
         </style>
       </head>
-      <body style="margin: 0; padding: 0; background-color: #f8f9fa;">
+      <body style="margin: 0; padding: 0; background-color: #F0F6FF;">
         
         <!-- Wrapper Table -->
-        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #f8f9fa;">
+        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #F0F6FF;">
           <tr>
             <td align="center" style="padding: 20px 10px;">
               
               <!-- Main Container -->
-              <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="max-width: 650px; background: #ffffff; border-radius: 16px; overflow: hidden; border: 1px solid #e2e8f0;">
+              <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="max-width: 650px; background: #F0F6FF; border-radius: 16px; overflow: hidden; border: 1px solid #e2e8f0;">
                 
                 <!-- Header -->
                 <tr>
-                  <td style="background-color: #090A28; padding: 48px 32px; text-align: center; border-bottom: 1px solid #090A28;">
-                    <div style="display: inline-block; max-width: 200px; margin-bottom: 16px;">
-                      <?xml version="1.0" encoding="utf-8"?>
-                      <!-- Generator: Adobe Illustrator 27.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+                  <td style="background-color: #003099; padding: 48px 32px; text-align: center; border-bottom: 1px solid #003099;">
+                    <div style="display: inline-block; max-width: 212px; margin-bottom: 16px;">
                       <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                           viewBox="0 0 566.9 138.7" style="enable-background:new 0 0 566.9 138.7; width: 100%; height: auto; display: block;" xml:space="preserve">
-                      <style type="text/css">
-                          .st0{fill:#FFFFFF;}
-                          .st1{fill:#F5970C;}
-                      </style>
-                      <g>
-                          <g>
-                              <g>
-                                  <path class="st0" d="M9.6,94.1c-2-0.2-3.6-1.1-4.9-2.6c-1.3-1.5-1.9-3.2-1.9-5.2V14.3c0-2,0.6-3.7,1.9-5.2s2.9-2.3,4.9-2.6
-                                      c5.1-0.6,10.7-0.8,17-0.8c14.1,0,24.9,3.7,32.4,11.1S70.3,35,70.3,49.2c0,15.2-3.7,26.7-11.2,34.3c-7.5,7.7-18.3,11.5-32.4,11.5
-                                      C20.3,94.9,14.7,94.7,9.6,94.1z M19.4,20.7V80c0,0.6,0.3,0.9,1,1.1c2.5,0.4,4.9,0.6,7.1,0.6c9.3,0,16.1-2.5,20.5-7.6
-                                      c4.4-5,6.5-13.3,6.5-24.9c0-10.4-2.2-18-6.7-22.8c-4.4-4.8-11.2-7.3-20.3-7.3c-2.2,0-4.6,0.2-7.1,0.6
-                                      C19.7,19.8,19.4,20.2,19.4,20.7z"/>
-                                  <path class="st0" d="M108,94.9c-10.4,0-18.4-2.7-24-8.1c-5.6-5.4-8.4-13.4-8.4-24c0-10.5,2.5-18.4,7.5-23.9
-                                      c5-5.5,12.2-8.2,21.6-8.2c17.6,0,26.6,10,27.1,30c0.1,1.9-0.6,3.5-2,4.8c-1.4,1.3-3.1,1.9-5,1.9H92.4c-0.7,0-1,0.4-0.8,1.1
-                                      c0.6,5.3,2.3,9.2,5.3,11.6c3,2.4,7.3,3.6,13,3.6c3.6,0,7.5-0.6,11.9-1.8c1.4-0.4,2.8-0.2,4,0.7c1.2,0.9,1.8,2.1,1.8,3.6
-                                      c0,1.8-0.5,3.4-1.6,4.8c-1.1,1.4-2.5,2.2-4.2,2.6C117.3,94.5,112.7,94.9,108,94.9z M105,41.8c-4,0-7.2,1.1-9.3,3.4
-                                      c-2.2,2.3-3.5,5.9-4.1,10.9c0,0.6,0.3,1,1,1h23.3c0.6,0,1-0.3,1-1C116.4,46.5,112.5,41.8,105,41.8z"/>
-                                  <path class="st0" d="M171.3,94.9c-10.4,0-18.4-2.7-24-8.1c-5.6-5.4-8.4-13.4-8.4-24c0-10.5,2.5-18.4,7.5-23.9
-                                      c5-5.5,12.2-8.2,21.6-8.2c17.6,0,26.6,10,27.1,30c0.1,1.9-0.6,3.5-2,4.8c-1.4,1.3-3.1,1.9-5,1.9h-32.5c-0.7,0-1,0.4-0.8,1.1
-                                      c0.6,5.3,2.3,9.2,5.3,11.6c3,2.4,7.3,3.6,13,3.6c3.6,0,7.5-0.6,11.9-1.8c1.4-0.4,2.8-0.2,4,0.7c1.2,0.9,1.8,2.1,1.8,3.6
-                                      c0,1.8-0.5,3.4-1.6,4.8c-1.1,1.4-2.5,2.2-4.2,2.6C180.7,94.5,176.1,94.9,171.3,94.9z M168.4,41.8c-4,0-7.2,1.1-9.3,3.4
-                                      c-2.2,2.3-3.5,5.9-4.1,10.9c0,0.6,0.3,1,1,1h23.3c0.6,0,1-0.3,1-1C179.8,46.5,175.9,41.8,168.4,41.8z"/>
-                                  <path class="st0" d="M215.7,93.8c-1.8,0-3.4-0.7-4.8-2c-1.3-1.3-2-2.9-2-4.8V11.3c0-1.8,0.7-3.4,2-4.8c1.3-1.3,2.9-2,4.8-2h3.1
-                                      c1.8,0,3.4,0.7,4.8,2c1.3,1.3,2,2.9,2,4.8V87c0,1.8-0.7,3.4-2,4.8c-1.4,1.3-2.9,2-4.8,2H215.7z"/>
-                                  <path class="st0" d="M250.8,94.1c-2-0.2-3.6-1.1-4.9-2.6c-1.3-1.5-1.9-3.2-1.9-5.2V14.3c0-2,0.6-3.7,1.9-5.2
-                                      c1.3-1.5,2.9-2.3,4.9-2.6c5.1-0.6,10.7-0.8,17-0.8c14.1,0,24.9,3.7,32.4,11.1c7.5,7.4,11.2,18.2,11.2,32.3
-                                      c0,15.2-3.7,26.7-11.2,34.3c-7.5,7.7-18.3,11.5-32.4,11.5C261.5,94.9,255.8,94.7,250.8,94.1z M260.5,20.7V80c0,0.6,0.3,0.9,1,1.1
-                                      c2.5,0.4,4.9,0.6,7.1,0.6c9.3,0,16.1-2.5,20.5-7.6c4.4-5,6.5-13.3,6.5-24.9c0-10.4-2.2-18-6.7-22.8c-4.4-4.8-11.2-7.3-20.3-7.3
-                                      c-2.2,0-4.6,0.2-7.1,0.6C260.8,19.8,260.5,20.2,260.5,20.7z"/>
-                                  <path class="st0" d="M349.1,94.9c-10.4,0-18.4-2.7-24-8.1c-5.6-5.4-8.4-13.4-8.4-24c0-10.5,2.5-18.4,7.5-23.9
-                                      c5-5.5,12.2-8.2,21.6-8.2c17.6,0,26.6,10,27.1,30c0.1,1.9-0.6,3.5-2,4.8c-1.4,1.3-3.1,1.9-5,1.9h-32.5c-0.7,0-1,0.4-0.8,1.1
-                                      c0.6,5.3,2.3,9.2,5.3,11.6c3,2.4,7.3,3.6,13,3.6c3.6,0,7.5-0.6,11.9-1.8c1.4-0.4,2.8-0.2,4,0.7c1.2,0.9,1.8,2.1,1.8,3.6
-                                      c0,1.8-0.5,3.4-1.6,4.8c-1.1,1.4-2.5,2.2-4.2,2.6C358.5,94.5,353.9,94.9,349.1,94.9z M346.1,41.8c-4,0-7.2,1.1-9.3,3.4
-                                      c-2.2,2.3-3.5,5.9-4.1,10.9c0,0.6,0.3,1,1,1H357c0.6,0,1-0.3,1-1C357.6,46.5,353.7,41.8,346.1,41.8z"/>
-                                  <path class="st0" d="M389.9,119.9c-1.8,0-3.4-0.7-4.8-2c-1.3-1.3-2-2.9-2-4.8V38.7c0-1.8,0.7-3.4,2-4.8c1.3-1.3,2.9-2,4.8-2h1.4
-                                      c1.9,0,3.5,0.7,4.9,2c1.3,1.3,2.1,2.9,2.1,4.8v0.8c0,0.1,0,0.1,0.1,0.1c0.1,0,0.2,0,0.2-0.1c2.9-3.2,5.7-5.4,8.6-6.8
-                                      c2.9-1.3,6.2-2,10-2c7.5,0,13.4,2.8,17.8,8.4c4.4,5.6,6.7,13.5,6.7,23.7c0,9.9-2.3,17.7-7,23.5c-4.6,5.7-10.5,8.6-17.5,8.6
-                                      c-6.9,0-12.9-2.5-18-7.5c-0.1-0.1-0.2-0.1-0.2-0.1c-0.1,0-0.1,0-0.1,0.1v25.7c0,1.8-0.7,3.4-2,4.8c-1.3,1.3-2.9,2-4.7,2H389.9z
-                                      M398.8,54.8v16.2c0,3.2,1.4,6,4.1,8.4s5.9,3.7,9.6,3.7c4.2,0,7.5-1.7,10-5.1c2.5-3.4,3.7-8.4,3.7-15.1
-                                      c0-13.5-4.6-20.2-13.7-20.2c-3.6,0-6.8,1.2-9.6,3.7S398.8,51.6,398.8,54.8z"/>
-                                  <path class="st0" d="M501.2,86.6c-5.3,5.6-12.7,8.4-22.2,8.4c-9.5,0-16.9-2.8-22.2-8.4c-5.3-5.6-7.9-13.5-7.9-23.7
-                                      c0-10.2,2.6-18.1,7.9-23.7c5.3-5.6,12.7-8.4,22.2-8.4c9.5,0,16.9,2.8,22.2,8.4c5.3,5.6,7.9,13.5,7.9,23.7
-                                      C509.1,73.1,506.4,81,501.2,86.6z M489.5,47.2c-2.3-3.3-5.8-4.9-10.5-4.9c-4.7,0-8.2,1.6-10.5,4.9c-2.3,3.3-3.5,8.5-3.5,15.6
-                                      c0,7.1,1.2,12.4,3.5,15.6c2.3,3.3,5.8,4.9,10.5,4.9c4.7,0,8.2-1.6,10.5-4.9c2.3-3.3,3.5-8.5,3.5-15.6
-                                      C493,55.7,491.8,50.5,489.5,47.2z"/>
-                                  <path class="st0" d="M520.1,45.8c-1.6,0-2.9-0.6-4-1.7c-1.1-1.1-1.7-2.5-1.7-4.1c0-1.6,0.6-2.9,1.7-4c1.1-1.1,2.5-1.7,4-1.7h5.7
-                                      c0.7,0,1.1-0.4,1.1-1.1V18.5c0-1.8,0.7-3.4,2-4.8c1.3-1.3,2.9-2,4.7-2h2.4c1.8,0,3.4,0.7,4.8,2c1.3,1.3,2,2.9,2,4.8v14.7
-                                      c0,0.7,0.4,1.1,1.1,1.1h13.6c1.6,0,3,0.6,4.1,1.7c1.1,1.1,1.7,2.5,1.7,4c0,1.6-0.6,3-1.7,4.1c-1.1,1.1-2.5,1.7-4.1,1.7h-13.6
-                                      c-0.7,0-1.1,0.3-1.1,1v24c0,5.2,0.6,8.5,1.7,10c1.1,1.5,3.4,2.3,6.9,2.3c1.9,0,3.3-0.1,4.3-0.2c1.6-0.2,3,0.2,4.2,1.1
-                                      c1.2,0.9,1.8,2.1,1.8,3.6c0,1.7-0.6,3.3-1.7,4.7c-1.1,1.4-2.6,2.2-4.2,2.3c-3.5,0.3-6.1,0.5-7.8,0.5c-7.7,0-13.1-1.6-16.2-4.9
-                                      c-3.1-3.3-4.6-9.2-4.6-17.7V46.8c0-0.6-0.4-1-1.1-1H520.1z"/>
-                              </g>
-                          </g>
-                          <g>
-                              <g>
-                                  <path class="st1" d="M136.4,135.9c-12.8,0-24.6-5.8-32.5-15.5c-2.8-3.4-1.6-8.6,2.3-10.6l0,0c2.9-1.5,6.6-0.8,8.6,1.8
-                                      c5.2,6.4,13,10.3,21.5,10.3c8.5,0,16.3-3.8,21.5-10.3c2.1-2.6,5.7-3.3,8.6-1.8l0,0c3.9,2,5.1,7.2,2.3,10.6
-                                      C161,130.1,149.2,135.9,136.4,135.9z"/>
-                              </g>
-                          </g>
-                      </g>
+                        viewBox="0 0 212 43.1" style="enable-background:new 0 0 212 43.1; width: 100%; height: auto; display: block;" xml:space="preserve">
+                        <style type="text/css">
+                          .st0{fill:#EEF5FF;}
+                          .st1{fill:#FFFAAC;}
+                        </style>
+                        <g>
+                          <path class="st0" d="M32.3,27.3c-1.6,0-2.5,0.7-3.7,2.2c-0.4,0.5-0.7,1.4-1.5,2.4c-1.4,1.7-3.7,2.6-6.7,2.6
+                            c-6.5,0-10.2-4.6-10.2-13c0-8.3,3.9-13,9.9-13c2.9,0,5.1,0.9,6.8,2.8c0.6,0.6,1,1.6,1.7,2.4c1.1,1.1,2.2,1.6,3.5,1.6
+                            c2.3,0,3.7-1.5,3.7-3.7c0-2-1.3-4.4-3.7-6.2C28.7,2.7,25,1.5,20.5,1.5C9,1.5,2.2,9.1,2.2,22.2c0,12,6.8,19.4,17.8,19.4
+                            c5.1,0,8.9-1.3,12.5-4.4c2.3-2.1,3.5-4.6,3.5-6.3C36,28.9,34.4,27.3,32.3,27.3z"/>
+                          <path class="st0" d="M62.7,19.4c0-5.1-4.2-7.9-12.1-7.9c-6.8,0-11.2,3.6-11.2,7c0,1.7,1.3,3.1,3,3.1c2.1,0,3-1.7,4.2-2.8
+                            c1.1-0.9,2.5-1.4,4.3-1.4c3.2,0,4.6,0.8,4.6,3.2c0,1.2-0.4,1.8-1.2,2.1c-1.6,0.5-4.4,0.5-7.9,1.3c-5.8,1.2-8.3,3.5-8.3,8.9
+                            c0,5.5,3.2,8.7,8.5,8.7c4.1,0,7.2-1.6,9-4.5c0.1,3.1,1.3,4.5,4.1,4.5c2.1,0,3.2-1.1,3.2-2.9c0-0.7-0.3-1.8-0.3-3.3V19.4z
+                             M55.5,29.4c0,3.9-2.5,6.4-6.3,6.4c-2.5,0-3.9-1.3-3.9-3.4c0-2.2,1.2-3.1,3.5-3.7c1.5-0.4,3.9-0.6,6.7-1.9V29.4z"/>
+                          <path class="st0" d="M80.6,23.3l-2.3-0.5C74.5,22,73,21.5,73,19.9c0-1.7,1.4-2.6,4.2-2.6c1.4,0,3,0.5,3.7,1.1
+                            c1.6,1.2,2.6,2.2,4.1,2.2c1.8,0,3.1-1.3,3.1-3c0-3.1-4.2-6.1-10.9-6.1c-7.2,0-11.5,3.7-11.5,9.3c0,4.6,3.1,6.9,9.7,8.4l2.9,0.7
+                            c3.3,0.8,4.5,1.1,4.5,2.8c0,1.7-1.6,2.8-4.6,2.8c-2.2,0-3.7-0.4-5-1.7c-1.3-1.3-2.1-2.7-4.1-2.7c-2,0-3.4,1.4-3.4,3.4
+                            c0,3.5,4.4,6.9,11.6,6.9c8.6,0,13.1-3.4,13.1-9.8C90.3,26.8,87.2,24.7,80.6,23.3z"/>
+                          <path class="st1" d="M125.9,11.5c-2.3,0-4.3,0.4-6.1,1.1c1.4,1.6,2.5,3.6,3.3,5.8c0.8-0.4,1.8-0.6,2.8-0.6c4.1,0,6.5,3.1,6.5,8.7
+                            c0,5.6-2.4,8.7-6.5,8.7c-1.1,0-2-0.2-2.8-0.6c-2.2-1-3.5-3.5-3.8-7.1c0-0.3,0-0.7,0-1.1s0-0.7,0-1.1c-0.2-4.2-1.5-7.6-3.8-10
+                            c-1.2-1.2-2.6-2.2-4.3-2.9c-1.8-0.7-3.8-1.1-6.1-1.1c-8.8,0-14.2,5.6-14.2,15c0,9.3,5.4,15,14.2,15c2.3,0,4.3-0.4,6.1-1.1
+                            c-1.4-1.6-2.5-3.6-3.3-5.8c-0.8,0.4-1.7,0.6-2.8,0.6c-4.2,0-6.6-3.1-6.6-8.7c0-5.6,2.4-8.7,6.6-8.7c1,0,2,0.2,2.8,0.6
+                            c2.4,1.1,3.7,3.9,3.7,8.1c0,4.7,1.4,8.5,3.8,11c1.2,1.2,2.6,2.2,4.3,2.9c1.8,0.7,3.8,1.1,6.1,1.1c8.8,0,14.2-5.6,14.2-15
+                            C140.1,17.1,134.7,11.5,125.9,11.5z"/>
+                          <path class="st0" d="M164.4,2.1c-2.4,0-3.6,1.4-3.6,4.2V16c-1.9-2.9-4.7-4.4-8.3-4.4c-6.5,0-11.5,5.9-11.5,15.1
+                            c0,9,4.8,14.8,11.6,14.8c3.6,0,6.2-1.5,8.4-4.7v0.8c0,2.3,1.2,3.4,3.4,3.4c2.5,0,3.7-1.4,3.7-4.2V6.2
+                            C168.1,3.4,166.9,2.1,164.4,2.1z M154.5,35c-3.9,0-6.1-3.1-6.1-8.7c0-5.2,2.4-8.3,6.1-8.3c4,0,6.3,3,6.3,8.3
+                            C160.8,32.1,158.6,35,154.5,35z"/>
+                          <path class="st0" d="M184.7,11.5c-8.8,0-14.2,5.6-14.2,15c0,9.3,5.4,15,14.2,15s14.2-5.6,14.2-15C198.9,17.1,193.5,11.5,184.7,11.5
+                            z M184.7,35.2c-4.2,0-6.6-3.1-6.6-8.7c0-5.6,2.4-8.7,6.6-8.7c4.1,0,6.5,3.1,6.5,8.7C191.3,32.1,188.9,35.2,184.7,35.2z"/>
+                          <path class="st0" d="M205.4,32.2c-2.4,0-4.4,2-4.4,4.4c0,2.4,2,4.4,4.4,4.4c2.4,0,4.4-2,4.4-4.4C209.8,34.1,207.8,32.2,205.4,32.2z
+                            "/>
+                        </g>
                       </svg>
                     </div>
                   </td>
@@ -247,8 +216,8 @@ export default async function handler(req, res) {
               
                 <!-- Headline Question -->
                 <tr>
-                  <td style="padding: 24px 32px; text-align: center; background-color: #090A28;">
-                    <h1 style="color: #ffffff; font-size: 24px; font-weight: 700; margin: 0;">
+                  <td style="padding: 24px 32px; text-align: center; background-color: #003099;">
+                    <h1 style="color: #F0F6FF; font-size: 24px; font-weight: 700; margin: 0;">
                       How Casoodo sources inventory
                     </h1>
                   </td>
@@ -262,11 +231,11 @@ export default async function handler(req, res) {
                       Here is a short overview of how our inventory sourcing works.
                     </p>
                     
-                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #f8fafc; border-left: 4px solid #090A28; border-radius: 8px; margin: 24px 0;">
+                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #F0F6FF; border-left: 4px solid #003099; border-radius: 8px; margin: 24px 0;">
                       <tr>
                         <td style="padding: 20px;">
-                          <p style="color: #090A28; font-size: 18px; font-weight: 600; margin: 0 0 8px 0;">Our Mission</p>
-                          <p style="color: #090A28; font-size: 18px; margin: 0; line-height: 1.6;">
+                          <p style="color: #070B17; font-size: 18px; font-weight: 600; margin: 0 0 8px 0;">Our Mission</p>
+                          <p style="color: #070B17; font-size: 18px; margin: 0; line-height: 1.6;">
                             Offer well-described products at fair prices through disciplined sourcing and inspection.
                           </p>
                         </td>
@@ -274,7 +243,7 @@ export default async function handler(req, res) {
                     </table>
 
                     <div style="text-align: center; margin: 32px 0;">
-                      <a href="https://www.casoodo.com" style="background-color: #F5970C; color: #090A28; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 18px; display: inline-block; box-shadow: 0 4px 6px -1px rgba(9, 10, 40, 0.5);">
+                      <a href="https://www.casoodo.com" style="background-color: #FFFBB6; color: #070B17; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 18px; display: inline-block; box-shadow: 0 4px 6px -1px rgba(7, 11, 23, 0.5);">
                         Visit Casoodo
                       </a>
                     </div>
@@ -284,7 +253,7 @@ export default async function handler(req, res) {
                 <!-- How We Keep Prices Low -->
                 <tr>
                   <td style="padding: 0 32px 32px 32px;">
-                    <h2 style="color: #090A28; font-size: 24px; font-weight: 700; margin: 0 0 24px 0; text-align: center;">
+                    <h2 style="color: #070B17; font-size: 24px; font-weight: 700; margin: 0 0 24px 0; text-align: center;">
                       How We Keep Prices Low
                     </h2>
                     
@@ -295,14 +264,14 @@ export default async function handler(req, res) {
                     <!-- Strategy 1 -->
                     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-bottom: 20px;">
                       <tr>
-                        <td style="background-color: #f8fafc; border-radius: 12px; padding: 24px; border: 1px solid #e2e8f0;">
+                        <td style="background-color: #F0F6FF; border-radius: 12px; padding: 24px; border: 1px solid #e2e8f0;">
                           <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                             <tr>
                               <td style="width: 40px; vertical-align: top;">
-                                <div style="width: 32px; height: 32px; background-color: #090A28; border-radius: 50%; text-align: center; line-height: 32px; color: #ffffff; font-weight: 700; font-size: 18px;">1</div>
+                                <div style="width: 32px; height: 32px; background-color: #003099; border-radius: 50%; text-align: center; line-height: 32px; color: #F0F6FF; font-weight: 700; font-size: 18px;">1</div>
                               </td>
                               <td style="vertical-align: top;">
-                                <h3 style="color: #090A28; font-size: 17px; font-weight: 600; margin: 0 0 8px 0;">Daily wins in online auctions</h3>
+                                <h3 style="color: #070B17; font-size: 17px; font-weight: 600; margin: 0 0 8px 0;">Daily wins in online auctions</h3>
                                 <p style="color: #64748b; font-size: 16px; margin: 0; line-height: 1.6;">We participate in high-volume auctions across multiple platforms. Buying in bulk before items reach regular marketplaces lets us secure lower costs and pass those savings on to you.</p>
                               </td>
                             </tr>
@@ -314,14 +283,14 @@ export default async function handler(req, res) {
                     <!-- Strategy 2 -->
                     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-bottom: 20px;">
                       <tr>
-                        <td style="background-color: #f8fafc; border-radius: 12px; padding: 24px; border: 1px solid #e2e8f0;">
+                        <td style="background-color: #F0F6FF; border-radius: 12px; padding: 24px; border: 1px solid #e2e8f0;">
                           <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                             <tr>
                               <td style="width: 40px; vertical-align: top;">
-                                <div style="width: 32px; height: 32px; background-color: #090A28; border-radius: 50%; text-align: center; line-height: 32px; color: #ffffff; font-weight: 700; font-size: 18px;">2</div>
+                                <div style="width: 32px; height: 32px; background-color: #003099; border-radius: 50%; text-align: center; line-height: 32px; color: #F0F6FF; font-weight: 700; font-size: 18px;">2</div>
                               </td>
                               <td style="vertical-align: top;">
-                                <h3 style="color: #090A28; font-size: 17px; font-weight: 600; margin: 0 0 8px 0;">Direct deals across online marketplaces</h3>
+                                <h3 style="color: #070B17; font-size: 17px; font-weight: 600; margin: 0 0 8px 0;">Direct deals across online marketplaces</h3>
                                 <p style="color: #64748b; font-size: 16px; margin: 0; line-height: 1.6;">Our team searches Facebook Marketplace, OfferUp, eBay, Kleinanzeigen, and other platforms. By negotiating directly with private sellers, we consistently find high-value deals.</p>
                               </td>
                             </tr>
@@ -333,16 +302,16 @@ export default async function handler(req, res) {
                     <!-- Strategy 3 -->
                     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-bottom: 20px;">
                       <tr>
-                        <td style="background-color: #f8fafc; border-radius: 12px; padding: 24px; border: 1px solid #e2e8f0;">
+                        <td style="background-color: #F0F6FF; border-radius: 12px; padding: 24px; border: 1px solid #e2e8f0;">
                           <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                             <tr>
                               <td style="width: 40px; vertical-align: top;">
-                                <div style="width: 32px; height: 32px; background-color: #090A28; border-radius: 50%; text-align: center; line-height: 32px; color: #ffffff; font-weight: 700; font-size: 18px;">3</div>
+                                <div style="width: 32px; height: 32px; background-color: #003099; border-radius: 50%; text-align: center; line-height: 32px; color: #F0F6FF; font-weight: 700; font-size: 18px;">3</div>
                               </td>
                               <td style="vertical-align: top;">
-                                <h3 style="color: #090A28; font-size: 17px; font-weight: 600; margin: 0 0 8px 0;">Partnerships with major retailers’ return & liquidation departments</h3>
+                                <h3 style="color: #070B17; font-size: 17px; font-weight: 600; margin: 0 0 8px 0;">Partnerships with major retailers’ return & liquidation departments</h3>
                                 <p style="color: #64748b; font-size: 16px; margin: 0 0 8px 0; line-height: 1.6;">We purchase overstock, open-box items, shelf pulls, refurbished pieces, and customer returns from companies such as Amazon, Best Buy, Target, and others.</p>
-                                <p style="color: #090A28; font-size: 13px; margin: 0; font-weight: 600;">Every item is inspected, tested, cleaned, or refurbished before being listed.</p>
+                                <p style="color: #070B17; font-size: 13px; margin: 0; font-weight: 600;">Every item is inspected, tested, cleaned, or refurbished before being listed.</p>
                               </td>
                             </tr>
                           </table>
@@ -353,14 +322,14 @@ export default async function handler(req, res) {
                     <!-- Strategy 4 -->
                     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-bottom: 20px;">
                       <tr>
-                        <td style="background-color: #f8fafc; border-radius: 12px; padding: 24px; border: 1px solid #e2e8f0;">
+                        <td style="background-color: #F0F6FF; border-radius: 12px; padding: 24px; border: 1px solid #e2e8f0;">
                           <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                             <tr>
                               <td style="width: 40px; vertical-align: top;">
-                                <div style="width: 32px; height: 32px; background-color: #090A28; border-radius: 50%; text-align: center; line-height: 32px; color: #ffffff; font-weight: 700; font-size: 18px;">4</div>
+                                <div style="width: 32px; height: 32px; background-color: #003099; border-radius: 50%; text-align: center; line-height: 32px; color: #F0F6FF; font-weight: 700; font-size: 18px;">4</div>
                               </td>
                               <td style="vertical-align: top;">
-                                <h3 style="color: #090A28; font-size: 17px; font-weight: 600; margin: 0 0 8px 0;">Local deal hunting</h3>
+                                <h3 style="color: #070B17; font-size: 17px; font-weight: 600; margin: 0 0 8px 0;">Local deal hunting</h3>
                                 <p style="color: #64748b; font-size: 16px; margin: 0; line-height: 1.6;">We regularly visit auctions, garage sales, estate sales, wholesalers, and liquidation centers. This helps us find items you often won’t see in traditional stores.</p>
                               </td>
                             </tr>
@@ -372,14 +341,14 @@ export default async function handler(req, res) {
                     <!-- Strategy 5 -->
                     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-bottom: 20px;">
                       <tr>
-                        <td style="background-color: #f8fafc; border-radius: 12px; padding: 24px; border: 1px solid #e2e8f0;">
+                        <td style="background-color: #F0F6FF; border-radius: 12px; padding: 24px; border: 1px solid #e2e8f0;">
                           <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                             <tr>
                               <td style="width: 40px; vertical-align: top;">
-                                <div style="width: 32px; height: 32px; background-color: #090A28; border-radius: 50%; text-align: center; line-height: 32px; color: #ffffff; font-weight: 700; font-size: 18px;">5</div>
+                                <div style="width: 32px; height: 32px; background-color: #003099; border-radius: 50%; text-align: center; line-height: 32px; color: #F0F6FF; font-weight: 700; font-size: 18px;">5</div>
                               </td>
                               <td style="vertical-align: top;">
-                                <h3 style="color: #090A28; font-size: 17px; font-weight: 600; margin: 0 0 8px 0;">Fair margins, fast turnover</h3>
+                                <h3 style="color: #070B17; font-size: 17px; font-weight: 600; margin: 0 0 8px 0;">Fair margins, fast turnover</h3>
                                 <p style="color: #64748b; font-size: 16px; margin: 0; line-height: 1.6;">Instead of adding heavy markups, we focus on reasonable pricing and steady rotation of inventory.</p>
                               </td>
                             </tr>
@@ -393,10 +362,10 @@ export default async function handler(req, res) {
                 <!-- Private Seller Network -->
                 <tr>
                   <td style="padding: 0 32px 32px 32px;">
-                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;">
+                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #F0F6FF; border-radius: 12px; border: 1px solid #e2e8f0;">
                       <tr>
                         <td style="padding: 32px;">
-                          <h2 style="color: #090A28; font-size: 22px; font-weight: 700; margin: 0 0 16px 0;">
+                          <h2 style="color: #070B17; font-size: 22px; font-weight: 700; margin: 0 0 16px 0;">
                             🤝 A Recent Addition: Approved Private Sellers
                           </h2>
                           <p style="color: #374151; font-size: 17px; line-height: 1.7; margin: 0 0 16px 0;">
@@ -405,7 +374,7 @@ export default async function handler(req, res) {
                           <p style="color: #374151; font-size: 17px; line-height: 1.7; margin: 0 0 16px 0;">
                             They ship their items to our warehouse, where our inspection team performs a complete check:
                           </p>
-                          <ul style="color: #090A28; font-size: 16px; margin: 0 0 16px 20px; padding: 0;">
+                          <ul style="color: #070B17; font-size: 16px; margin: 0 0 16px 20px; padding: 0;">
                             <li style="margin-bottom: 8px;">✓ Authentic condition</li>
                             <li style="margin-bottom: 8px;">✓ Full functionality</li>
                             <li style="margin-bottom: 8px;">✓ Pricing aligned with real market value</li>
@@ -422,7 +391,7 @@ export default async function handler(req, res) {
                 <!-- What Makes Us Different -->
                 <tr>
                   <td style="padding: 0 32px 32px 32px;">
-                    <h2 style="color: #090A28; font-size: 24px; font-weight: 700; margin: 0 0 24px 0; text-align: center;">
+                    <h2 style="color: #070B17; font-size: 24px; font-weight: 700; margin: 0 0 24px 0; text-align: center;">
                       What Makes Us Different
                     </h2>
                     
@@ -435,7 +404,7 @@ export default async function handler(req, res) {
                                 <span style="font-size: 20px;">✨</span>
                               </td>
                               <td>
-                                <h3 style="color: #090A28; font-size: 18px; font-weight: 600; margin: 0 0 4px 0;">Curated Inventory</h3>
+                                <h3 style="color: #070B17; font-size: 18px; font-weight: 600; margin: 0 0 4px 0;">Curated Inventory</h3>
                                 <p style="color: #64748b; font-size: 16px; margin: 0; line-height: 1.6;">Every product goes through a full inspection before shipping.</p>
                               </td>
                             </tr>
@@ -450,7 +419,7 @@ export default async function handler(req, res) {
                                 <span style="font-size: 20px;">📋</span>
                               </td>
                               <td>
-                                <h3 style="color: #090A28; font-size: 18px; font-weight: 600; margin: 0 0 4px 0;">Clear Product Details</h3>
+                                <h3 style="color: #070B17; font-size: 18px; font-weight: 600; margin: 0 0 4px 0;">Clear Product Details</h3>
                                 <p style="color: #64748b; font-size: 16px; margin: 0; line-height: 1.6;">We always specify whether an item is new, open box, refurbished, or pre-owned.</p>
                               </td>
                             </tr>
@@ -465,7 +434,7 @@ export default async function handler(req, res) {
                                 <span style="font-size: 20px;">💎</span>
                               </td>
                               <td>
-                                <h3 style="color: #090A28; font-size: 18px; font-weight: 600; margin: 0 0 4px 0;">Great Value</h3>
+                                <h3 style="color: #070B17; font-size: 18px; font-weight: 600; margin: 0 0 4px 0;">Great Value</h3>
                                 <p style="color: #64748b; font-size: 16px; margin: 0; line-height: 1.6;">We constantly compare and track market prices to make sure listings offer real savings.</p>
                               </td>
                             </tr>
@@ -480,7 +449,7 @@ export default async function handler(req, res) {
                                 <span style="font-size: 20px;">🎯</span>
                               </td>
                               <td>
-                                <h3 style="color: #090A28; font-size: 18px; font-weight: 600; margin: 0 0 4px 0;">Customer Support</h3>
+                                <h3 style="color: #070B17; font-size: 18px; font-weight: 600; margin: 0 0 4px 0;">Customer Support</h3>
                                 <p style="color: #64748b; font-size: 16px; margin: 0; line-height: 1.6;">Fast, free shipping within the U.S. and Canada, a 30-day return policy, and responsive human support.</p>
                               </td>
                             </tr>
@@ -495,7 +464,7 @@ export default async function handler(req, res) {
                                 <span style="font-size: 20px;">♻️</span>
                               </td>
                               <td>
-                                <h3 style="color: #090A28; font-size: 18px; font-weight: 600; margin: 0 0 4px 0;">Sustainable Shopping</h3>
+                                <h3 style="color: #070B17; font-size: 18px; font-weight: 600; margin: 0 0 4px 0;">Sustainable Shopping</h3>
                                 <p style="color: #64748b; font-size: 16px; margin: 0; line-height: 1.6;">By reselling returns, overstock, and refurbished goods, you help reduce waste and support a more sustainable buying cycle.</p>
                               </td>
                             </tr>
@@ -509,7 +478,7 @@ export default async function handler(req, res) {
                 <!-- Company Stats -->
                 <tr>
                   <td style="padding: 0 32px 32px 32px;">
-                    <h2 style="color: #090A28; font-size: 24px; font-weight: 700; margin: 0 0 24px 0; text-align: center;">
+                    <h2 style="color: #070B17; font-size: 24px; font-weight: 700; margin: 0 0 24px 0; text-align: center;">
                       Company Stats
                     </h2>
                     
@@ -521,10 +490,10 @@ export default async function handler(req, res) {
                       <td valign="top" width="25%">
                       <![endif]-->
                       <div style="display: inline-block; width: 100%; max-width: 140px; vertical-align: top; margin-bottom: 16px;">
-                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #f8fafc; border-radius: 12px; text-align: center; padding: 16px; border: 2px solid #090A28;">
+                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #F0F6FF; border-radius: 12px; text-align: center; padding: 16px; border: 2px solid #003099;">
                           <tr>
                             <td>
-                              <div style="font-size: 28px; font-weight: 700; color: #090A28; margin-bottom: 4px;">5000+</div>
+                              <div style="font-size: 28px; font-weight: 700; color: #070B17; margin-bottom: 4px;">5000+</div>
                               <div style="font-size: 13px; color: #64748b; font-weight: 500;">Happy Customers</div>
                             </td>
                           </tr>
@@ -535,10 +504,10 @@ export default async function handler(req, res) {
                       <td valign="top" width="25%">
                       <![endif]-->
                       <div style="display: inline-block; width: 100%; max-width: 140px; vertical-align: top; margin-bottom: 16px;">
-                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #f8fafc; border-radius: 12px; text-align: center; padding: 16px; border: 2px solid #090A28;">
+                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #F0F6FF; border-radius: 12px; text-align: center; padding: 16px; border: 2px solid #003099;">
                           <tr>
                             <td>
-                              <div style="font-size: 28px; font-weight: 700; color: #090A28; margin-bottom: 4px;">1000+</div>
+                              <div style="font-size: 28px; font-weight: 700; color: #070B17; margin-bottom: 4px;">1000+</div>
                               <div style="font-size: 13px; color: #64748b; font-weight: 500;">Products Sold</div>
                             </td>
                           </tr>
@@ -549,10 +518,10 @@ export default async function handler(req, res) {
                       <td valign="top" width="25%">
                       <![endif]-->
                       <div style="display: inline-block; width: 100%; max-width: 140px; vertical-align: top; margin-bottom: 16px;">
-                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #f8fafc; border-radius: 12px; text-align: center; padding: 16px; border: 2px solid #090A28;">
+                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #F0F6FF; border-radius: 12px; text-align: center; padding: 16px; border: 2px solid #003099;">
                           <tr>
                             <td>
-                              <div style="font-size: 28px; font-weight: 700; color: #090A28; margin-bottom: 4px;">99%</div>
+                              <div style="font-size: 28px; font-weight: 700; color: #070B17; margin-bottom: 4px;">99%</div>
                               <div style="font-size: 13px; color: #64748b; font-weight: 500;">Satisfaction Rate</div>
                             </td>
                           </tr>
@@ -563,10 +532,10 @@ export default async function handler(req, res) {
                       <td valign="top" width="25%">
                       <![endif]-->
                       <div style="display: inline-block; width: 100%; max-width: 140px; vertical-align: top; margin-bottom: 16px;">
-                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #f8fafc; border-radius: 12px; text-align: center; padding: 16px; border: 2px solid #090A28;">
+                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #F0F6FF; border-radius: 12px; text-align: center; padding: 16px; border: 2px solid #003099;">
                           <tr>
                             <td>
-                              <div style="font-size: 28px; font-weight: 700; color: #090A28; margin-bottom: 4px;">24/7</div>
+                              <div style="font-size: 28px; font-weight: 700; color: #070B17; margin-bottom: 4px;">24/7</div>
                               <div style="font-size: 13px; color: #64748b; font-weight: 500;">Support Available</div>
                             </td>
                           </tr>
@@ -583,33 +552,33 @@ export default async function handler(req, res) {
                 
                 <!-- Contact Information -->
                 <tr>
-                  <td style="background-color: #f8fafc; padding: 32px; border-top: 1px solid #e5e7eb;">
-                    <h2 style="color: #090A28; font-size: 22px; font-weight: 700; margin: 0 0 20px 0; text-align: center;">
+                  <td style="background-color: #F0F6FF; padding: 32px; border-top: 1px solid #e5e7eb;">
+                    <h2 style="color: #070B17; font-size: 22px; font-weight: 700; margin: 0 0 20px 0; text-align: center;">
                       📞 Contact Information
                     </h2>
                     
                     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                       <tr>
                         <td style="padding: 12px 0;">
-                          <strong style="color: #090A28; font-size: 16px;">Address:</strong><br>
-                          <span style="color: #64748b; font-size: 16px;">1420 N McKinley Ave, Los Angeles, CA 90059, United States</span>
+                          <strong style="color: #070B17; font-size: 16px;">Address:</strong><br>
+                          <span style="color: #64748b; font-size: 16px;">415 Codoni Ave, Modesto, CA 95357, USA</span>
                         </td>
                       </tr>
                       <tr>
                         <td style="padding: 12px 0;">
-                          <strong style="color: #090A28; font-size: 16px;">Phone:</strong><br>
-                          <a href="tel:+17176484487" style="color: #090A28; text-decoration: none; font-size: 16px;">+1 717 648 4487</a>
+                          <strong style="color: #070B17; font-size: 16px;">Phone:</strong><br>
+                          <a href="tel:+13186574299" style="color: #070B17; text-decoration: none; font-size: 16px;">+1 318 657 4299</a>
                         </td>
                       </tr>
                       <tr>
                         <td style="padding: 12px 0;">
-                          <strong style="color: #090A28; font-size: 16px;">Email:</strong><br>
-                          <a href="mailto:${senderIdentity.fromEmail}" style="color: #090A28; text-decoration: none; font-size: 16px;">${senderIdentity.fromEmail}</a>
+                          <strong style="color: #070B17; font-size: 16px;">Email:</strong><br>
+                          <a href="mailto:${senderIdentity.fromEmail}" style="color: #070B17; text-decoration: none; font-size: 16px;">${senderIdentity.fromEmail}</a>
                         </td>
                       </tr>
                       <tr>
                         <td style="padding: 12px 0;">
-                          <strong style="color: #090A28; font-size: 16px;">Business Hours:</strong><br>
+                          <strong style="color: #070B17; font-size: 16px;">Business Hours:</strong><br>
                           <span style="color: #64748b; font-size: 16px;">Monday to Friday, 9:00 AM - 5:00 PM EST</span><br>
                           <span style="color: #64748b; font-size: 16px;">Saturday, 10:00 AM - 3:00 PM EST</span><br>
                           <span style="color: #64748b; font-size: 16px;">Sunday, Closed</span>
@@ -688,8 +657,8 @@ export default async function handler(req, res) {
       24/7 Support Available
       
       CONTACT INFORMATION
-      Address: 1420 N McKinley Ave, Los Angeles, CA 90059, United States
-      Phone: +1 717 648 4487
+      Address: 415 Codoni Ave, Modesto, CA 95357, USA
+      Phone: +1 318 657 4299
       Email: ${senderIdentity.fromEmail}
       
       Business Hours:

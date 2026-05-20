@@ -133,18 +133,18 @@ export default async function handler(req, res) {
         <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
           <tr>
             <td style="padding: 20px 0; background-color: #f5f5f5;">
-              <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden;">
+              <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px; margin: 0 auto; background-color: #F0F6FF; border-radius: 12px; overflow: hidden;">
                 <!-- Header Top -->
                 <tr>
-                  <td style="background-color: #F5970C; padding: 40px 32px 24px; text-align: center;">
-                    <h1 style="color: #090A28; font-size: 32px; font-weight: 800; margin: 0;">Refund Update</h1>
+                  <td style="background-color: #FFFBB6; padding: 40px 32px 24px; text-align: center;">
+                    <h1 style="color: #070B17; font-size: 32px; font-weight: 800; margin: 0;">Refund Update</h1>
                   </td>
                 </tr>
                 
                 <!-- Header Bottom -->
                 <tr>
-                  <td style="background-color: #090A28; padding: 24px 32px 40px; text-align: center;">
-                    <div style="color: #ffffff; font-size: 18px; font-weight: 600; margin: 0;">A refund has been issued for your order</div>
+                  <td style="background-color: #003099; padding: 24px 32px 40px; text-align: center;">
+                    <div style="color: #F0F6FF; font-size: 18px; font-weight: 600; margin: 0;">A refund has been issued for your order</div>
                   </td>
                 </tr>
                 <!-- Main Content -->
@@ -155,17 +155,17 @@ export default async function handler(req, res) {
                     <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background: white; border: 1px solid #e5e7eb; border-radius: 20px; padding: 40px; margin-bottom: 32px;">
                       <tr>
                         <td align="center">
-                          <div style="width: 80px; height: 80px; background-color: #090A28; border-radius: 50%; display: table; margin: 0 auto 32px;">
+                          <div style="width: 80px; height: 80px; background-color: #003099; border-radius: 50%; display: table; margin: 0 auto 32px;">
                             <span style="display: table-cell; vertical-align: middle; text-align: center; color: white; font-size: 32px; font-weight: bold;">✓</span>
                           </div>
                           <h2 style="font-size: 28px; font-weight: 600; color: #1f2937; text-align: center; margin-bottom: 12px;">Your refund is on the way</h2>
                           <p style="font-size: 16px; color: #6b7280; text-align: center; margin-bottom: 32px;">We have submitted the refund for your order. The amount below should return to your original payment method shortly.</p>
                           
-                          <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px; padding: 24px; text-align: center;">
+                          <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background: #F0F6FF; border: 1px solid #e2e8f0; border-radius: 16px; padding: 24px; text-align: center;">
                             <tr>
                               <td>
                                 <div style="font-size: 14px; color: #6b7280; margin-bottom: 8px; font-weight: 500;">Full Refund Amount</div>
-                                <div style="font-size: 32px; font-weight: 700; color: #090A28;">$${amount.toFixed(2)}</div>
+                                <div style="font-size: 32px; font-weight: 700; color: #070B17;">$${amount.toFixed(2)}</div>
                               </td>
                             </tr>
                           </table>
@@ -188,30 +188,30 @@ export default async function handler(req, res) {
                             </tr>
                             <tr>
                               <td class="detail-row-label" width="150" style="color: #6b7280; font-size: 14px; font-weight: 500; padding: 8px 0;">Refund Amount</td>
-                              <td class="detail-row-value" style="color: #090A28; font-weight: 700; text-align: right;">$${amount.toFixed(2)}</td>
+                              <td class="detail-row-value" style="color: #070B17; font-weight: 700; text-align: right;">$${amount.toFixed(2)}</td>
                             </tr>
                             <tr>
                               <td class="detail-row-label" width="150" style="color: #6b7280; font-size: 14px; font-weight: 500; padding: 8px 0;">Status</td>
-                              <td class="detail-row-value" style="color: #090A28; font-weight: 700; text-align: right;">Processed</td>
+                              <td class="detail-row-value" style="color: #070B17; font-weight: 700; text-align: right;">Processed</td>
                             </tr>
                           </table>
                         </td>
                       </tr>
                     </table>
 
-                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background: #f8fafc; border: 1px solid #090A28; border-radius: 12px; padding: 24px; margin-bottom: 32px;">
+                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background: #F0F6FF; border: 1px solid #003099; border-radius: 12px; padding: 24px; margin-bottom: 32px;">
                       <tr>
                         <td>
-                          <h3 style="color: #090A28; font-size: 18px; font-weight: 600; margin-bottom: 20px;">What happens next?</h3>
+                          <h3 style="color: #070B17; font-size: 18px; font-weight: 600; margin-bottom: 20px;">What happens next?</h3>
                           <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
                             <tr>
                               <td style="padding-bottom: 16px;">
                                 <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
                                   <tr>
                                     <td width="28" style="vertical-align: top;">
-                                      <div style="width: 28px; height: 28px; background-color: #F5970C; color: #090A28; border-radius: 50%; text-align: center; line-height: 28px; font-size: 12px; font-weight: 700;">1</div>
+                                      <div style="width: 28px; height: 28px; background-color: #FFFBB6; color: #070B17; border-radius: 50%; text-align: center; line-height: 28px; font-size: 12px; font-weight: 700;">1</div>
                                     </td>
-                                    <td style="padding-left: 12px; color: #090A28; font-size: 14px; line-height: 1.5;">Your full refund has been processed by our team</td>
+                                    <td style="padding-left: 12px; color: #070B17; font-size: 14px; line-height: 1.5;">Your full refund has been processed by our team</td>
                                   </tr>
                                 </table>
                               </td>
@@ -221,9 +221,9 @@ export default async function handler(req, res) {
                                 <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
                                   <tr>
                                     <td width="28" style="vertical-align: top;">
-                                      <div style="width: 28px; height: 28px; background-color: #F5970C; color: #090A28; border-radius: 50%; text-align: center; line-height: 28px; font-size: 12px; font-weight: 700;">2</div>
+                                      <div style="width: 28px; height: 28px; background-color: #FFFBB6; color: #070B17; border-radius: 50%; text-align: center; line-height: 28px; font-size: 12px; font-weight: 700;">2</div>
                                     </td>
-                                    <td style="padding-left: 12px; color: #090A28; font-size: 14px; line-height: 1.5;">The full refund amount will appear in your original payment method within 3-5 business days</td>
+                                    <td style="padding-left: 12px; color: #070B17; font-size: 14px; line-height: 1.5;">The full refund amount will appear in your original payment method within 3-5 business days</td>
                                   </tr>
                                 </table>
                               </td>
@@ -233,9 +233,9 @@ export default async function handler(req, res) {
                                 <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
                                   <tr>
                                     <td width="28" style="vertical-align: top;">
-                                      <div style="width: 28px; height: 28px; background-color: #F5970C; color: #090A28; border-radius: 50%; text-align: center; line-height: 28px; font-size: 12px; font-weight: 700;">3</div>
+                                      <div style="width: 28px; height: 28px; background-color: #FFFBB6; color: #070B17; border-radius: 50%; text-align: center; line-height: 28px; font-size: 12px; font-weight: 700;">3</div>
                                     </td>
-                                    <td style="padding-left: 12px; color: #090A28; font-size: 14px; line-height: 1.5;">You'll see the transaction reflected in your account statement</td>
+                                    <td style="padding-left: 12px; color: #070B17; font-size: 14px; line-height: 1.5;">You'll see the transaction reflected in your account statement</td>
                                   </tr>
                                 </table>
                               </td>
@@ -248,11 +248,11 @@ export default async function handler(req, res) {
                 </tr>
                 <!-- Footer -->
                 <tr>
-                  <td style="background: #f8fafc; padding: 32px; text-align: center; border-top: 1px solid #e5e7eb;">
+                  <td style="background: #F0F6FF; padding: 32px; text-align: center; border-top: 1px solid #e5e7eb;">
                     <h3 style="color: #374151; font-size: 18px; font-weight: 600; margin-bottom: 16px;">Need Help?</h3>
                     <p style="color: #6b7280; font-size: 14px; margin-bottom: 16px;">If you have any questions about your refund, our customer service team is here to help.</p>
-                    <p style="margin-bottom: 16px;"><a href="mailto:${senderIdentity.fromEmail}" style="color: #090A28; text-decoration: none; font-weight: 500; font-size: 14px;">📧 Email Support</a></p>
-                    <p style="margin-bottom: 16px;"><a href="tel:+17176484487" style="color: #090A28; text-decoration: none; font-weight: 500; font-size: 14px;">📞 +17176484487</a></p>
+                    <p style="margin-bottom: 16px;"><a href="mailto:${senderIdentity.fromEmail}" style="color: #070B17; text-decoration: none; font-weight: 500; font-size: 14px;">📧 Email Support</a></p>
+                    <p style="margin-bottom: 16px;"><a href="tel:+13186574299" style="color: #070B17; text-decoration: none; font-weight: 500; font-size: 14px;">📞 +1 318 657 4299</a></p>
                     <p style="color: #9ca3af; font-size: 12px; margin-top: 16px; padding-top: 16px; border-top: 1px solid #e5e7eb;">© 2026 Casoodo. All rights reserved.<br>Customer support for every order.</p>
                   </td>
                 </tr>
@@ -290,7 +290,7 @@ export default async function handler(req, res) {
         
         If you have any questions, please contact us:
         Email: Reply to this email
-        Phone: +17176484487
+        Phone: +1 318 657 4299
         
         Thank you,
         

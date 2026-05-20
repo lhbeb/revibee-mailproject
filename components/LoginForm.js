@@ -50,7 +50,7 @@ export default function LoginForm({ onLoginSuccess }) {
   };
 
   return (
-    <div className="max-w-md mx-auto bg-white rounded-xl shadow-lg p-8">
+    <div className="max-w-md mx-auto bg-[#F0F6FF] rounded-xl shadow-lg p-8">
       <form onSubmit={handleSubmit} className="space-y-6">
         {error && (
           <div className="bg-red-50 border border-red-200 rounded-lg p-4">
@@ -70,7 +70,7 @@ export default function LoginForm({ onLoginSuccess }) {
             value={formData.username}
             onChange={handleInputChange}
             required
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#F5970C] focus:border-transparent transition duration-200 ease-in-out text-gray-900 bg-white"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FFFBB6] focus:border-transparent transition duration-200 ease-in-out text-gray-900 bg-white"
             placeholder="Enter your username"
             disabled={isLoading}
           />
@@ -88,7 +88,7 @@ export default function LoginForm({ onLoginSuccess }) {
             value={formData.password}
             onChange={handleInputChange}
             required
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#F5970C] focus:border-transparent transition duration-200 ease-in-out text-gray-900 bg-white"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FFFBB6] focus:border-transparent transition duration-200 ease-in-out text-gray-900 bg-white"
             placeholder="Enter your password"
             disabled={isLoading}
           />
@@ -98,7 +98,7 @@ export default function LoginForm({ onLoginSuccess }) {
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full bg-[#F5970C] hover:bg-[#e08800] disabled:bg-[#090A28]/50 text-[#090A28] font-semibold py-3 px-6 rounded-lg transition duration-200 ease-in-out focus:ring-2 focus:ring-[#F5970C] focus:ring-offset-2"
+          className="w-full bg-[#FFFBB6] hover:bg-[#f3ee8f] disabled:bg-[#003099]/50 text-[#003099] font-semibold py-3 px-6 rounded-lg transition duration-200 ease-in-out focus:ring-2 focus:ring-[#FFFBB6] focus:ring-offset-2"
         >
           {isLoading ? 'Authenticating...' : 'Authenticate'}
         </button>

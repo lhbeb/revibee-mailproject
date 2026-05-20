@@ -125,7 +125,7 @@ export default function LocalPickupForm() {
             onChange={(e) => setRawData(e.target.value)}
             required
             rows={7}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent transition duration-200 ease-in-out text-gray-900 bg-white resize-y font-mono text-sm leading-relaxed"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FFFBB6] focus:border-transparent transition duration-200 ease-in-out text-gray-900 bg-white resize-y font-mono text-sm leading-relaxed"
             placeholder="Product Name : $Price&#10;customer@example.com&#10;John Doe&#10;123 Address St, City, ST 12345&#10;https://casoodo.com/product/..."
             disabled={isLoading}
           />
@@ -137,7 +137,7 @@ export default function LocalPickupForm() {
           disabled={isLoading}
           className={`w-full py-3 px-4 rounded-lg font-medium text-white transition duration-200 ease-in-out ${isLoading
             ? 'bg-gray-400 cursor-not-allowed'
-            : 'bg-[#F5970C] hover:bg-[#d98205] text-[#090A28] focus:ring-2 focus:ring-[#F5970C] focus:ring-offset-2'
+            : 'bg-[#FFFBB6] hover:bg-[#f3ee8f] text-[#003099] focus:ring-2 focus:ring-[#FFFBB6] focus:ring-offset-2'
             }`}
         >
           {isLoading ? 'Sending...' : '🏪 Send Local Pickup Email'}

@@ -1,39 +1,19 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import SenderEmailButtons from './SenderEmailButtons';
+import { useWebsiteAccounts } from '../src/lib/useWebsiteAccounts';
 
-export default function AboutHappyDeelForm() {
+export default function AboutHappyDeelForm({ activeWebsite = 'casoodo' }) {
+    const { accounts, selectedEmail, setSelectedEmail, isLoadingAccounts } = useWebsiteAccounts(activeWebsite);
+
     const [emailList, setEmailList] = useState('');
-    const [senderEmail, setSenderEmail] = useState('');
-    const [accounts, setAccounts] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [message, setMessage] = useState('');
-    const [messageType, setMessageType] = useState(''); // 'success' or 'error'
+    const [messageType, setMessageType] = useState('');
     const [progress, setProgress] = useState({ sent: 0, total: 0, current: '' });
     const [errors, setErrors] = useState([]);
 
-    // Fetch available email accounts on mount
-    useEffect(() => {
-        const fetchAccounts = async () => {
-            try {
-                const response = await fetch('/api/get-accounts');
-                if (response.ok) {
-                    const data = await response.json();
-                    const nextAccounts = data.accounts || [];
-                    setAccounts(nextAccounts);
-                    if (nextAccounts.length) {
-                        setSenderEmail(prev => prev || nextAccounts[0].user);
-                    }
-                }
-            } catch (error) {
-                console.error('Failed to fetch email accounts:', error);
-            }
-        };
-        fetchAccounts();
-    }, []);
-
-    // Parse and validate emails from textarea
     const parsedEmails = useMemo(() => {
         return emailList
             .split('\n')
@@ -45,7 +25,6 @@ export default function AboutHappyDeelForm() {
     const emailCount = parsedEmails.length;
     const isOverLimit = emailCount > 5000;
 
-    // Random delay between 2000ms and 5000ms
     const randomDelay = () => {
         const min = 2000;
         const max = 5000;
@@ -62,7 +41,8 @@ export default function AboutHappyDeelForm() {
             },
             body: JSON.stringify({
                 customerEmail: email,
-                senderEmail: senderEmail // Pass selected sender
+                senderEmail: selectedEmail,
+                website: activeWebsite,
             }),
         });
 
@@ -84,7 +64,7 @@ export default function AboutHappyDeelForm() {
         }
 
         if (isOverLimit) {
-            setMessage('Maximum 5000 emails allowed. Please reduce the list.');
+            setMessage('Maximum limit is 5000 emails per batch');
             setMessageType('error');
             return;
         }
@@ -94,162 +74,123 @@ export default function AboutHappyDeelForm() {
         setErrors([]);
         setProgress({ sent: 0, total: emailCount, current: '' });
 
-        const failedEmails = [];
         let successCount = 0;
-        const BATCH_SIZE = 10;
-        const BATCH_DELAY = 30000; // 30 seconds
+        const failedEmails = [];
 
         for (let i = 0; i < parsedEmails.length; i++) {
-            const email = parsedEmails[i];
-
-            // Check for batch pause
-            if (i > 0 && i % BATCH_SIZE === 0) {
-                setProgress(prev => ({ ...prev, current: `Pausing for safety (${BATCH_DELAY / 1000}s)...` }));
-                await sleep(BATCH_DELAY);
-            }
+            const currentEmail = parsedEmails[i];
+            setProgress({ sent: successCount, total: emailCount, current: currentEmail });
 
             try {
-                setProgress({ sent: i, total: emailCount, current: email });
-                await sendSingleEmail(email);
+                await sendSingleEmail(currentEmail);
                 successCount++;
-                setProgress({ sent: i + 1, total: emailCount, current: email });
-
-                // Add random delay between sends (except for the last one)
-                if (i < parsedEmails.length - 1) {
-                    await sleep(randomDelay());
-                }
+                setProgress({ sent: successCount, total: emailCount, current: currentEmail });
             } catch (error) {
-                console.error(`Failed to send to ${email}:`, error);
-                failedEmails.push({ email, error: error.message });
+                console.error(`Failed to send to ${currentEmail}:`, error);
+                failedEmails.push({ email: currentEmail, error: error.message });
+                setErrors([...failedEmails]);
+            }
+
+            if (i < parsedEmails.length - 1) {
+                const delay = randomDelay();
+                await sleep(delay);
             }
         }
 
         setIsLoading(false);
-        setErrors(failedEmails);
+        setProgress({ sent: successCount, total: emailCount, current: '' });
 
-        // Set final message
-        if (successCount === emailCount) {
-            setMessage(`✅ Successfully sent ${successCount} email${successCount !== 1 ? 's' : ''}!`);
+        if (failedEmails.length === 0) {
+            setMessage(`All ${successCount} emails sent successfully via ${activeWebsite.toUpperCase()}! 🎉`);
             setMessageType('success');
-            setEmailList(''); // Clear the textarea
+            setEmailList('');
         } else if (successCount > 0) {
-            setMessage(`⚠️ Sent ${successCount} of ${emailCount} emails. ${failedEmails.length} failed.`);
-            setMessageType('error');
+            setMessage(`Sent ${successCount} emails. ${failedEmails.length} failed.`);
+            setMessageType('warning');
         } else {
-            setMessage(`❌ Failed to send all emails. Please check the errors below.`);
+            setMessage('Failed to send any emails. Please check the errors below.');
             setMessageType('error');
         }
-
-        setProgress({ sent: 0, total: 0, current: '' });
     };
 
     return (
-        <div className="max-w-4xl mx-auto bg-[#F0F6FF] rounded-xl shadow-lg p-8">
-            <div className="text-center mb-8">
-                <h2 className="text-2xl font-bold text-gray-800 mb-2">
-                    About Casoodo Email - Bulk Send
-                </h2>
-                <p className="text-gray-600 text-sm">
-                    Send comprehensive business model explanation to multiple customers
+        <div className="w-full">
+            <div className="text-center mb-6">
+                <p className="text-gray-600 font-medium">
+                    Brand Story Campaign — Sending as <span className="font-bold text-[#003099] uppercase">{activeWebsite}</span>
                 </p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
-                {/* Sender Email Selection */}
                 <SenderEmailButtons
                     accounts={accounts}
-                    selectedEmail={senderEmail}
-                    onSelect={setSenderEmail}
-                    disabled={isLoading}
+                    selectedEmail={selectedEmail}
+                    onSelect={setSelectedEmail}
+                    disabled={isLoading || isLoadingAccounts}
                 />
 
                 <div>
                     <div className="flex justify-between items-center mb-2">
                         <label htmlFor="emailList" className="block text-sm font-medium text-gray-700">
-                            Customer Emails (one per line) *
+                            Recipient Email Addresses *
                         </label>
-                        <span className={`text-sm font-medium ${isOverLimit ? 'text-red-600' : emailCount > 0 ? 'text-[#003099]' : 'text-gray-500'}`}>
-                            {emailCount} email{emailCount !== 1 ? 's' : ''} detected
-                            {isOverLimit && ' (MAX: 5000)'}
+                        <span className={`text-xs ${isOverLimit ? 'text-red-600 font-bold' : 'text-gray-400'}`}>
+                            {emailCount} / 5000 emails
                         </span>
                     </div>
                     <textarea
                         id="emailList"
-                        name="emailList"
                         value={emailList}
                         onChange={(e) => setEmailList(e.target.value)}
                         required
                         disabled={isLoading}
-                        rows={10}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FFFBB6] focus:border-transparent transition-colors text-gray-900 bg-white font-mono text-sm disabled:bg-gray-100 disabled:cursor-not-allowed"
+                        rows={8}
+                        className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:border-transparent transition duration-200 ease-in-out text-gray-900 bg-white resize-y font-mono text-sm leading-relaxed ${
+                            isOverLimit
+                                ? 'border-red-500 focus:ring-red-200'
+                                : 'border-gray-300 focus:ring-[#FFFBB6]'
+                        }`}
                         placeholder="customer1@example.com&#10;customer2@example.com&#10;customer3@example.com"
                     />
-                    <p className="mt-2 text-xs text-gray-500">
-                        Enter one email address per line. Invalid emails will be automatically filtered out.
-                    </p>
                 </div>
 
-                {/* Progress Bar */}
                 {isLoading && (
-                    <div className="space-y-2">
-                        <div className="flex justify-between text-sm text-gray-700">
-                            <span className="font-medium">Sending emails...</span>
-                            <span className="font-semibold">{progress.sent} / {progress.total}</span>
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                        <div className="flex justify-between text-sm text-blue-800 mb-2 font-semibold">
+                            <span>Sending Campaign...</span>
+                            <span>{progress.sent} / {progress.total}</span>
                         </div>
-                        <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+                        <div className="w-full bg-blue-200 rounded-full h-3 overflow-hidden">
                             <div
                                 className="bg-[#003099] h-3 rounded-full transition-all duration-300 ease-out"
                                 style={{ width: `${(progress.sent / progress.total) * 100}%` }}
                             />
                         </div>
-                        {progress.current && (
-                            <p className="text-xs text-gray-600 truncate">
-                                Current: {progress.current}
-                            </p>
-                        )}
                     </div>
                 )}
 
                 <button
                     type="submit"
-                    disabled={isLoading || emailCount === 0 || isOverLimit}
-                    className="w-full bg-[#FFFBB6] text-[#003099] py-3 px-6 rounded-lg font-bold hover:bg-[#f3ee8f] focus:ring-2 focus:ring-[#FFFBB6] focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={isLoading || isLoadingAccounts || isOverLimit || emailCount === 0 || !selectedEmail}
+                    className={`w-full py-3 px-4 rounded-lg font-bold text-[#003099] transition duration-200 ease-in-out ${
+                        isLoading || isOverLimit || emailCount === 0 || !selectedEmail
+                            ? 'bg-gray-400 cursor-not-allowed text-white'
+                            : 'bg-[#FFFBB6] hover:bg-[#f3ee8f] focus:ring-2 focus:ring-[#FFFBB6] focus:ring-offset-2'
+                    }`}
                 >
-                    {isLoading ? (
-                        <div className="flex items-center justify-center">
-                            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                            Sending {progress.sent}/{progress.total}...
-                        </div>
-                    ) : (
-                        `Send to ${emailCount} Email${emailCount !== 1 ? 's' : ''}`
-                    )}
+                    {isLoading ? 'Sending Campaign...' : `🚀 Send About ${activeWebsite.toUpperCase()} Campaign (${emailCount})`}
                 </button>
             </form>
 
             {message && (
-                <div className={`mt-6 p-4 rounded-lg ${messageType === 'success'
-                    ? 'bg-green-50 text-green-800 border border-green-200'
-                    : 'bg-red-50 text-red-800 border border-red-200'
-                    }`}>
-                    {message}
-                </div>
-            )}
-
-            {/* Error List */}
-            {errors.length > 0 && (
-                <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
-                    <h3 className="text-sm font-semibold text-red-800 mb-2">
-                        Failed Emails ({errors.length}):
-                    </h3>
-                    <div className="max-h-40 overflow-y-auto">
-                        <ul className="text-xs text-red-700 space-y-1">
-                            {errors.map((err, idx) => (
-                                <li key={idx} className="font-mono">
-                                    {err.email}: {err.error}
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
+                <div className={`mt-6 p-4 rounded-lg ${
+                    messageType === 'success'
+                        ? 'bg-green-50 border border-green-200 text-green-800'
+                        : messageType === 'warning'
+                            ? 'bg-yellow-50 border border-yellow-200 text-yellow-800'
+                            : 'bg-red-50 border border-red-200 text-red-800'
+                }`}>
+                    <span className="font-medium">{message}</span>
                 </div>
             )}
         </div>

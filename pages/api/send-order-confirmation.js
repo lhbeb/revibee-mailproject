@@ -1,399 +1,160 @@
 import { getRandomAccount, createTransporter, getAccountByUser, getSenderIdentity } from '../../src/config/emailAccounts';
+import { getBrandEmailContext } from '../../src/config/brandEmailHelpers';
 import { logEmail } from '../../src/utils/logger';
 
 export default async function handler(req, res) {
-  // Only allow POST requests
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
   try {
-    const { customerName, customerEmail, customerAddress, productName, senderEmail, orderNumber } = req.body;
+    const { customerName, customerEmail, customerAddress, productName, senderEmail, orderNumber, website } = req.body;
 
-    // Validate required fields
     if (!customerEmail || !customerName || !productName) {
       return res.status(400).json({
         error: 'Missing required fields: customerEmail, customerName, and productName are required'
       });
     }
 
-    // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(customerEmail)) {
       return res.status(400).json({ error: 'Invalid email format' });
     }
 
-    console.log('=== SENDING ORDER CONFIRMATION EMAIL ===');
-    console.log('Customer:', customerName);
-    console.log('Email:', customerEmail);
-    console.log('Product:', productName);
+    const brandCtx = getBrandEmailContext(website);
+    const brand = brandCtx.brand;
 
-    // Get the email account - fall back to random if senderEmail is invalid/not found
-    let account = senderEmail ? await getAccountByUser(senderEmail) : null;
-    if (!account) account = getRandomAccount();
+    let account = senderEmail ? getAccountByUser(senderEmail, brand.id) : getRandomAccount(brand.id);
+    if (!account) account = getRandomAccount(brand.id);
+
+    console.log(`[${brand.name}] Order confirmation sender: ${account?.user}`);
     const emailTransporter = createTransporter(account);
-    const senderIdentity = getSenderIdentity(account);
+    const senderIdentity = getSenderIdentity(account, brand.id);
 
-    // HTML email template - Refined for Email Client Compatibility
     const htmlTemplate = `
       <!DOCTYPE html>
       <html lang="en">
       <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Order Confirmation - Casoodo.com</title>
+        <title>Order Confirmation - ${brand.name}</title>
         <style>
-          /* Reset */
           * { margin: 0; padding: 0; box-sizing: border-box; }
           body { 
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
             line-height: 1.6; 
             color: #374151; 
-            margin: 0; 
-            padding: 0; 
-            background-color: #f9fafb; 
+            background-color: ${brand.colors.bgLight}; 
+            padding: 20px 0;
           }
-          
-          /* Container */
           .container { 
             max-width: 600px; 
             margin: 0 auto; 
-            background-color: #F0F6FF; 
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-          }
-          
-          /* Header */
-          .header-top { 
-            background-color: #FFFBB6; 
-            padding: 40px 32px 24px; 
-            text-align: center; 
-          }
-          .header-bottom { 
-            background-color: #003099; 
-            padding: 24px 32px 40px; 
-            text-align: center; 
-          }
-
-          .header-title { 
-            font-size: 32px; 
-            font-weight: 800; 
-            margin: 0;
-            color: #070B17 !important;
-          }
-          .header-subtitle { 
-            font-size: 18px; 
-            color: #F0F6FF !important;
-            font-weight: 600;
-            margin: 0;
-          }
-          .header-order {
-            color: #F0F6FF !important; 
-            font-size: 18px; 
-            font-weight: 700; 
-            margin-top: 16px; 
-            letter-spacing: 0.5px;
-          }
-          
-          /* Content */
-          .content { 
-            padding: 48px 32px; 
-          }
-          
-          /* Confirmation Card */
-          .confirmation-card {
-            background-color: #F0F6FF;
-            border: 1px solid #e2e8f0;
+            background-color: #ffffff; 
             border-radius: 16px;
-            padding: 32px;
-            margin-bottom: 32px;
+            overflow: hidden;
+            border: 1px solid ${brand.colors.cardBorder};
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+          }
+          .header-top {
+            background-color: ${brand.colors.accent};
+            padding: 36px 24px 20px;
             text-align: center;
           }
-          
-          /* Icon - Fixed centering and shape using block/line-height instead of flex */
-          .confirmation-icon {
-            width: 64px;
-            height: 64px;
-            line-height: 64px; /* Vertically center text */
-            background-color: #003099; /* Solid color fallback */
-            border-radius: 50%;
-            display: inline-block; /* Better structure */
-            text-align: center; /* Horizontally center text */
-            margin: 0 auto 24px auto;
-            color: white;
-            font-size: 28px;
-            /* Ensure it doesn't get squashed */
-            min-width: 64px;
-            min-height: 64px;
+          .header-bottom {
+            background-color: ${brand.colors.primary};
+            padding: 20px 24px 28px;
+            text-align: center;
+            color: #ffffff;
           }
-          
-          /* Order Info */
-          .order-info {
-            background: white;
-            border: 1px solid #e5e7eb;
+          .content { padding: 32px 24px; }
+          .card {
+            background-color: ${brand.colors.bgLight};
+            border: 1px solid ${brand.colors.cardBorder};
             border-radius: 12px;
-            padding: 24px;
-            margin-bottom: 32px;
+            padding: 20px;
+            margin: 20px 0;
           }
-          .order-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: #1f2937;
-            margin-bottom: 8px;
-          }
-          .order-detail {
-            color: #6b7280;
-            font-size: 14px;
-            margin-bottom: 4px;
-          }
-          
-          /* Next Steps */
-          .next-steps {
-            background: white;
-            border: 1px solid #e5e7eb;
-            border-radius: 12px;
-            padding: 24px;
-            margin-bottom: 32px;
-          }
-          .next-steps h3 {
-            font-size: 18px;
-            font-weight: 600;
-            color: #1f2937;
-            margin-bottom: 16px;
-          }
-          
-          /* Step Item - Table-like layout for better alignment */
-          .step-item {
-            margin-bottom: 12px;
-            padding: 12px;
-            background: #F0F6FF;
-            border-radius: 8px;
-            border-left: 3px solid #003099;
-          }
-          .step-table {
-            width: 100%;
-            border-collapse: collapse;
-          }
-          .step-number-cell {
-            width: 40px;
-            vertical-align: top;
-          }
-          
-          /* Step Number - Fixed centering */
-          .step-number {
-            background: #003099;
-            color: white;
-            width: 24px;
-            height: 24px;
-            line-height: 24px; /* Vertically center */
-            border-radius: 50%;
+          .btn {
             display: inline-block;
-            text-align: center; /* Horizontally center */
-            font-size: 12px;
-            font-weight: 600;
-          }
-          
-          .step-content-cell {
-            vertical-align: top;
-            color: #374151;
-            font-size: 14px;
-            line-height: 1.5;
-          }
-          
-          /* Delivery Info */
-          .delivery-info {
-            background: #F0F6FF;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 24px;
-            margin-bottom: 32px;
-          }
-          .delivery-info h3 {
-            color: #070B17;
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 8px;
-          }
-          .delivery-info p {
-            color: #070B17;
-            font-size: 14px;
-            margin: 0;
-          }
-          
-          /* Footer */
-          .footer { 
-            background: #F0F6FF; 
-            padding: 32px; 
-            text-align: center; 
-            border-top: 1px solid #e5e7eb;
-          }
-          .footer-content h3 { 
-            color: #1f2937; 
-            font-size: 18px; 
-            font-weight: 600; 
-            margin-bottom: 8px; 
-          }
-          .footer-content p { 
-            color: #6b7280; 
-            font-size: 14px; 
-            margin-bottom: 16px; 
-          }
-          
-          /* Contact Info - Stacked layout */
-          .contact-info { 
-            margin-bottom: 24px; 
-          }
-          .contact-link-wrapper {
-            margin-bottom: 8px;
-          }
-          .contact-link { 
-            color: #070B17; 
-            text-decoration: none;  
-            font-weight: 500; 
-            font-size: 14px;
-          }
-          .contact-link:hover { 
-            color: #00363a; 
-          }
-          .copyright { 
-            color: #9ca3af; 
-            font-size: 12px; 
-            line-height: 1.5; 
+            background-color: ${brand.colors.primary};
+            color: #ffffff !important;
+            font-weight: 700;
+            padding: 12px 28px;
+            border-radius: 8px;
+            text-decoration: none;
+            margin-top: 10px;
           }
         </style>
       </head>
       <body>
         <div class="container">
           <div class="header-top">
-            <h1 class="header-title">Order Received</h1>
+            <h1 style="color: ${brand.colors.textDark}; font-size: 26px; font-weight: 800;">We received your order! 🎉</h1>
           </div>
           <div class="header-bottom">
-            <div class="header-subtitle">We have received your order details</div>
-            ${orderNumber ? `<div class="header-order">Order ${orderNumber}</div>` : ''}
+            <p style="font-size: 15px; opacity: 0.95;">Thank you for shopping with ${brand.name}</p>
+            ${orderNumber ? `<div style="font-size: 18px; font-weight: 800; margin-top: 8px; color: ${brand.colors.accent};">Order #${orderNumber}</div>` : ''}
           </div>
-          
+
           <div class="content">
-            <div class="confirmation-card">
-              <!-- Using a span for the icon with explicit block display and dimensions -->
-              <span class="confirmation-icon">📦</span>
-              <h2 style="font-size: 24px; font-weight: 600; color: #1f2937; margin-bottom: 16px;">We are preparing your order</h2>
-              <p style="color: #6b7280; font-size: 16px;">This email confirms that your order information has been received successfully.</p>
-            </div>
+            <p style="font-size: 16px; margin-bottom: 16px;">Hello <strong>${customerName}</strong>,</p>
+            <p style="color: #4B5563; font-size: 15px; margin-bottom: 20px;">
+              Great news! We've received your order and our fulfillment team is preparing it for dispatch.
+            </p>
 
-            <div class="order-info">
-              <div class="order-title">${productName}</div>
-              <div class="order-detail">Shipping to: ${customerAddress}</div>
-              <div class="order-detail">Order confirmation sent to: ${customerEmail}</div>
-            </div>
+            <div class="card">
+              <div style="font-size: 12px; font-weight: 700; color: #6B7280; text-transform: uppercase; margin-bottom: 6px;">Purchased Item</div>
+              <div style="font-size: 16px; font-weight: 700; color: #111827; margin-bottom: 14px;">${productName}</div>
 
-            <div class="next-steps">
-              <h3>📋 What happens next?</h3>
-              
-              <!-- Using tables for steps to ensure alignment in all clients -->
-              <div class="step-item">
-                <table class="step-table" border="0" cellpadding="0" cellspacing="0">
-                  <tr>
-                    <td class="step-number-cell">
-                      <span class="step-number">1</span>
-                    </td>
-                    <td class="step-content-cell">
-                      Our team will carefully inspect and prepare your item for shipping
-                    </td>
-                  </tr>
-                </table>
-              </div>
-              
-              <div class="step-item">
-                <table class="step-table" border="0" cellpadding="0" cellspacing="0">
-                  <tr>
-                    <td class="step-number-cell">
-                      <span class="step-number">2</span>
-                    </td>
-                    <td class="step-content-cell">
-                      You'll receive a shipping notification with tracking details within 2-3 business days
-                    </td>
-                  </tr>
-                </table>
-              </div>
-              
-              <div class="step-item">
-                <table class="step-table" border="0" cellpadding="0" cellspacing="0">
-                  <tr>
-                    <td class="step-number-cell">
-                      <span class="step-number">3</span>
-                    </td>
-                    <td class="step-content-cell">
-                      Your package will be delivered within 3-5 business days after shipping
-                    </td>
-                  </tr>
-                </table>
+              <div style="border-top: 1px solid #E5E7EB; padding-top: 12px;">
+                <div style="font-size: 12px; font-weight: 700; color: #6B7280; text-transform: uppercase; margin-bottom: 4px;">Shipping Address</div>
+                <div style="font-size: 14px; color: #374151; white-space: pre-line;">${customerAddress || 'Standard Shipping'}</div>
               </div>
             </div>
 
-            <div class="delivery-info">
-              <h3>📅 Delivery Information</h3>
-              <p>We'll send you tracking information as soon as your order ships. All items receive extra care during our inspection process.</p>
+            <div style="text-align: center; margin: 30px 0 20px;">
+              <a href="${brand.links.track}" class="btn">Check Order Status →</a>
             </div>
+
+            <p style="font-size: 13px; color: #6B7280; text-align: center;">
+              You will receive another email with active tracking details as soon as your package ships.
+            </p>
           </div>
-          
-          <div class="footer">
-            <div class="footer-content">
-              <h3>Need Help?</h3>
-              <p>If you have any questions about your order, our customer service team is here to help.</p>
-              
-              <div class="contact-info">
-                <div class="contact-link-wrapper">
-                  <a href="mailto:${senderIdentity.fromEmail}" class="contact-link">📧 Email Support</a>
-                </div>
-                <div class="contact-link-wrapper">
-                  <a href="tel:+13186574299" class="contact-link">📞 +1 318 657 4299</a>
-                </div>
-              </div>
-              
-              <div class="copyright">
-                © 2026 Casoodo.com. All rights reserved.<br>
-                Thank you for ordering with Casoodo.
-              </div>
-            </div>
-          </div>
+
+          ${brandCtx.getFooterHtml()}
         </div>
       </body>
       </html>
     `;
 
-    // Plain text version
     const textTemplate = `
-      Order received
-      
-      Hello ${customerName},
-      
-      We have received your order for "${productName}".
-      ${orderNumber ? `\n      Order Number: ${orderNumber}` : ''}
-      
-      Shipping To: ${customerAddress || 'Address not provided'}
-      
-      Questions? Reply to this email
-      
-      © 2026 Casoodo.com. All rights reserved.
-    `;
+${brand.name.toUpperCase()} — ORDER CONFIRMATION
 
-    // Email options
+Hello ${customerName},
+
+We have received your order for:
+"${productName}"
+${orderNumber ? `Order Number: ${orderNumber}\n` : ''}
+Shipping To:
+${customerAddress || 'Address on file'}
+
+We are preparing your order and will email your tracking link as soon as it ships.
+
+${brandCtx.getTextFooter()}
+    `.trim();
+
     const mailOptions = {
       from: `"${senderIdentity.fromName}" <${senderIdentity.fromEmail}>`,
-      replyTo: senderIdentity.fromEmail,
+      replyTo: brand.supportEmail || senderIdentity.fromEmail,
       to: customerEmail,
-      subject: `Order Received - ${orderNumber ? `${orderNumber} - ` : ''}${productName}`,
+      subject: `Order Received - ${orderNumber ? `${orderNumber} - ` : ''}${productName} | ${brand.name}`,
       html: htmlTemplate,
       text: textTemplate,
     };
 
-    // Send email
-    const startTime = Date.now();
     const info = await emailTransporter.sendMail(mailOptions);
-    const endTime = Date.now();
 
-    // Log the sent email
     await logEmail({
       templateName: 'Order Confirmation',
       senderEmail: senderIdentity.fromEmail,
@@ -401,23 +162,20 @@ export default async function handler(req, res) {
       recipientName: customerName,
       productName: productName,
       status: 'Success',
-      payload: req.body
+      payload: { ...req.body, website: brand.id }
     });
-
-    console.log('Email sent successfully!');
-    console.log('Message ID:', info.messageId);
-    console.log(`Email sent in ${endTime - startTime}ms`);
 
     res.status(200).json({
       success: true,
       message: 'Order confirmation email sent successfully!',
-      messageId: info.messageId
+      messageId: info.messageId,
+      website: brand.id
     });
 
   } catch (error) {
-    console.error('Error sending email:', error);
+    console.error('Error sending order confirmation email:', error);
     res.status(500).json({
-      error: 'Failed to send email',
+      error: 'Failed to send order confirmation email',
       details: error.message
     });
   }

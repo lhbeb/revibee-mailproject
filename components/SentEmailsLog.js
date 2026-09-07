@@ -12,11 +12,21 @@ const TYPE_CONFIG = {
   'Recovery — Friendly':       { color: 'bg-[#F0F6FF] text-[#003099]', icon: '💚' },
   'Recovery — Last Chance':    { color: 'bg-[#070B17] text-[#F0F6FF]', icon: '⏰' },
   'About Casoodo':             { color: 'bg-[#003099] text-[#F0F6FF]', icon: '🏪' },
+  'About Bricoc':              { color: 'bg-[#233F31] text-[#FAF6EB]', icon: '🏪' },
+  'Product Recommendations':   { color: 'bg-[#FFFBB6] text-[#003099]', icon: '✨' },
 };
 
-export default function SentEmailsDashboard() {
+function resolveWebsite(log) {
+  if (log.payload?.website) return log.payload.website.toLowerCase();
+  const sender = (log.senderEmail || '').toLowerCase();
+  if (sender.includes('bricoc') || sender.includes('arvarado')) return 'bricoc';
+  return 'casoodo';
+}
+
+export default function SentEmailsDashboard({ activeWebsite = 'all' }) {
   const [logs, setLogs] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [filterWebsite, setFilterWebsite] = useState('All');
   const [filterType, setFilterType] = useState('All');
   const [filterSender, setFilterSender] = useState('All');
   const [search, setSearch] = useState('');
@@ -51,204 +61,156 @@ export default function SentEmailsDashboard() {
   ])];
 
   const filtered = logs.filter(log => {
-    const matchType   = filterType === 'All' || log.templateName === filterType;
+    const logSite = resolveWebsite(log);
+    const matchSite = filterWebsite === 'All' || logSite === filterWebsite.toLowerCase();
+    const matchType = filterType === 'All' || log.templateName === filterType;
     const matchSender = filterSender === 'All' || log.senderEmail === filterSender;
     const matchSearch = !search || 
       log.recipientEmail?.toLowerCase().includes(search.toLowerCase()) ||
       log.recipientName?.toLowerCase().includes(search.toLowerCase()) ||
       log.productName?.toLowerCase().includes(search.toLowerCase());
-    return matchType && matchSender && matchSearch;
+    return matchSite && matchType && matchSender && matchSearch;
   });
 
-  const formatDate = (iso) => {
-    const d = new Date(iso);
-    return d.toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-  };
-
-  // Stats
-  const total = logs.length;
-  const todayCount = logs.filter(l => {
-    const logDate = new Date(l.timestamp).toDateString();
-    return logDate === new Date().toDateString();
-  }).length;
-  const typeCounts = Object.keys(TYPE_CONFIG).reduce((acc, t) => {
-    acc[t] = logs.filter(l => l.templateName === t).length;
-    return acc;
-  }, {});
-
   return (
-    <div className="space-y-6">
+    <div className="w-full space-y-4">
+      {/* Controls row */}
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex flex-wrap items-center gap-2">
+          {/* Website Filter Tabs */}
+          <div className="flex items-center rounded-lg bg-slate-100 p-1 border border-slate-200">
+            {['All', 'Casoodo', 'Bricoc'].map((site) => (
+              <button
+                key={site}
+                type="button"
+                onClick={() => setFilterWebsite(site)}
+                className={`px-3 py-1 rounded-md text-xs font-semibold transition-all ${
+                  filterWebsite === site
+                    ? site === 'Bricoc'
+                      ? 'bg-[#233F31] text-white shadow-sm'
+                      : site === 'Casoodo'
+                        ? 'bg-[#003099] text-white shadow-sm'
+                        : 'bg-white text-slate-800 shadow-sm'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                {site}
+              </button>
+            ))}
+          </div>
 
-      {/* Stats Bar */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div className="bg-[#003099] text-white rounded-xl p-4 flex flex-col gap-1">
-          <span className="text-3xl font-black">{total}</span>
-          <span className="text-xs text-white/60 uppercase tracking-wider">Total Sent</span>
-        </div>
-        <div className="bg-[#FFFBB6] text-[#003099] rounded-xl p-4 flex flex-col gap-1">
-          <span className="text-3xl font-black">{todayCount}</span>
-          <span className="text-xs text-[#003099]/70 uppercase tracking-wider">Today</span>
-        </div>
-        <div className="bg-white border border-slate-200 rounded-xl p-4 flex flex-col gap-1">
-          <span className="text-3xl font-black text-[#003099]">{
-            (typeCounts['Recovery — Urgent'] || 0) + 
-            (typeCounts['Recovery — Friendly'] || 0) + 
-            (typeCounts['Recovery — Last Chance'] || 0)
-          }</span>
-          <span className="text-xs text-slate-500 uppercase tracking-wider">Recovery</span>
-        </div>
-        <div className="bg-white border border-slate-200 rounded-xl p-4 flex flex-col gap-1">
-          <span className="text-3xl font-black text-[#003099]">{
-            (typeCounts['Shipping Confirmation'] || 0) + 
-            (typeCounts['Order Confirmation'] || 0) +
-            (typeCounts['Local Pickup'] || 0)
-          }</span>
-          <span className="text-xs text-slate-500 uppercase tracking-wider">Transactional</span>
-        </div>
-      </div>
+          {/* Type Filter */}
+          <select
+            value={filterType}
+            onChange={e => setFilterType(e.target.value)}
+            className="text-xs border border-slate-200 rounded-lg px-3 py-2 bg-white text-slate-700 font-medium"
+          >
+            {allTypes.map(t => <option key={t} value={t}>{t === 'All' ? 'All Templates' : t}</option>)}
+          </select>
 
-      {/* Filters + Search */}
-      <div className="bg-white border border-slate-200 rounded-xl p-4 flex flex-wrap gap-3 items-center">
-        {/* Search */}
-        <div className="flex-1 min-w-[180px] relative">
-          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">🔍</span>
+          {/* Sender Filter */}
+          <select
+            value={filterSender}
+            onChange={e => setFilterSender(e.target.value)}
+            className="text-xs border border-slate-200 rounded-lg px-3 py-2 bg-white text-slate-700 font-medium"
+          >
+            {allSenders.map(s => <option key={s} value={s}>{s === 'All' ? 'All Senders' : s}</option>)}
+          </select>
+
+          {/* Search */}
           <input
             type="text"
-            placeholder="Search recipient or product..."
+            placeholder="Search email, name, product..."
             value={search}
             onChange={e => setSearch(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#FFFBB6]"
+            className="text-xs border border-slate-200 rounded-lg px-3 py-2 bg-white text-slate-700 w-52 placeholder-slate-400"
           />
         </div>
 
-        {/* Type Filter */}
-        <select
-          value={filterType}
-          onChange={e => setFilterType(e.target.value)}
-          className="px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#FFFBB6]"
-        >
-          {allTypes.map(t => <option key={t}>{t}</option>)}
-        </select>
-
-        {/* Sender Filter */}
-        <select
-          value={filterSender}
-          onChange={e => setFilterSender(e.target.value)}
-          className="px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#FFFBB6] max-w-[200px] truncate"
-        >
-          {allSenders.map(s => <option key={s}>{s}</option>)}
-        </select>
-
-        {/* Refresh */}
         <button
           onClick={fetchLogs}
           disabled={isLoading}
-          className="px-4 py-2 bg-[#003099] text-white rounded-lg text-sm font-medium hover:bg-[#1a1c4a] transition-colors disabled:opacity-50"
+          className="text-xs font-medium text-slate-600 hover:text-slate-900 bg-white border border-slate-200 px-3 py-2 rounded-lg hover:bg-slate-50 transition"
         >
-          {isLoading ? '⏳' : '↻'} Refresh
+          {isLoading ? 'Refreshing...' : '🔄 Refresh'}
         </button>
       </div>
 
-      {/* Table */}
-      <div className="bg-white border border-slate-200 rounded-xl overflow-hidden">
-        {isLoading ? (
-          <div className="flex items-center justify-center h-48 text-slate-400">
-            <div className="text-center">
-              <div className="animate-spin text-3xl mb-3">⏳</div>
-              <p className="text-sm">Loading emails...</p>
-            </div>
-          </div>
-        ) : filtered.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-48 text-slate-400 gap-3">
-            <span className="text-4xl">📭</span>
-            <p className="text-sm font-medium">No emails match your filters</p>
-            <button onClick={() => { setSearch(''); setFilterType('All'); setFilterSender('All'); }} className="text-xs text-[#003099] hover:underline">Clear filters</button>
-          </div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="bg-slate-50 border-b border-slate-200 text-slate-500 text-xs uppercase tracking-wider">
-                  <th className="px-5 py-3 text-left font-semibold">Time</th>
-                  <th className="px-5 py-3 text-left font-semibold">Recipient</th>
-                  <th className="px-5 py-3 text-left font-semibold">Type</th>
-                  <th className="px-5 py-3 text-left font-semibold">Product</th>
-                  <th className="px-5 py-3 text-left font-semibold">Sent From</th>
-                  <th className="px-5 py-3 text-right font-semibold">Details</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100">
-                {filtered.map((log) => {
-                  const cfg = TYPE_CONFIG[log.templateName] || { color: 'bg-[#F0F6FF] text-slate-600', icon: '📧' };
-                  const isExpanded = expandedRowId === log.id;
-                  
-                  return (
-                    <React.Fragment key={log.id}>
-                      <tr className={`hover:bg-slate-50 transition-colors ${isExpanded ? 'bg-slate-50' : ''}`}>
-                        <td className="px-5 py-3.5 text-slate-500 whitespace-nowrap">{formatDate(log.timestamp)}</td>
-                        <td className="px-5 py-3.5">
-                          <p className="font-semibold text-[#003099]">{log.recipientName || '—'}</p>
-                          <p className="text-slate-400 text-xs">{log.recipientEmail}</p>
-                        </td>
-                        <td className="px-5 py-3.5">
-                          <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold ${cfg.color}`}>
-                            {cfg.icon} {log.templateName}
-                          </span>
-                        </td>
-                        <td className="px-5 py-3.5 text-slate-600 max-w-[200px] truncate" title={log.productName}>
-                          {log.productName || '—'}
-                        </td>
-                        <td className="px-5 py-3.5 text-slate-400 text-xs whitespace-nowrap">{log.senderEmail}</td>
-                        <td className="px-5 py-3.5 text-right whitespace-nowrap">
-                          <button
-                            onClick={() => setExpandedRowId(isExpanded ? null : log.id)}
-                            className="text-slate-400 hover:text-[#003099] p-2 rounded transition-colors"
-                            title="View full payload details"
-                          >
-                            {isExpanded ? '▼ Close' : '▶ Expand'}
-                          </button>
+      {/* Logs Table */}
+      <div className="overflow-x-auto border border-slate-200 rounded-xl bg-white shadow-sm">
+        <table className="w-full text-left text-xs">
+          <thead className="bg-slate-50 text-slate-500 uppercase tracking-wider text-[10px] font-bold border-b border-slate-200">
+            <tr>
+              <th className="px-4 py-3">Site</th>
+              <th className="px-4 py-3">Template</th>
+              <th className="px-4 py-3">Recipient</th>
+              <th className="px-4 py-3">Product / Info</th>
+              <th className="px-4 py-3">Sender</th>
+              <th className="px-4 py-3">Date</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-100">
+            {filtered.length === 0 ? (
+              <tr>
+                <td colSpan={6} className="text-center py-10 text-slate-400">
+                  {isLoading ? 'Loading logs...' : 'No sent emails match your filter criteria.'}
+                </td>
+              </tr>
+            ) : (
+              filtered.map((log) => {
+                const site = resolveWebsite(log);
+                const isBricoc = site === 'bricoc';
+                const typeCfg = TYPE_CONFIG[log.templateName] || { color: 'bg-slate-100 text-slate-700', icon: '✉️' };
+
+                return (
+                  <React.Fragment key={log.id}>
+                    <tr
+                      onClick={() => setExpandedRowId(expandedRowId === log.id ? null : log.id)}
+                      className="hover:bg-slate-50/70 transition cursor-pointer"
+                    >
+                      <td className="px-4 py-3 whitespace-nowrap">
+                        <span className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
+                          isBricoc ? 'bg-[#233F31] text-[#FAF6EB]' : 'bg-[#003099] text-[#FFFBB6]'
+                        }`}>
+                          {site}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap">
+                        <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold ${typeCfg.color}`}>
+                          <span>{typeCfg.icon}</span>
+                          <span>{log.templateName}</span>
+                        </span>
+                      </td>
+                      <td className="px-4 py-3">
+                        <div className="font-semibold text-slate-800">{log.recipientEmail}</div>
+                        {log.recipientName && <div className="text-slate-400 text-[11px]">{log.recipientName}</div>}
+                      </td>
+                      <td className="px-4 py-3 max-w-[240px] truncate text-slate-700 font-medium">
+                        {log.productName || '—'}
+                      </td>
+                      <td className="px-4 py-3 text-slate-500 whitespace-nowrap">
+                        {log.senderEmail}
+                      </td>
+                      <td className="px-4 py-3 text-slate-400 whitespace-nowrap">
+                        {log.timestamp ? new Date(log.timestamp).toLocaleString() : '—'}
+                      </td>
+                    </tr>
+                    {expandedRowId === log.id && log.payload && (
+                      <tr className="bg-slate-50">
+                        <td colSpan={6} className="px-6 py-4">
+                          <p className="text-[11px] font-bold text-slate-500 uppercase mb-2">Request Payload</p>
+                          <pre className="text-[11px] bg-slate-900 text-slate-100 p-3 rounded-lg overflow-x-auto font-mono">
+                            {JSON.stringify(log.payload, null, 2)}
+                          </pre>
                         </td>
                       </tr>
-                      {isExpanded && (
-                        <tr className="bg-slate-50 border-t-0">
-                          <td colSpan="6" className="px-5 pb-4 pt-1">
-                            <div className="bg-white border text-left border-slate-200 rounded-lg p-5 shadow-sm relative overflow-hidden">
-                              <div className="absolute top-0 left-0 w-1 h-full bg-[#FFFBB6]"></div>
-                              <h4 className="font-bold text-[#003099] mb-4 text-sm flex items-center gap-2">
-                                <span>📄</span> Request Payload Details
-                              </h4>
-                              {log.payload ? (
-                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-5 gap-x-6">
-                                  {Object.entries(log.payload).map(([key, value]) => {
-                                    if (value == null || value === '' || typeof value === 'object') return null;
-                                    // Skip redundant fields displayed in main row
-                                    if (['senderEmail', 'customerName', 'customerEmail', 'productName', 'message'].includes(key)) return null;
-                                    
-                                    return (
-                                      <div key={key}>
-                                        <span className="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">{key.replace(/([A-Z])/g, ' $1').trim()}</span>
-                                        <span className="block text-sm text-slate-700 font-mono break-all">{value.toString()}</span>
-                                      </div>
-                                    );
-                                  })}
-                                </div>
-                              ) : (
-                                <div className="text-slate-400 text-sm italic py-2">No extended payload data was saved for this email.</div>
-                              )}
-                            </div>
-                          </td>
-                        </tr>
-                      )}
-                    </React.Fragment>
-                  );
-                })}
-              </tbody>
-            </table>
-            <div className="px-5 py-3 bg-slate-50 border-t border-slate-200 text-xs text-slate-400">
-              Showing {filtered.length} of {total} emails
-            </div>
-          </div>
-        )}
+                    )}
+                  </React.Fragment>
+                );
+              })
+            )}
+          </tbody>
+        </table>
       </div>
     </div>
   );

@@ -1,57 +1,13 @@
 import { getRandomAccount, createTransporter, getAccountByUser, getSenderIdentity } from '../../src/config/emailAccounts';
+import { getBrandEmailContext } from '../../src/config/brandEmailHelpers';
 import { logEmail } from '../../src/utils/logger';
 
-// Create a persistent SMTP transporter (connection pool)
-// Note: With multiple accounts, we might want to create a pool per account or just create fresh connections.
-// For simplicity and rotation, we'll create a fresh connection per request or maintain a map.
-// However, to keep it simple and robust for now, we will create a new transporter for each request 
-// based on the selected account. Connection pooling is less effective if we rotate constantly, 
-// but we can optimize later if volume is huge.
-
-// function getTransporter() {
-//   const account = getRandomAccount();
-//   console.log(`Selected email account: ${account.user}`);
-//   return createTransporter(account);
-// }
-
-// Authentication middleware
-function checkAuth(req) {
-  const { session } = req.cookies;
-
-  if (!session) {
-    return { authenticated: false, error: 'No session found' };
-  }
-
-  try {
-    const decoded = Buffer.from(session, 'base64').toString('utf-8');
-    const [username, timestamp] = decoded.split(':');
-
-    // Check if session is still valid (24 hours)
-    const sessionAge = Date.now() - parseInt(timestamp);
-    const maxAge = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
-
-    if (sessionAge > maxAge) {
-      return { authenticated: false, error: 'Session expired' };
-    }
-
-    return { authenticated: true, user: username };
-  } catch (error) {
-    return { authenticated: false, error: 'Invalid session' };
-  }
-}
-
 export default async function handler(req, res) {
-  // Authentication bypassed for shipping emails
-  // const authResult = checkAuth(req);
-  // if (!authResult.authenticated) {
-  //   return res.status(401).json({ error: 'Authentication required', details: authResult.error });
-  // }
-
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { customerEmail, customerName, customerAddress, productName, trackingNumber, senderEmail, orderNumber } = req.body;
+  const { customerEmail, customerName, customerAddress, productName, trackingNumber, senderEmail, orderNumber, website } = req.body;
 
   // Validate required fields
   if (!customerEmail || !customerAddress || !productName || !trackingNumber) {
@@ -72,32 +28,26 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Debug: Log environment variables (without exposing the password)
-    // console.log('Gmail User:', 'orders@deeldepot.com'); // Removed hardcoded log
+    const brandCtx = getBrandEmailContext(website);
+    const brand = brandCtx.brand;
 
-
-    // Get the persistent transporter (no need to verify each time)
-    // const emailTransporter = getTransporter();
-
-    // Determine which account to use
+    // Determine which account to use for this brand
     let account = null;
     if (senderEmail) {
-      account = getAccountByUser(senderEmail);
+      account = getAccountByUser(senderEmail, brand.id);
     }
-
-    // Fallback to random account if specific one not found or not requested
     if (!account) {
-      account = getRandomAccount();
+      account = getRandomAccount(brand.id);
     }
 
-    console.log(`Selected email account: ${account.user}`);
+    console.log(`[${brand.name}] Selected email account: ${account.user}`);
     const emailTransporter = createTransporter(account);
-    const senderIdentity = getSenderIdentity(account);
+    const senderIdentity = getSenderIdentity(account, brand.id);
 
     // Generate FedEx tracking URL
     const trackingUrl = `https://www.fedex.com/fedextrack/?trknbr=${trackingNumber}`;
 
-    // HTML email template - DeelDepot Branded Design (Fully Responsive)
+    // HTML email template - Brand Dynamic Design (Fully Responsive)
     const htmlTemplate = `
       <!DOCTYPE html>
       <html lang="en">
@@ -105,73 +55,39 @@ export default async function handler(req, res) {
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="format-detection" content="telephone=no, date=no, email=no, address=no">
-        <title>Your Order Has Shipped - Casoodo</title>
-        <!--[if mso]>
-        <noscript>
-          <xml>
-            <o:OfficeDocumentSettings>
-              <o:PixelsPerInch>96</o:PixelsPerInch>
-            </o:OfficeDocumentSettings>
-          </xml>
-        </noscript>
-        <![endif]-->
+        <title>Your Order Has Shipped - ${brand.name}</title>
         <style>
           @media screen and (max-width: 600px) {
-            .content-cell {
-              padding: 20px !important;
-            }
-            .header h1 {
-              font-size: 24px !important;
-            }
-            .product-box {
-              display: block !important;
-              width: 100% !important;
-            }
+            .content-cell { padding: 20px !important; }
+            .header h1 { font-size: 24px !important; }
+            .product-box { display: block !important; width: 100% !important; }
           }
         </style>
       </head>
-      <body style="margin: 0; padding: 0; background-color: #F0F6FF; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.5; color: #070B17; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%;">
+      <body style="margin: 0; padding: 0; background-color: ${brand.colors.bgLight}; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.5; color: ${brand.colors.textDark}; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%;">
         
-        <!-- Wrapper Table for Email Client Compatibility -->
-        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #F0F6FF;">
+        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: ${brand.colors.bgLight};">
           <tr>
-            <td align="center" style="padding: 20px 10px;">
-              
-              <!-- Main Container -->
-              <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="max-width: 600px; background: #F0F6FF; border-radius: 16px; overflow: hidden; border: 1px solid #e2e8f0;">
+            <td align="center" style="padding: 24px 10px;">
+              <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="max-width: 600px; background: #ffffff; border-radius: 16px; overflow: hidden; border: 1px solid ${brand.colors.cardBorder};">
                 
-                <!-- Header Top -->
-                <tr>
-                  <td style="background-color: #FFFBB6; padding: 40px 32px 24px; text-align: center;">
-                    <h1 style="color: #070B17; font-size: 32px; font-weight: 800; margin: 0; line-height: 1.2;">
-                      Your order is on the way 🚀
-                    </h1>
-                  </td>
-                </tr>
-                
-                <!-- Header Bottom -->
-                <tr>
-                  <td style="background-color: #003099; padding: 24px 32px 40px; text-align: center;">
-                    <div style="color: #F0F6FF; font-size: 18px; font-weight: 600; margin: 0;">Shipping update for your order</div>
-                    ${orderNumber ? `<div style="color: #F0F6FF; font-size: 18px; font-weight: 700; margin-top: 16px; letter-spacing: 0.5px;">Order ${orderNumber}</div>` : ''}
-                  </td>
-                </tr>
+                ${brandCtx.getHeaderHtml('Your order is on the way 🚀', 'Shipping update for your order', orderNumber)}
                 
                 <!-- Content Section -->
                 <tr>
-                  <td class="content-cell" style="padding: 32px 24px;">
+                  <td class="content-cell" style="padding: 32px 24px; background-color: #ffffff;">
                     
                     <!-- Status Indicator -->
-                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-bottom: 32px;">
+                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-bottom: 28px;">
                       <tr>
-                        <td style="padding: 16px 20px; background-color: #F0F6FF; border-radius: 12px; border: 1px solid #e2e8f0;">
+                        <td style="padding: 16px 20px; background-color: ${brand.colors.bgLight}; border-radius: 12px; border: 1px solid ${brand.colors.cardBorder};">
                           <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                             <tr>
                               <td style="width: 20px; vertical-align: middle;">
-                                <div style="width: 8px; height: 8px; background-color: #003099; border-radius: 50%; display: inline-block;"></div>
+                                <div style="width: 10px; height: 10px; background-color: ${brand.colors.primary}; border-radius: 50%; display: inline-block;"></div>
                               </td>
                               <td style="vertical-align: middle;">
-                                <div style="color: #070B17; font-weight: 600; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px; margin: 0;">SHIPPED</div>
+                                <div style="color: ${brand.colors.textDark}; font-weight: 700; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px; margin: 0;">SHIPPED • IN TRANSIT</div>
                               </td>
                             </tr>
                           </table>
@@ -182,210 +98,89 @@ export default async function handler(req, res) {
                     <!-- Description -->
                     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-bottom: 24px;">
                       <tr>
-                        <td style="color: #475569; font-size: 16px; line-height: 1.6; text-align: left;">
-                          Your item has been packed and handed to the carrier. You can use the tracking details below to follow delivery progress.
+                        <td style="color: #475569; font-size: 15px; line-height: 1.6; text-align: left;">
+                          Your item has been carefully packed and handed to the carrier. You can use the tracking details below to follow your delivery progress in real time.
                         </td>
                       </tr>
                     </table>
                     
                     <!-- Order Card -->
-                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #F0F6FF; border-radius: 16px; border: 1px solid #e2e8f0; margin: 24px 0;">
-                      
-                      <!-- Product Section -->
+                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: ${brand.colors.bgLight}; border-radius: 14px; border: 1px solid ${brand.colors.cardBorder}; margin: 20px 0;">
+                      <tr>
+                        <td style="padding: 22px;">
+                          <div style="font-size: 12px; font-weight: 700; text-transform: uppercase; color: #64748B; letter-spacing: 0.5px; margin-bottom: 8px;">Product Shipped</div>
+                          <div style="color: ${brand.colors.textDark}; font-size: 17px; font-weight: 700; line-height: 1.4; margin-bottom: 16px;">${productName}</div>
+                          
+                          <div style="border-top: 1px solid ${brand.colors.cardBorder}; padding-top: 14px; margin-top: 14px;">
+                            <div style="font-size: 12px; font-weight: 700; text-transform: uppercase; color: #64748B; letter-spacing: 0.5px; margin-bottom: 4px;">Delivery Address</div>
+                            <div style="color: #334155; font-size: 14px; line-height: 1.5; white-space: pre-line;">${customerAddress}</div>
+                          </div>
+                        </td>
+                      </tr>
+                    </table>
+                    
+                    <!-- Tracking Box -->
+                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: 28px 0; background-color: #0F172A; border-radius: 14px; text-align: center;">
                       <tr>
                         <td style="padding: 24px;">
-                          <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
-                            <tr>
-                              <td align="center" style="padding-bottom: 16px;">
-                                <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="width: 64px; height: 64px; background-color: #003099; border-radius: 12px; margin: 0 auto;">
-                                  <tr>
-                                    <td style="text-align: center; vertical-align: middle; font-size: 28px; color: #F0F6FF; line-height: 1;">📦</td>
-                                  </tr>
-                                </table>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td align="center">
-                                <h3 style="color: #070B17; font-size: 18px; font-weight: 600; margin: 0 0 8px 0; line-height: 1.4; text-align: center;">${productName}</h3>
-                                <p style="color: #64748b; font-size: 14px; margin: 0; line-height: 1.4; text-align: center;">Order summary and delivery details</p>
-                              </td>
-                            </tr>
-                          </table>
-                        </td>
-                      </tr>
-                      
-                      <!-- Divider -->
-                      <tr>
-                        <td style="padding: 0 24px;">
-                          <div style="height: 1px; background-color: #e2e8f0; margin: 0;"></div>
-                        </td>
-                      </tr>
-                      
-                      <!-- Details Grid - Stacked for Better Mobile Support -->
-                      <tr>
-                        <td style="padding: 24px;">
-                          
-                          <!-- Delivery Email Card -->
-                          <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #F0F6FF; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 16px;">
-                            <tr>
-                              <td style="padding: 20px;">
-                                <div style="color: #070B17; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 8px 0;">Delivery Email</div>
-                                <div style="color: #475569; font-size: 14px; line-height: 1.5; margin: 0; word-break: break-all;">
-                                  ${customerEmail}
-                                </div>
-                              </td>
-                            </tr>
-                          </table>
-                          
-                          <!-- Status Card -->
-                          <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #F0F6FF; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 16px;">
-                            <tr>
-                              <td style="padding: 20px;">
-                                <div style="color: #070B17; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 8px 0;">Status</div>
-                                <div style="color: #475569; font-size: 14px; line-height: 1.5; margin: 0;">
-                                  In Transit<br>
-                                  3-7 Business Days
-                                </div>
-                              </td>
-                            </tr>
-                          </table>
-                          
-                          <!-- Delivery Address Card -->
-                          <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #F0F6FF; border-radius: 12px; border: 1px solid #e2e8f0;">
-                            <tr>
-                              <td style="padding: 20px;">
-                                <div style="color: #070B17; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 8px 0;">Delivery Address</div>
-                                <div style="color: #475569; font-size: 14px; line-height: 1.6; margin: 0;">
-                                  ${customerAddress}
-                                </div>
-                              </td>
-                            </tr>
-                          </table>
-                          
-                          </td>
-                      </tr>
-                      
-                    </table>
-                    
-                    <!-- Tracking Card -->
-                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #F0F6FF; border-radius: 16px; border: 1px solid #e2e8f0; margin: 32px 0;">
-                      <tr>
-                        <td style="padding: 28px 24px; text-align: center;">
-                          <h3 style="color: #070B17; font-size: 20px; font-weight: 700; margin: 0 0 8px 0;">Tracking Information</h3>
-                          <p style="color: #475569; font-size: 16px; margin: 0 0 20px 0;">Use the tracking number below to view the latest carrier updates.</p>
-                          
-                          <!-- Tracking Number -->
-                          <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: 16px 0;">
-                            <tr>
-                              <td style="background-color: #F0F6FF; color: #070B17; padding: 16px; border-radius: 8px; font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, monospace; font-size: 16px; font-weight: 600; border: 1px solid #cbd5e1; letter-spacing: 1px; text-align: center; word-break: break-all;">
-                                ${trackingNumber}
-                              </td>
-                            </tr>
-                          </table>
-                          
-                          <!-- Track Package Button -->
-                          <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="margin: 20px auto 0 auto;">
-                            <tr>
-                              <td style="background-color: #FFFBB6; border-radius: 8px; text-align: center;">
-                                <a href="${trackingUrl}" style="display: inline-block; padding: 14px 28px; color: #070B17; text-decoration: none; font-weight: 600; font-size: 16px; border-radius: 8px;">Track Package</a>
-                              </td>
-                            </tr>
-                          </table>
+                          <div style="color: #94A3B8; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px;">Carrier: FedEx Express</div>
+                          <div style="color: #FFFFFF; font-size: 20px; font-family: monospace; font-weight: 700; letter-spacing: 2px; margin-bottom: 16px;">${trackingNumber}</div>
+                          <a href="${trackingUrl}" style="background-color: ${brand.colors.accent}; color: ${brand.colors.textDark}; display: inline-block; padding: 12px 28px; border-radius: 8px; font-size: 14px; font-weight: 700; text-decoration: none;">
+                            Track Package on FedEx →
+                          </a>
                         </td>
                       </tr>
                     </table>
-                    
-                    <!-- Closing Message -->
-                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: 32px 0;">
-                      <tr>
-                        <td style="color: #475569; font-size: 16px; line-height: 1.6; text-align: left;">
-                          We take the risk out of used gear with expert inspection and reliable service on every order. Questions about your order? Our support team is here to help. Thank you for choosing <strong>Casoodo</strong>!
-                        </td>
-                      </tr>
-                    </table>
-                    
+
+                    <div style="color: #64748B; font-size: 13px; line-height: 1.6; text-align: center; margin-top: 24px;">
+                      Questions about your delivery? Reply directly to this email or visit our support page. Thank you for choosing <strong>${brand.name}</strong>!
+                    </div>
+
                   </td>
                 </tr>
                 
-                <!-- Footer -->
-                <tr>
-                  <td style="background-color: #003099; padding: 32px 24px; text-align: center;">
-                    <div style="color: #F0F6FF; font-size: 16px; margin: 0 0 20px 0; font-weight: 500;">Thank you for ordering with Casoodo.</div>
-                    
-                    <!-- Footer Links -->
-                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="margin: 20px auto;">
-                      <tr>
-                        <td style="padding: 0 12px;">
-                          <a href="https://www.casoodo.com/contact" style="color: #F0F6FF; text-decoration: none; font-size: 14px; font-weight: 500;">Support</a>
-                        </td>
-                        <td style="padding: 0 12px;">
-                          <a href="https://www.casoodo.com/track" style="color: #F0F6FF; text-decoration: none; font-size: 14px; font-weight: 500;">Track Orders</a>
-                        </td>
-                        <td style="padding: 0 12px;">
-                          <a href="https://www.casoodo.com/return-policy" style="color: #F0F6FF; text-decoration: none; font-size: 14px; font-weight: 500;">Returns</a>
-                        </td>
-                      </tr>
-                    </table>
-                    
-                    <div style="color: #F0F6FF; font-size: 12px; margin-top: 24px; line-height: 1.4;">
-                      This email was sent to ${customerEmail}<br>
-                      © 2026 Casoodo. All rights reserved.
-                    </div>
-                  </td>
-                </tr>
+                ${brandCtx.getFooterHtml()}
                 
               </table>
-              
             </td>
           </tr>
         </table>
-        
       </body>
       </html>
     `;
 
-    // Plain text version for email clients that don't support HTML
+    // Plain text version
     const textTemplate = `
-      Casoodo shipping update
-      
-      Your order is on the way.
-      Your item has been packed and handed to the carrier.
-      
-      Order Details:
-      ${orderNumber ? `Order Number: ${orderNumber}` : ''}
-      Product: ${productName}
-      Delivery Email: ${customerEmail}
-      Delivery Address: ${customerAddress}
-      Status: In Transit (3-7 Business Days)
-      
-      Tracking Information:
-      Tracking Number: ${trackingNumber}
-      Track your package: ${trackingUrl}
-      
-      Questions about your order? Our support team is here to help. Thank you for choosing Casoodo.
-      
-      ---
-      Casoodo order support
-      
-      This email was sent to ${customerEmail}
-      Casoodo • Premium Pre-Owned Technology
-    `;
+${brand.name.toUpperCase()} — SHIPPING CONFIRMATION
 
-    // Email options
+Your order is on the way!
+Your item has been packed and handed to the carrier.
+
+Order Details:
+${orderNumber ? `Order Number: ${orderNumber}\n` : ''}Product: ${productName}
+Recipient: ${customerName || customerEmail}
+Delivery Address: ${customerAddress}
+
+Tracking Details:
+Carrier: FedEx
+Tracking Number: ${trackingNumber}
+Track your shipment: ${trackingUrl}
+
+${brandCtx.getTextFooter()}
+    `.trim();
+
     const mailOptions = {
       from: `"${senderIdentity.fromName}" <${senderIdentity.fromEmail}>`,
-      replyTo: senderIdentity.fromEmail,
+      replyTo: brand.supportEmail || senderIdentity.fromEmail,
       to: customerEmail,
-      subject: `Shipping Update - ${orderNumber ? `${orderNumber} - ` : ''}${productName}`,
+      subject: `Shipping Update - ${orderNumber ? `${orderNumber} - ` : ''}${productName} | ${brand.name}`,
       text: textTemplate,
       html: htmlTemplate,
     };
 
     const info = await emailTransporter.sendMail(mailOptions);
+    console.log(`[${brand.name}] Shipping email sent successfully:`, info.messageId);
 
-    console.log('Email sent successfully:', info.messageId);
-
-    // Log the sent email
     await logEmail({
       templateName: 'Shipping Confirmation',
       senderEmail: senderIdentity.fromEmail,
@@ -393,38 +188,21 @@ export default async function handler(req, res) {
       recipientName: customerName,
       productName: productName,
       status: 'Success',
-      payload: req.body
+      payload: { ...req.body, website: brand.id }
     });
 
     return res.status(200).json({
       success: true,
       message: 'Shipping confirmation email sent successfully!',
-      messageId: info.messageId
+      messageId: info.messageId,
+      website: brand.id
     });
 
   } catch (error) {
-    console.error('Detailed error information:');
-    console.error('Error message:', error.message);
-    console.error('Error code:', error.code);
-    console.error('Error stack:', error.stack);
-    console.error('Full error object:', error);
-
-    // Return appropriate error message
-    if (error.code === 'EAUTH') {
-      return res.status(500).json({
-        error: 'Email authentication failed. Please check your Gmail credentials.',
-        details: error.message
-      });
-    } else if (error.code === 'ECONNECTION') {
-      return res.status(500).json({
-        error: 'Failed to connect to Gmail SMTP server. Please check your internet connection.',
-        details: error.message
-      });
-    } else {
-      return res.status(500).json({
-        error: 'Failed to send email. Please try again later.',
-        details: error.message
-      });
-    }
+    console.error('Failed to send shipping email:', error);
+    return res.status(500).json({
+      error: 'Failed to send shipping email',
+      details: error.message
+    });
   }
 }

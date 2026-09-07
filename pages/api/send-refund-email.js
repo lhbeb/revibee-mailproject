@@ -1,310 +1,158 @@
 import { getRandomAccount, createTransporter, getAccountByUser, getSenderIdentity } from '../../src/config/emailAccounts';
+import { getBrandEmailContext } from '../../src/config/brandEmailHelpers';
 import { logEmail } from '../../src/utils/logger';
 
-// Reuse the transporter from other email endpoints
-// let transporter = null;
-
-// function getTransporter() {
-//   if (!transporter) {
-//     transporter = nodemailer.createTransport({
-//       host: 'smtp.gmail.com',
-//       port: 465,
-//       secure: true, // Use SSL
-//       pool: true, // Use connection pooling
-//       maxConnections: 5, // Maximum concurrent connections
-//       maxMessages: 100, // Maximum messages per connection
-//       auth: {
-//         user: 'orders@deeldepot.com',
-//         pass: 'gdui faql dedk yhxg',
-//       },
-//     });
-//   }
-//   return transporter;
-// }
-
-// Authentication middleware
-function checkAuth(req) {
-  const { session } = req.cookies;
-
-  if (!session) {
-    return { authenticated: false, error: 'No session found' };
-  }
-
-  try {
-    const decoded = Buffer.from(session, 'base64').toString('utf-8');
-    const [username, timestamp] = decoded.split(':');
-
-    // Check if session is still valid (7 days)
-    const sessionAge = Date.now() - parseInt(timestamp);
-    const maxAge = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
-
-    if (sessionAge > maxAge) {
-      return { authenticated: false, error: 'Session expired' };
-    }
-
-    return { authenticated: true, user: username };
-  } catch (error) {
-    return { authenticated: false, error: 'Invalid session' };
-  }
-}
-
 export default async function handler(req, res) {
-  // Only allow POST requests
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  // Authentication bypassed for refund emails
-
   try {
-    const { customerEmail, customerName, productName, refundAmount, senderEmail } = req.body;
+    const { customerEmail, customerName, productName, refundAmount, senderEmail, website } = req.body;
 
-    // Validate required fields
-    if (!customerEmail || !customerName || !productName || !refundAmount) {
+    if (!customerEmail || !customerName || !productName || refundAmount === undefined || refundAmount === null) {
       return res.status(400).json({
         error: 'Missing required fields: customerEmail, customerName, productName, and refundAmount are required'
       });
     }
 
-    // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(customerEmail)) {
       return res.status(400).json({ error: 'Invalid email format' });
     }
 
-    // Validate refund amount — strip leading $ sign before parsing
-    const amount = parseFloat(String(refundAmount).replace(/^\$/, '').trim());
+    const amount = parseFloat(refundAmount);
     if (isNaN(amount) || amount <= 0) {
-      return res.status(400).json({ error: 'Invalid refund amount' });
+      return res.status(400).json({ error: 'Invalid refund amount. Must be a positive number.' });
     }
 
-    console.log('=== SENDING REFUND CONFIRMATION EMAIL ===');
-    console.log('Customer Email:', customerEmail);
-    console.log('Product:', productName);
-    console.log('Refund Amount:', `$${amount.toFixed(2)}`);
+    const brandCtx = getBrandEmailContext(website);
+    const brand = brandCtx.brand;
 
-    // Get the email transporter
-    // const emailTransporter = getTransporter();
-    let account;
-    if (senderEmail) {
-      account = getAccountByUser(senderEmail);
-      if (!account) {
-        console.warn(`Requested sender email ${senderEmail} not found. Falling back to random account.`);
-        account = getRandomAccount();
-      } else {
-        console.log(`Using manually selected email account: ${account.user}`);
-      }
-    } else {
-      account = getRandomAccount();
-      console.log(`Using randomly selected email account: ${account.user}`);
-    }
+    let account = senderEmail ? getAccountByUser(senderEmail, brand.id) : getRandomAccount(brand.id);
+    if (!account) account = getRandomAccount(brand.id);
+
+    console.log(`[${brand.name}] Refund email sender: ${account?.user}`);
     const emailTransporter = createTransporter(account);
-    const senderIdentity = getSenderIdentity(account);
+    const senderIdentity = getSenderIdentity(account, brand.id);
 
-    // HTML email template - Redesigned based on design guidelines
     const htmlTemplate = `
       <!DOCTYPE html>
       <html lang="en">
       <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Refund Update</title>
+        <title>Refund Update - ${brand.name}</title>
         <style>
-          @media screen and (max-width: 600px) {
-            .content-cell {
-              padding: 20px !important;
-            }
-            .header h1 {
-              font-size: 24px !important;
-            }
-            .detail-row-label, .detail-row-value {
-              display: block !important;
-              width: 100% !important;
-              text-align: left !important;
-              padding-bottom: 8px !important;
-            }
-            .detail-row-value {
-              padding-bottom: 16px !important;
-            }
+          * { margin: 0; padding: 0; box-sizing: border-box; }
+          body { 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+            line-height: 1.6; 
+            color: #374151; 
+            background-color: ${brand.colors.bgLight}; 
+            padding: 20px 0;
+          }
+          .container { 
+            max-width: 600px; 
+            margin: 0 auto; 
+            background-color: #ffffff; 
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid ${brand.colors.cardBorder};
+          }
+          .header-top {
+            background-color: ${brand.colors.accent};
+            padding: 36px 24px 20px;
+            text-align: center;
+          }
+          .header-bottom {
+            background-color: ${brand.colors.primary};
+            padding: 20px 24px 28px;
+            text-align: center;
+            color: #ffffff;
+          }
+          .content { padding: 32px 24px; }
+          .card {
+            background-color: ${brand.colors.bgLight};
+            border: 1px solid ${brand.colors.cardBorder};
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
           }
         </style>
       </head>
-      <body style="margin: 0; padding: 0; background-color: #f5f5f5; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #374151;">
-        <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
-          <tr>
-            <td style="padding: 20px 0; background-color: #f5f5f5;">
-              <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px; margin: 0 auto; background-color: #F0F6FF; border-radius: 12px; overflow: hidden;">
-                <!-- Header Top -->
-                <tr>
-                  <td style="background-color: #FFFBB6; padding: 40px 32px 24px; text-align: center;">
-                    <h1 style="color: #070B17; font-size: 32px; font-weight: 800; margin: 0;">Refund Update</h1>
-                  </td>
-                </tr>
-                
-                <!-- Header Bottom -->
-                <tr>
-                  <td style="background-color: #003099; padding: 24px 32px 40px; text-align: center;">
-                    <div style="color: #F0F6FF; font-size: 18px; font-weight: 600; margin: 0;">A refund has been issued for your order</div>
-                  </td>
-                </tr>
-                <!-- Main Content -->
-                <tr>
-                  <td class="content-cell" style="padding: 48px 32px;">
-                    <p style="font-size: 18px; margin-bottom: 32px; color: #374151;">Dear ${customerName},</p>
-                    
-                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background: white; border: 1px solid #e5e7eb; border-radius: 20px; padding: 40px; margin-bottom: 32px;">
-                      <tr>
-                        <td align="center">
-                          <div style="width: 80px; height: 80px; background-color: #003099; border-radius: 50%; display: table; margin: 0 auto 32px;">
-                            <span style="display: table-cell; vertical-align: middle; text-align: center; color: white; font-size: 32px; font-weight: bold;">✓</span>
-                          </div>
-                          <h2 style="font-size: 28px; font-weight: 600; color: #1f2937; text-align: center; margin-bottom: 12px;">Your refund is on the way</h2>
-                          <p style="font-size: 16px; color: #6b7280; text-align: center; margin-bottom: 32px;">We have submitted the refund for your order. The amount below should return to your original payment method shortly.</p>
-                          
-                          <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background: #F0F6FF; border: 1px solid #e2e8f0; border-radius: 16px; padding: 24px; text-align: center;">
-                            <tr>
-                              <td>
-                                <div style="font-size: 14px; color: #6b7280; margin-bottom: 8px; font-weight: 500;">Full Refund Amount</div>
-                                <div style="font-size: 32px; font-weight: 700; color: #070B17;">$${amount.toFixed(2)}</div>
-                              </td>
-                            </tr>
-                          </table>
-                        </td>
-                      </tr>
-                    </table>
+      <body>
+        <div class="container">
+          <div class="header-top">
+            <h1 style="color: ${brand.colors.textDark}; font-size: 26px; font-weight: 800;">Refund Confirmation 💰</h1>
+          </div>
+          <div class="header-bottom">
+            <p style="font-size: 15px; opacity: 0.95;">Financial Update for Your Order • ${brand.name}</p>
+          </div>
 
-                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 24px; margin-bottom: 32px;">
-                      <tr>
-                        <td>
-                          <h3 style="font-size: 18px; font-weight: 600; color: #1f2937; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #e5e7eb;">Refund Details</h3>
-                          <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
-                            <tr>
-                              <td class="detail-row-label" width="150" style="color: #6b7280; font-size: 14px; font-weight: 500; padding: 8px 0;">Product</td>
-                              <td class="detail-row-value" style="color: #1f2937; font-weight: 600; text-align: right; word-break: break-word;">${productName}</td>
-                            </tr>
-                            <tr>
-                              <td class="detail-row-label" width="150" style="color: #6b7280; font-size: 14px; font-weight: 500; padding: 8px 0;">Customer Email</td>
-                              <td class="detail-row-value" style="color: #1f2937; font-weight: 600; text-align: right; word-break: break-word;">${customerEmail}</td>
-                            </tr>
-                            <tr>
-                              <td class="detail-row-label" width="150" style="color: #6b7280; font-size: 14px; font-weight: 500; padding: 8px 0;">Refund Amount</td>
-                              <td class="detail-row-value" style="color: #070B17; font-weight: 700; text-align: right;">$${amount.toFixed(2)}</td>
-                            </tr>
-                            <tr>
-                              <td class="detail-row-label" width="150" style="color: #6b7280; font-size: 14px; font-weight: 500; padding: 8px 0;">Status</td>
-                              <td class="detail-row-value" style="color: #070B17; font-weight: 700; text-align: right;">Processed</td>
-                            </tr>
-                          </table>
-                        </td>
-                      </tr>
-                    </table>
+          <div class="content">
+            <p style="font-size: 16px; margin-bottom: 16px;">Dear <strong>${customerName}</strong>,</p>
+            <p style="color: #4B5563; font-size: 15px; margin-bottom: 20px;">
+              We have successfully processed a refund for your order.
+            </p>
 
-                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background: #F0F6FF; border: 1px solid #003099; border-radius: 12px; padding: 24px; margin-bottom: 32px;">
-                      <tr>
-                        <td>
-                          <h3 style="color: #070B17; font-size: 18px; font-weight: 600; margin-bottom: 20px;">What happens next?</h3>
-                          <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
-                            <tr>
-                              <td style="padding-bottom: 16px;">
-                                <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
-                                  <tr>
-                                    <td width="28" style="vertical-align: top;">
-                                      <div style="width: 28px; height: 28px; background-color: #FFFBB6; color: #070B17; border-radius: 50%; text-align: center; line-height: 28px; font-size: 12px; font-weight: 700;">1</div>
-                                    </td>
-                                    <td style="padding-left: 12px; color: #070B17; font-size: 14px; line-height: 1.5;">Your full refund has been processed by our team</td>
-                                  </tr>
-                                </table>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td style="padding-bottom: 16px;">
-                                <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
-                                  <tr>
-                                    <td width="28" style="vertical-align: top;">
-                                      <div style="width: 28px; height: 28px; background-color: #FFFBB6; color: #070B17; border-radius: 50%; text-align: center; line-height: 28px; font-size: 12px; font-weight: 700;">2</div>
-                                    </td>
-                                    <td style="padding-left: 12px; color: #070B17; font-size: 14px; line-height: 1.5;">The full refund amount will appear in your original payment method within 3-5 business days</td>
-                                  </tr>
-                                </table>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
-                                  <tr>
-                                    <td width="28" style="vertical-align: top;">
-                                      <div style="width: 28px; height: 28px; background-color: #FFFBB6; color: #070B17; border-radius: 50%; text-align: center; line-height: 28px; font-size: 12px; font-weight: 700;">3</div>
-                                    </td>
-                                    <td style="padding-left: 12px; color: #070B17; font-size: 14px; line-height: 1.5;">You'll see the transaction reflected in your account statement</td>
-                                  </tr>
-                                </table>
-                              </td>
-                            </tr>
-                          </table>
-                        </td>
-                      </tr>
-                    </table>
-                  </td>
-                </tr>
-                <!-- Footer -->
-                <tr>
-                  <td style="background: #F0F6FF; padding: 32px; text-align: center; border-top: 1px solid #e5e7eb;">
-                    <h3 style="color: #374151; font-size: 18px; font-weight: 600; margin-bottom: 16px;">Need Help?</h3>
-                    <p style="color: #6b7280; font-size: 14px; margin-bottom: 16px;">If you have any questions about your refund, our customer service team is here to help.</p>
-                    <p style="margin-bottom: 16px;"><a href="mailto:${senderIdentity.fromEmail}" style="color: #070B17; text-decoration: none; font-weight: 500; font-size: 14px;">📧 Email Support</a></p>
-                    <p style="margin-bottom: 16px;"><a href="tel:+13186574299" style="color: #070B17; text-decoration: none; font-weight: 500; font-size: 14px;">📞 +1 318 657 4299</a></p>
-                    <p style="color: #9ca3af; font-size: 12px; margin-top: 16px; padding-top: 16px; border-top: 1px solid #e5e7eb;">© 2026 Casoodo. All rights reserved.<br>Customer support for every order.</p>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-        </table>
+            <div class="card">
+              <div style="font-size: 12px; font-weight: 700; color: #6B7280; text-transform: uppercase; margin-bottom: 4px;">Refunded Product</div>
+              <div style="font-size: 16px; font-weight: 700; color: #111827; margin-bottom: 14px;">${productName}</div>
+
+              <div style="border-top: 1px solid #E5E7EB; padding-top: 12px; display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 14px; font-weight: 600; color: #4B5563;">Refund Amount:</span>
+                <span style="font-size: 22px; font-weight: 800; color: #059669;">$${amount.toFixed(2)}</span>
+              </div>
+            </div>
+
+            <div style="background-color: #F3F4F6; border-radius: 10px; padding: 18px; margin: 24px 0;">
+              <div style="font-size: 14px; font-weight: 700; color: #1F2937; margin-bottom: 8px;">What to expect next:</div>
+              <ul style="font-size: 13px; color: #4B5563; padding-left: 18px; line-height: 1.6;">
+                <li>The credit has been submitted to your original payment processor.</li>
+                <li>Funds typically appear on your statement within <strong>3–5 business days</strong> depending on your bank.</li>
+              </ul>
+            </div>
+
+            <p style="font-size: 13px; color: #6B7280; text-align: center;">
+              If you have any questions or do not see the credit after 5 business days, please contact our support team.
+            </p>
+          </div>
+
+          ${brandCtx.getFooterHtml()}
+        </div>
       </body>
       </html>
     `;
 
-    // Send the email
+    const textTemplate = `
+${brand.name.toUpperCase()} — REFUND NOTIFICATION
+
+Dear ${customerName},
+
+We have processed a refund for your order.
+
+Refund Details:
+Product: ${productName}
+Refund Amount: $${amount.toFixed(2)}
+Status: Processed
+
+The funds will post back to your original payment method within 3-5 business days.
+
+${brandCtx.getTextFooter()}
+    `.trim();
+
     const mailOptions = {
       from: `"${senderIdentity.fromName}" <${senderIdentity.fromEmail}>`,
-      replyTo: senderIdentity.fromEmail,
+      replyTo: brand.supportEmail || senderIdentity.fromEmail,
       to: customerEmail,
-      subject: 'Refund Update for Your Order',
+      subject: `Refund Processed - $${amount.toFixed(2)} - ${productName} | ${brand.name}`,
       html: htmlTemplate,
-      text: `
-        Refund Update
-        
-        Dear ${customerName},
-        
-        We have submitted a refund for your order.
-        
-        Refund Details:
-        - Product: ${productName}
-        - Full Refund Amount: ${amount.toFixed(2)}
-        - Status: Processed
-        
-        What happens next:
-        1. Your full refund has been processed by our team
-        2. The full refund amount will appear in your original payment method within 3-5 business days
-        3. You'll see the transaction reflected in your account statement
-        
-        If you have any questions, please contact us:
-        Email: Reply to this email
-        Phone: +1 318 657 4299
-        
-        Thank you,
-        
-        This email was sent to ${customerEmail}
-      `
+      text: textTemplate,
     };
 
-    // Send the email
     const info = await emailTransporter.sendMail(mailOptions);
 
-    console.log('✅ Refund email sent successfully!');
-    console.log('Message ID:', info.messageId);
-
-    // Log the sent email
     await logEmail({
       templateName: 'Refund Email',
       senderEmail: senderIdentity.fromEmail,
@@ -312,30 +160,25 @@ export default async function handler(req, res) {
       recipientName: customerName,
       productName: productName,
       status: 'Success',
-      payload: req.body
+      payload: { ...req.body, website: brand.id }
     });
-    console.log('Response:', info.response);
 
-    // Return success response
     res.status(200).json({
       success: true,
       message: 'Refund confirmation email sent successfully',
       data: {
         customerEmail,
         productName,
-        refundAmount: `${amount.toFixed(2)}`,
+        refundAmount: `$${amount.toFixed(2)}`,
         messageId: info.messageId,
-        timestamp: new Date().toISOString()
+        website: brand.id
       }
     });
 
   } catch (error) {
-    console.error('❌ Error sending refund email:', error);
-
-    // Return error response
+    console.error('Error sending refund email:', error);
     res.status(500).json({
-      success: false,
-      error: 'Failed to send refund confirmation email',
+      error: 'Failed to send refund email',
       details: error.message
     });
   }

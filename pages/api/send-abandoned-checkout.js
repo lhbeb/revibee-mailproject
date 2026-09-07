@@ -1,337 +1,169 @@
 import { getRandomAccount, createTransporter, getAccountByUser, getSenderIdentity } from '../../src/config/emailAccounts';
+import { getBrandEmailContext } from '../../src/config/brandEmailHelpers';
 import { logEmail } from '../../src/utils/logger';
 import * as cheerio from 'cheerio';
 
-// Reuse the transporter from the shipping email
-// let transporter = null;
-
-// function getTransporter() {
-//   if (!transporter) {
-//     transporter = nodemailer.createTransport({
-//       host: 'smtp.gmail.com',
-//       port: 465,
-//       secure: true, // Use SSL
-//       secure: true, // Use SSL
-//       auth: {
-//         user: 'orders@deeldepot.com',
-//         pass: 'gdui faql dedk yhxg',
-//       },
-//     });
-//   }
-//   return transporter;
-// }
-
 export default async function handler(req, res) {
-  // Only allow POST requests
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
   try {
-    const { customerName, customerEmail, customerAddress, productName, productLink, checkoutUrl, senderEmail } = req.body;
+    const { customerName, customerEmail, customerAddress, productName, productLink, checkoutUrl, senderEmail, website } = req.body;
     const normalizedProductLink = productLink?.trim() || '';
     const normalizedCheckoutUrl = checkoutUrl?.trim() || normalizedProductLink;
 
-    // Validate required fields
     if (!customerEmail || !normalizedCheckoutUrl) {
       return res.status(400).json({
         error: 'Missing required fields: customerEmail and either checkoutUrl or productLink are required'
       });
     }
 
-    // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(customerEmail)) {
       return res.status(400).json({ error: 'Invalid email format' });
     }
 
-    console.log('=== SENDING ABANDONED CHECKOUT EMAIL ===');
-    console.log('Customer Email:', customerEmail);
+    const brandCtx = getBrandEmailContext(website);
+    const brand = brandCtx.brand;
 
     let productImage = null;
-
-    // Fetch product image if link is provided
     if (normalizedProductLink) {
       try {
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 5000); // 5s timeout
-
+        const timeoutId = setTimeout(() => controller.abort(), 5000);
         const response = await fetch(normalizedProductLink, {
           signal: controller.signal,
-          headers: {
-            'User-Agent': 'Mozilla/5.0 (compatible; CasoodoBot/1.0;)'
-          }
+          headers: { 'User-Agent': 'Mozilla/5.0 (compatible; BrandBot/1.0;)' }
         });
         clearTimeout(timeoutId);
 
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-
-        const html = await response.text();
-        const $ = cheerio.load(html);
-
-        // Try to find og:image
-        productImage = $('meta[property="og:image"]').attr('content');
-
-        // Fallback to twitter:image
-        if (!productImage) {
-          productImage = $('meta[name="twitter:image"]').attr('content');
+        if (response.ok) {
+          const html = await response.text();
+          const $ = cheerio.load(html);
+          productImage = $('meta[property="og:image"]').attr('content') ||
+            $('meta[name="twitter:image"]').attr('content') ||
+            $('.product-image img, .woocommerce-product-gallery__image img').first().attr('src') ||
+            $('img[src*="product"]').first().attr('src') || null;
         }
-
-        // Fallback to first image on page (absolute path only)
-        if (!productImage) {
-          const firstImg = $('img').first().attr('src');
-          if (firstImg) {
-            // Handle relative URLs
-            if (firstImg.startsWith('http')) {
-              productImage = firstImg;
-            } else {
-              try {
-                const url = new URL(normalizedProductLink);
-                productImage = `${url.protocol}//${url.host}${firstImg.startsWith('/') ? '' : '/'}${firstImg}`;
-              } catch (e) {
-                // Ignore URL parsing errors
-              }
-            }
-          }
-        }
-      } catch (error) {
-        console.warn('Warning: Failed to fetch product image (continuing without it):', error.message);
-        // Continue without image - this is not fatal
+      } catch (e) {
+        console.warn('Could not scrape product image:', e.message);
       }
     }
 
-    // Get the email transporter
-    // const emailTransporter = getTransporter();
-    let account;
-    if (senderEmail) {
-      account = getAccountByUser(senderEmail);
-      if (!account) {
-        console.warn(`Requested sender email ${senderEmail} not found. Falling back to random account.`);
-        account = getRandomAccount();
-      } else {
-        console.log(`Using manually selected email account: ${account.user}`);
-      }
-    } else {
-      account = getRandomAccount();
-      console.log(`Using randomly selected email account: ${account.user}`);
-    }
+    let account = senderEmail ? getAccountByUser(senderEmail, brand.id) : getRandomAccount(brand.id);
+    if (!account) account = getRandomAccount(brand.id);
+
+    console.log(`[${brand.name}] Abandoned checkout sender: ${account?.user}`);
     const emailTransporter = createTransporter(account);
-    const senderIdentity = getSenderIdentity(account);
+    const senderIdentity = getSenderIdentity(account, brand.id);
 
-    // HTML email template - Casoodo branded design (table-based for iOS support)
     const htmlTemplate = `
       <!DOCTYPE html>
       <html lang="en">
       <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="format-detection" content="telephone=no, date=no, email=no, address=no">
-        <title>Your Saved Item - Casoodo.com</title>
-        <!--[if mso]>
-        <noscript>
-          <xml>
-            <o:OfficeDocumentSettings>
-              <o:PixelsPerInch>96</o:PixelsPerInch>
-            </o:OfficeDocumentSettings>
-          </xml>
-        </noscript>
-        <![endif]-->
+        <title>Your Saved Item - ${brand.name}</title>
         <style>
-          body {
-            margin: 0;
-            padding: 0;
-            background-color: #F0F6FF;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            line-height: 1.5;
-            color: #070B17;
-            -webkit-text-size-adjust: 100%;
-            -ms-text-size-adjust: 100%;
+          * { margin: 0; padding: 0; box-sizing: border-box; }
+          body { 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+            line-height: 1.6; 
+            color: #374151; 
+            background-color: ${brand.colors.bgLight}; 
+            padding: 20px 0;
           }
-          @media screen and (max-width: 600px) {
-            .content-cell {
-              padding: 20px !important;
-            }
-            .header h1 {
-              font-size: 24px !important;
-            }
+          .container { 
+            max-width: 600px; 
+            margin: 0 auto; 
+            background-color: #ffffff; 
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid ${brand.colors.cardBorder};
+          }
+          .header-top {
+            background-color: ${brand.colors.accent};
+            padding: 36px 24px 20px;
+            text-align: center;
+          }
+          .header-bottom {
+            background-color: ${brand.colors.primary};
+            padding: 20px 24px 28px;
+            text-align: center;
+            color: #ffffff;
+          }
+          .content { padding: 32px 24px; }
+          .btn {
+            display: inline-block;
+            background-color: ${brand.colors.primary};
+            color: #ffffff !important;
+            font-weight: 700;
+            padding: 14px 32px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 15px;
           }
         </style>
       </head>
-      <body style="margin: 0; padding: 0; background-color: #F0F6FF; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.5; color: #070B17;">
-        
-        <!-- Wrapper Table -->
-        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #F0F6FF;">
-          <tr>
-            <td align="center" style="padding: 20px 10px;">
-              
-              <!-- Main Container -->
-              <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="max-width: 600px; background: #F0F6FF; border-radius: 16px; overflow: hidden; border: 1px solid #e2e8f0;">
-                
-                <!-- Header -->
-                <tr class="header">
-                  <td style="background-color: #003099; padding: 40px 32px; text-align: center;">
-                    <h1 style="color: #F0F6FF; font-size: 28px; font-weight: 800; margin: 0 0 12px 0; line-height: 1.2;">
-                      Your saved item is still available
-                    </h1>
-                    <p style="color: #F0F6FF; font-size: 16px; margin: 0; line-height: 1.5; font-weight: 500;">
-                      Return to your saved item whenever you are ready
-                    </p>
-                  </td>
-                </tr>
-                
-                <!-- Content Section -->
-                <tr>
-                  <td class="content-cell" style="padding: 32px 24px;">
-                    
-                    <!-- Abandoned Item Card -->
-                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #F0F6FF; border: 1px solid #e2e8f0; border-radius: 16px; margin-bottom: 32px;">
-                      <tr>
-                        <td style="padding: 32px; text-align: center;">
-                          <!-- Product Image or Icon -->
-                          <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin: 0 auto 24px;">
-                            <tr>
-                              <td>
-                                ${productImage ? `
-                                  <img src="${productImage}" alt="${productName || 'Product'}" style="width: 200px; height: auto; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); display: block;">
-                                ` : `
-                                  <div style="width: 64px; height: 64px; background: #F0F6FF; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px;">🛒</div>
-                                `}
-                              </td>
-                            </tr>
-                          </table>
-                          
-                          <p style="color: #374151; font-size: 18px; line-height: 1.6; margin: 0 0 24px 0;">
-                            ${customerName ? `Hi ${customerName},` : 'Hi there,'}<br><br>
-                            We saved your <strong>${productName || 'item'}</strong> in your cart so you can continue your order when it suits you.
-                          </p>
+      <body>
+        <div class="container">
+          <div class="header-top">
+            <h1 style="color: ${brand.colors.textDark}; font-size: 24px; font-weight: 800;">Your item is waiting for you 🛒</h1>
+          </div>
+          <div class="header-bottom">
+            <p style="font-size: 15px; opacity: 0.95;">We saved your cart at ${brand.name}</p>
+          </div>
 
-                          ${customerAddress ? `
-                            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: 0 0 24px 0; background-color: #F0F6FF; border: 1px solid #e5e7eb; border-radius: 12px;">
-                              <tr>
-                                <td style="padding: 18px 20px; text-align: left;">
-                                  <div style="color: #070B17; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px;">Saved delivery address</div>
-                                  <div style="color: #374151; font-size: 15px; line-height: 1.6; white-space: pre-line;">${customerAddress}</div>
-                                  <div style="color: #6b7280; font-size: 13px; line-height: 1.5; margin-top: 10px;">We saved your delivery details so you can pick up right where you left off.</div>
-                                </td>
-                              </tr>
-                            </table>
-                          ` : ''}
+          <div class="content">
+            <p style="font-size: 16px; margin-bottom: 16px;">${customerName ? `Hi <strong>${customerName}</strong>,` : 'Hello,'}</p>
+            <p style="color: #4B5563; font-size: 15px; margin-bottom: 20px;">
+              You left something behind! We reserved your item so you can easily finish checking out when you are ready.
+            </p>
 
-                          <p style="font-weight: 600; color: #1f2937; font-size: 18px; margin: 0 0 24px 0;">Continue your order:</p>
-                          
-                          <!-- CTA Button -->
-                          <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center">
-                            <tr>
-                              <td style="background-color: #FFFBB6; border-radius: 8px; box-shadow: 0 4px 6px rgba(7, 11, 23, 0.2);">
-                                <a href="${normalizedCheckoutUrl}" style="display: inline-block; padding: 16px 32px; color: #070B17; text-decoration: none; font-weight: 700; font-size: 16px; border-radius: 8px; background-color: #FFFBB6; border: 1px solid #FFFBB6;">
-                                  <span style="color: #070B17;">Complete Purchase</span>
-                                </a>
-                              </td>
-                            </tr>
-                          </table>
-                        </td>
-                      </tr>
-                    </table>
+            <div style="background-color: ${brand.colors.bgLight}; border: 1px solid ${brand.colors.cardBorder}; border-radius: 12px; padding: 20px; margin: 20px 0; text-align: center;">
+              ${productImage ? `<img src="${productImage}" alt="${productName || 'Product'}" style="max-width: 180px; max-height: 180px; border-radius: 8px; margin-bottom: 12px; object-fit: contain;">` : ''}
+              <div style="font-size: 16px; font-weight: 700; color: #111827; margin-bottom: 16px;">${productName || 'Saved Item'}</div>
+              <a href="${normalizedCheckoutUrl}" class="btn">Complete Purchase Now →</a>
+            </div>
 
-                    <!-- Footer Info -->
-                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-top: 32px; text-align: center;">
-                      <tr>
-                        <td style="color: #6b7280; font-size: 14px;">
-                          <p style="margin: 0 0 8px 0;"><strong>Why Casoodo.com?</strong></p>
-                          <p style="margin: 0 0 16px 0;">We inspect every item to ensure quality. 30-day returns. Fast shipping.</p>
-                          <p style="margin: 0; color: #6b7280; font-size: 14px;">
-                            Questions? Reply here or <a href="https://wa.me/13186574299" style="color: #070B17; text-decoration: none;">WhatsApp +1 318 657 4299</a>.
-                          </p>
-                        </td>
-                      </tr>
-                    </table>
-                    
-                  </td>
-                </tr>
-                
-                <!-- Footer -->
-                <tr>
-                  <td style="background-color: #F0F6FF; padding: 32px 24px; text-align: center; border-top: 1px solid #e5e7eb;">
-                    <h3 style="color: #1f2937; font-size: 18px; font-weight: 600; margin: 0 0 8px 0;">Need Help?</h3>
-                    <p style="color: #6b7280; font-size: 14px; margin: 0 0 24px 0;">If you have any questions about your order, our customer service team is here to help.</p>
-                    
-                    <!-- Contact Links - Stacked Vertically -->
-                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin-bottom: 24px;">
-                      <tr>
-                        <td style="padding: 8px 0;">
-                          <a href="mailto:${senderIdentity.fromEmail}" style="color: #070B17; text-decoration: none; font-weight: 500; font-size: 14px; display: block;">📧 Email Support</a>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td style="padding: 8px 0;">
-                          <a href="tel:+13186574299" style="color: #070B17; text-decoration: none; font-weight: 500; font-size: 14px; display: block;">📞 +1 318 657 4299</a>
-                        </td>
-                      </tr>
-                    </table>
-                    
-                    <div style="color: #9ca3af; font-size: 12px; line-height: 1.5;">
-                      © 2026 Casoodo.com. All rights reserved.<br>
-                      Thank you for your business.
-                    </div>
-                  </td>
-                </tr>
-                
-              </table>
-              
-            </td>
-          </tr>
-        </table>
-        
+            ${customerAddress ? `
+              <div style="font-size: 13px; color: #6B7280; text-align: center; margin-bottom: 16px;">
+                Shipping address on file: ${customerAddress}
+              </div>
+            ` : ''}
+          </div>
+
+          ${brandCtx.getFooterHtml()}
+        </div>
       </body>
       </html>
     `;
 
-    // Plain text version
     const textTemplate = `
-      ${customerName ? `${customerName}, your saved item is still available` : `Your saved item is still available`}
-      
-      ${customerName ? `Hi ${customerName},` : 'Hi there,'}
-      
-      We saved your ${productName || 'item'} in your cart so you can continue your order when you are ready.
-      ${customerAddress ? `
-      We saved your delivery address so you can continue from where you left off:
-      ${customerAddress}
-      ` : ''}
-      
-      Continue your order:
-      Complete Purchase: ${normalizedCheckoutUrl}
-      
-      Questions? Reply here or WhatsApp +1 318 657 4299.
-      
-      Need Help?
-      If you have any questions about your order, our customer service team is here to help.
-      
-      📧 Email Support: Reply to this email
-      📞 +1 318 657 4299
-      
-      © 2026 Casoodo.com. All rights reserved.
-      Thank you for your business.
-    `;
+${brand.name.toUpperCase()} — SAVED ITEM REMINDER
 
-    // Email options
+${customerName ? `Hi ${customerName},` : 'Hello,'}
+
+We saved your ${productName || 'item'} in your cart so you can continue whenever you are ready:
+
+Complete your purchase here:
+${normalizedCheckoutUrl}
+
+${brandCtx.getTextFooter()}
+    `.trim();
+
     const mailOptions = {
       from: `"${senderIdentity.fromName}" <${senderIdentity.fromEmail}>`,
-      replyTo: senderIdentity.fromEmail,
+      replyTo: brand.supportEmail || senderIdentity.fromEmail,
       to: customerEmail,
-      subject: `Your Saved Item - ${productName || 'item'}`,
+      subject: `Your Saved Item - ${productName || 'In Your Cart'} | ${brand.name}`,
       html: htmlTemplate,
       text: textTemplate,
     };
 
-    // Send email
-    const startTime = Date.now();
     const info = await emailTransporter.sendMail(mailOptions);
-    const endTime = Date.now();
 
-    console.log('Email sent successfully!');
-    console.log('Message ID:', info.messageId);
-
-    // Log the sent email
     await logEmail({
       templateName: 'Recovery — Urgent',
       senderEmail: senderIdentity.fromEmail,
@@ -339,29 +171,20 @@ export default async function handler(req, res) {
       recipientName: customerName,
       productName: productName,
       status: 'Success',
-      payload: req.body
+      payload: { ...req.body, website: brand.id }
     });
-    console.log(`Email sent in ${endTime - startTime}ms`);
 
     res.status(200).json({
       success: true,
       message: 'Abandoned checkout email sent successfully!',
-      messageId: info.messageId
+      messageId: info.messageId,
+      website: brand.id
     });
 
   } catch (error) {
-    console.error('Error sending email:', error);
-
-    // Detailed error handling for network issues
-    if (error.code === 'ECONNREFUSED' || error.code === 'ESOCKET') {
-      return res.status(503).json({
-        error: 'Email Service Unavailable',
-        details: 'Network connection to Gmail was refused. Please check your firewall, VPN, or network settings to ensure ports 465/587 are open.'
-      });
-    }
-
+    console.error('Error sending abandoned checkout email:', error);
     res.status(500).json({
-      error: 'Failed to send email',
+      error: 'Failed to send abandoned checkout email',
       details: error.message
     });
   }

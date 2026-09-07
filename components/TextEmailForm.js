@@ -1,40 +1,19 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import SenderEmailButtons from './SenderEmailButtons';
+import { useWebsiteAccounts } from '../src/lib/useWebsiteAccounts';
 
-export default function TextEmailForm() {
+export default function TextEmailForm({ activeWebsite = 'casoodo' }) {
+  const { accounts, selectedEmail, setSelectedEmail, isLoadingAccounts } = useWebsiteAccounts(activeWebsite);
+
   const [formData, setFormData] = useState({
-    senderEmail: '',
     recipients: '',
     subject: '',
     body: '',
   });
-  const [accounts, setAccounts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState({ type: '', content: '' });
-
-  useEffect(() => {
-    const fetchAccounts = async () => {
-      try {
-        const response = await fetch('/api/get-accounts');
-        if (response.ok) {
-          const data = await response.json();
-          const nextAccounts = data.accounts || [];
-          setAccounts(nextAccounts);
-          if (nextAccounts.length) {
-            setFormData(prev => ({
-              ...prev,
-              senderEmail: prev.senderEmail || nextAccounts[0].user,
-            }));
-          }
-        }
-      } catch (error) {
-        console.error('Failed to fetch email accounts:', error);
-      }
-    };
-    fetchAccounts();
-  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -55,24 +34,33 @@ export default function TextEmailForm() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          senderEmail: selectedEmail,
+          website: activeWebsite,
+        }),
       });
 
       const result = await response.json();
 
       if (response.ok) {
-        setMessage({ type: 'success', content: 'Text email sent successfully!' });
+        setMessage({ type: 'success', content: `Text email sent successfully via ${activeWebsite.toUpperCase()}! ✉️` });
         setFormData(prev => ({
           ...prev,
-          recipients: '',
           subject: '',
           body: '',
         }));
       } else {
-        setMessage({ type: 'error', content: result.error || 'Failed to send text email.' });
+        setMessage({
+          type: 'error',
+          content: result.error || 'Failed to send text email.',
+        });
       }
     } catch (error) {
-      setMessage({ type: 'error', content: 'Network error. Please try again.' });
+      setMessage({
+        type: 'error',
+        content: 'Network error. Please try again.',
+      });
     } finally {
       setIsLoading(false);
     }
@@ -80,34 +68,35 @@ export default function TextEmailForm() {
 
   return (
     <div className="w-full">
-      <div className="text-center mb-8">
-        <p className="text-gray-600">Send a plain custom email without a template</p>
+      <div className="text-center mb-6">
+        <p className="text-gray-600 font-medium">
+          Plain Custom Email — Sending as <span className="font-bold text-[#003099] uppercase">{activeWebsite}</span>
+        </p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <SenderEmailButtons
           accounts={accounts}
-          selectedEmail={formData.senderEmail}
-          onSelect={(email) => setFormData(prev => ({ ...prev, senderEmail: email }))}
-          disabled={isLoading}
+          selectedEmail={selectedEmail}
+          onSelect={setSelectedEmail}
+          disabled={isLoading || isLoadingAccounts}
         />
 
         <div>
           <label htmlFor="recipients" className="block text-sm font-medium text-gray-700 mb-2">
-            Recipients *
+            Recipient Emails (Comma, semicolon, or newline separated) *
           </label>
-          <input
+          <textarea
             id="recipients"
             name="recipients"
-            type="text"
             value={formData.recipients}
             onChange={handleInputChange}
             required
+            rows={3}
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FFFBB6] focus:border-transparent transition duration-200 ease-in-out text-gray-900 bg-white"
-            placeholder="customer@example.com, manager@example.com"
+            placeholder="customer1@example.com, customer2@example.com"
             disabled={isLoading}
           />
-          <p className="mt-1 text-xs text-gray-500">Separate multiple email addresses with commas. The first address is used as `To` and the rest are sent as `CC`.</p>
         </div>
 
         <div>
@@ -115,21 +104,21 @@ export default function TextEmailForm() {
             Subject *
           </label>
           <input
+            type="text"
             id="subject"
             name="subject"
-            type="text"
             value={formData.subject}
             onChange={handleInputChange}
             required
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FFFBB6] focus:border-transparent transition duration-200 ease-in-out text-gray-900 bg-white"
-            placeholder="Your custom subject"
+            placeholder="Important update about your account"
             disabled={isLoading}
           />
         </div>
 
         <div>
           <label htmlFor="body" className="block text-sm font-medium text-gray-700 mb-2">
-            Body *
+            Message Body *
           </label>
           <textarea
             id="body"
@@ -137,23 +126,23 @@ export default function TextEmailForm() {
             value={formData.body}
             onChange={handleInputChange}
             required
-            rows={12}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FFFBB6] focus:border-transparent transition duration-200 ease-in-out text-gray-900 bg-white resize-y font-mono text-sm leading-relaxed"
-            placeholder={"Hello,\n\nThis is a plain text email.\n\nBest regards,"}
+            rows={8}
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FFFBB6] focus:border-transparent transition duration-200 ease-in-out text-gray-900 bg-white leading-relaxed"
+            placeholder="Write your email message here..."
             disabled={isLoading}
           />
         </div>
 
         <button
           type="submit"
-          disabled={isLoading}
-          className={`w-full py-3 px-4 rounded-lg font-bold transition duration-200 ease-in-out ${
-            isLoading
+          disabled={isLoading || isLoadingAccounts || !selectedEmail}
+          className={`w-full py-3 px-4 rounded-lg font-bold text-[#003099] transition duration-200 ease-in-out ${
+            isLoading || !selectedEmail
               ? 'bg-gray-400 cursor-not-allowed text-white'
-              : 'bg-[#FFFBB6] hover:bg-[#f3ee8f] text-[#003099] focus:ring-2 focus:ring-[#FFFBB6] focus:ring-offset-2'
+              : 'bg-[#FFFBB6] hover:bg-[#f3ee8f] focus:ring-2 focus:ring-[#FFFBB6] focus:ring-offset-2'
           }`}
         >
-          {isLoading ? 'Sending…' : '✉️ Send Text Email'}
+          {isLoading ? 'Sending...' : `✉️ Send Text Email (${activeWebsite.toUpperCase()})`}
         </button>
       </form>
 

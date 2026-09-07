@@ -1,4 +1,5 @@
 import { getRandomAccount, createTransporter, getAccountByUser, getSenderIdentity } from '../../src/config/emailAccounts';
+import { getBrandEmailContext } from '../../src/config/brandEmailHelpers';
 import { logEmail } from '../../src/utils/logger';
 
 function parseRecipientList(recipients) {
@@ -15,7 +16,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { recipients, customerEmail: legacyCustomerEmail, cc, subject, body, senderEmail } = req.body;
+    const { recipients, customerEmail: legacyCustomerEmail, cc, subject, body, senderEmail, website } = req.body;
     const normalizedRecipients = recipients || [legacyCustomerEmail, cc].filter(Boolean).join(', ');
 
     if (!normalizedRecipients || !subject || !body) {
@@ -37,13 +38,17 @@ export default async function handler(req, res) {
     const customerEmail = recipientList[0];
     const ccList = recipientList.slice(1);
 
-    let account = senderEmail ? getAccountByUser(senderEmail) : null;
-    if (!account) account = getRandomAccount();
+    const brandCtx = getBrandEmailContext(website);
+    const brand = brandCtx.brand;
+
+    let account = senderEmail ? getAccountByUser(senderEmail, brand.id) : getRandomAccount(brand.id);
+    if (!account) account = getRandomAccount(brand.id);
 
     const transporter = createTransporter(account);
-    const senderIdentity = getSenderIdentity(account, 'Casoodo');
+    const senderIdentity = getSenderIdentity(account, brand.id);
     const info = await transporter.sendMail({
       from: `"${senderIdentity.fromName}" <${senderIdentity.fromEmail}>`,
+      replyTo: brand.supportEmail || senderIdentity.fromEmail,
       to: customerEmail,
       cc: ccList.length ? ccList.join(', ') : undefined,
       subject,
@@ -61,6 +66,7 @@ export default async function handler(req, res) {
         recipients: recipientList,
         cc: ccList,
         subject,
+        website: brand.id
       },
     });
 
@@ -68,6 +74,7 @@ export default async function handler(req, res) {
       success: true,
       message: 'Text email sent successfully',
       messageId: info.messageId,
+      website: brand.id
     });
   } catch (error) {
     console.error('[text-email] Error:', error);

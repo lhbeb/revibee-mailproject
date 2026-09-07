@@ -1,40 +1,18 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import SenderEmailButtons from './SenderEmailButtons';
+import { useWebsiteAccounts } from '../src/lib/useWebsiteAccounts';
 
-export default function ShippingEmailForm() {
+export default function ShippingEmailForm({ activeWebsite = 'casoodo' }) {
+  const { accounts, selectedEmail, setSelectedEmail, isLoadingAccounts } = useWebsiteAccounts(activeWebsite);
+
   const [formData, setFormData] = useState({
     trackingNumber: '',
-    senderEmail: '' // Optional: specific sender email
   });
   const [rawData, setRawData] = useState('');
-  const [accounts, setAccounts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState({ type: '', content: '' });
-
-  // Fetch available email accounts on mount
-  useEffect(() => {
-    const fetchAccounts = async () => {
-      try {
-        const response = await fetch('/api/get-accounts');
-        if (response.ok) {
-          const data = await response.json();
-          const nextAccounts = data.accounts || [];
-          setAccounts(nextAccounts);
-          if (nextAccounts.length) {
-            setFormData(prev => ({
-              ...prev,
-              senderEmail: prev.senderEmail || nextAccounts[0].user
-            }));
-          }
-        }
-      } catch (error) {
-        console.error('Failed to fetch email accounts:', error);
-      }
-    };
-    fetchAccounts();
-  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -59,10 +37,12 @@ export default function ShippingEmailForm() {
 
       const payload = {
         customerEmail: email,
-        customerName: name, // even if Shipping API doesn't strictly need it
+        customerName: name,
         customerAddress: address,
         productName: productLine,
         orderNumber: orderNum,
+        senderEmail: selectedEmail,
+        website: activeWebsite,
         ...formData
       };
 
@@ -77,8 +57,7 @@ export default function ShippingEmailForm() {
       const result = await response.json();
 
       if (response.ok) {
-        setMessage({ type: 'success', content: 'Email sent successfully! 🎉' });
-        // Reset form but keep sender selection
+        setMessage({ type: 'success', content: `Email sent successfully via ${activeWebsite.toUpperCase()}! 🎉` });
         setRawData('');
         setFormData(prev => ({ ...prev, trackingNumber: '' }));
       } else {
@@ -99,20 +78,20 @@ export default function ShippingEmailForm() {
 
   return (
     <div className="w-full">
-      <div className="text-center mb-8">
-        <p className="text-gray-600">Shipping Confirmation Dashboard</p>
+      <div className="text-center mb-6">
+        <p className="text-gray-600 font-medium">
+          Shipping Confirmation Dashboard — Sending as <span className="font-bold text-[#003099] uppercase">{activeWebsite}</span>
+        </p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Sender Email Selection */}
         <SenderEmailButtons
           accounts={accounts}
-          selectedEmail={formData.senderEmail}
-          onSelect={(email) => setFormData(prev => ({ ...prev, senderEmail: email }))}
-          disabled={isLoading}
+          selectedEmail={selectedEmail}
+          onSelect={setSelectedEmail}
+          disabled={isLoading || isLoadingAccounts}
         />
 
-        {/* Order Details Paste Block */}
         <div>
           <div className="flex justify-between mb-2">
             <label htmlFor="rawData" className="block text-sm font-medium text-gray-700">
@@ -128,12 +107,11 @@ export default function ShippingEmailForm() {
             required
             rows={7}
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#FFFBB6] focus:border-transparent transition duration-200 ease-in-out text-gray-900 bg-white resize-y font-mono text-sm leading-relaxed"
-            placeholder="Product Name : $Price&#10;customer@example.com&#10;John Doe&#10;123 Address St, City, ST 12345&#10;https://casoodo.com/product/...&#10;#9934"
+            placeholder={`Product Name : $Price\ncustomer@example.com\nJohn Doe\n123 Address St, City, ST 12345\nhttps://${activeWebsite}.com/product/...\n#9934`}
             disabled={isLoading}
           />
         </div>
 
-        {/* Tracking Number Field */}
         <div>
           <label htmlFor="trackingNumber" className="block text-sm font-medium text-gray-700 mb-2">
             Tracking Number *
@@ -152,12 +130,11 @@ export default function ShippingEmailForm() {
           />
         </div>
 
-        {/* Submit Button */}
         <button
           type="submit"
-          disabled={isLoading}
-          className={`w-full py-3 px-4 rounded-lg font-bold text-[#003099] transition duration-200 ease-in-out ${isLoading
-            ? 'bg-gray-400 cursor-not-allowed'
+          disabled={isLoading || isLoadingAccounts || !selectedEmail}
+          className={`w-full py-3 px-4 rounded-lg font-bold text-[#003099] transition duration-200 ease-in-out ${isLoading || !selectedEmail
+            ? 'bg-gray-400 cursor-not-allowed text-white'
             : 'bg-[#FFFBB6] hover:bg-[#f3ee8f] focus:ring-2 focus:ring-[#FFFBB6] focus:ring-offset-2'
             }`}
         >
@@ -170,12 +147,11 @@ export default function ShippingEmailForm() {
               Sending Email...
             </div>
           ) : (
-            '📧 Send Shipping Email'
+            `📧 Send Shipping Email (${activeWebsite.toUpperCase()})`
           )}
         </button>
       </form>
 
-      {/* Success/Error Messages */}
       {message.content && (
         <div className={`mt-6 p-4 rounded-lg ${message.type === 'success'
           ? 'bg-green-50 border border-green-200 text-green-800'
@@ -195,17 +171,6 @@ export default function ShippingEmailForm() {
           </div>
         </div>
       )}
-
-      {/* Instructions */}
-      <div className="mt-8 p-4 bg-teal-50 border border-teal-200 rounded-lg">
-        <h3 className="text-sm font-medium text-teal-800 mb-2">📋 Instructions:</h3>
-        <ul className="text-sm text-teal-700 space-y-1">
-          <li>• Fill in all required fields</li>
-          <li>• Make sure the email address is valid</li>
-          <li>• The tracking number will be included in the email</li>
-          <li>• Customer will receive a professional shipping confirmation</li>
-        </ul>
-      </div>
     </div>
   );
 }

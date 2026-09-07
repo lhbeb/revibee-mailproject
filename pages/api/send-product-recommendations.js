@@ -1,11 +1,8 @@
 import { getRandomAccount, createTransporter, getAccountByUser, getSenderIdentity } from '../../src/config/emailAccounts';
+import { getBrandEmailContext } from '../../src/config/brandEmailHelpers';
 import { logEmail } from '../../src/utils/logger';
 import * as cheerio from 'cheerio';
 
-/**
- * Fetch the og:image and og:title (or page <title>) for a given product URL.
- * Returns { image, title } — either field can be null on failure.
- */
 async function scrapeProduct(url) {
   try {
     const controller = new AbortController();
@@ -13,7 +10,7 @@ async function scrapeProduct(url) {
 
     const res = await fetch(url, {
       signal: controller.signal,
-      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; CasoodoBot/1.0;)' },
+      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; BrandBot/1.0;)' },
     });
     clearTimeout(timeoutId);
 
@@ -22,7 +19,6 @@ async function scrapeProduct(url) {
     const html = await res.text();
     const $ = cheerio.load(html);
 
-    // ── Image ──────────────────────────────────────────────────────────
     let image =
       $('meta[property="og:image"]').attr('content') ||
       $('meta[name="twitter:image"]').attr('content') ||
@@ -42,130 +38,91 @@ async function scrapeProduct(url) {
       }
     }
 
-    // ── Title ──────────────────────────────────────────────────────────
-    const title =
+    let title =
       $('meta[property="og:title"]').attr('content') ||
       $('meta[name="twitter:title"]').attr('content') ||
+      $('h1').first().text().trim() ||
       $('title').text().trim() ||
       null;
 
-    // ── Price ──────────────────────────────────────────────────────────
-    let price =
-      $('meta[property="product:price:amount"]').attr('content') ||
-      $('meta[property="og:price:amount"]').attr('content') ||
-      null;
-
-    let currency =
-      $('meta[property="product:price:currency"]').attr('content') ||
-      $('meta[property="og:price:currency"]').attr('content') ||
-      '$';
-
-    let formattedPrice = null;
-    if (price) {
-      if (currency === 'USD' || currency === '$') {
-        formattedPrice = `$${price}`;
-      } else {
-        formattedPrice = `${price} ${currency}`;
-      }
-    } else {
-      let label1 = $('meta[name="twitter:label1"]').attr('content');
-      let data1 = $('meta[name="twitter:data1"]').attr('content');
-      if (label1 && label1.toLowerCase() === 'price' && data1) {
-        formattedPrice = data1;
-      }
+    if (title) {
+      title = title.replace(/\s*[-–|].*$/, '').trim();
     }
 
-    return { image, title, price: formattedPrice };
+    return { image, title, url };
   } catch (err) {
-    console.warn(`[recommendations] Failed to scrape ${url}: ${err.message}`);
-    return { image: null, title: null };
+    console.warn(`[scrapeProduct] Failed for ${url}:`, err.message);
+    return { image: null, title: null, url };
   }
 }
 
-// ── HTML helpers ────────────────────────────────────────────────────────────
-
-/**
- * Renders a single product card cell for the email grid.
- * Table-based layout for maximum email client compatibility.
- */
-function renderProductCard({ url, image, title, price }) {
-  const displayTitle = title || 'View Product';
-  // Truncate long titles
-  const shortTitle = displayTitle.length > 50 ? displayTitle.slice(0, 47) + '…' : displayTitle;
-
-  const imgBlock = image
-    ? `<img src="${image}" alt="${shortTitle.replace(/"/g, '&quot;')}"
-          style="width:100%; height:180px; object-fit:cover; display:block; border-radius:8px 8px 0 0;">`
-    : `<div style="width:100%; height:180px; background:#f1f5f9; border-radius:8px 8px 0 0;
-                   display:flex; align-items:center; justify-content:center; font-size:48px;">🛍️</div>`;
-
-  const priceHTML = price 
-    ? `<p style="margin:4px 0 0 0; font-size:14px; font-weight:700; color:#FFFBB6;">${price}</p>` 
-    : '';
-
-  return `
-    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
-           style="border:1px solid #e2e8f0; border-radius:12px; overflow:hidden;
-                  background:#F0F6FF; box-shadow:0 1px 4px rgba(0,0,0,0.06);">
-      <tr>
-        <td style="padding:0;">${imgBlock}</td>
-      </tr>
-      <tr>
-        <td style="padding:14px 16px 6px 16px;">
-          <p style="margin:0; font-size:13px; font-weight:600; color:#1f2937;
-                    line-height:1.4; min-height:36px;">${shortTitle}</p>
-          ${priceHTML}
-        </td>
-      </tr>
-      <tr>
-        <td style="padding:10px 16px 16px 16px; text-align:center;">
-          <a href="${url}"
-             style="display:inline-block; padding:10px 22px; background-color:#FFFBB6;
-                    color:#070B17; text-decoration:none; font-weight:700; font-size:13px;
-                    border-radius:8px; border:1px solid #FFFBB6;">
-            Get Deal
-          </a>
-        </td>
-      </tr>
-    </table>`;
-}
-
-/**
- * Splits products into rows of `cols` items and renders a 2-column grid.
- * Works in Gmail, Outlook 2016+, Apple Mail, and iOS Mail.
- */
-function renderProductGrid(products) {
-  const COLS = 2;
+function renderProductGrid(products, brand) {
   const rows = [];
-
-  for (let i = 0; i < products.length; i += COLS) {
-    const chunk = products.slice(i, i + COLS);
-    const cells = chunk
-      .map(p => `
-        <td class="prod-col" width="48%" valign="top" style="padding:8px;">
-          ${renderProductCard(p)}
-        </td>`)
-      .join(`<!-- spacer --><td class="prod-spacer" width="4%" style="padding:0; font-size:1px; line-height:1px;">&nbsp;</td>`);
-
-    // If odd product on last row, add an empty cell to balance
-    const emptyFill = chunk.length < COLS
-      ? `<!-- spacer --><td class="prod-spacer" width="4%" style="padding:0; font-size:1px; line-height:1px;">&nbsp;</td><td class="prod-col" width="48%" style="padding:8px;"></td>`
-      : '';
-
-    rows.push(`
-      <tr class="prod-row">
-        ${cells}
-        ${emptyFill}
-      </tr>`);
+  for (let i = 0; i < products.length; i += 2) {
+    rows.push(products.slice(i, i + 2));
   }
 
-  return `
-    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
-      ${rows.join('')}
-    </table>`;
-}
+  return rows.map((pair, rowIdx) => {
+    const isSingleInRow = pair.length === 1;
 
-// ── Main handler ─────────────────────────────────────────────────────────────
+    const renderCard = (p) => `
+      <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+             style="background:#ffffff;border-radius:14px;border:1px solid ${brand.colors.cardBorder};overflow:hidden;">
+        <tr>
+          <td style="padding:16px;text-align:center;background:#ffffff;">
+            ${p.image
+              ? `<a href="${p.url}" style="text-decoration:none;">
+                   <img src="${p.image}" alt="${p.title || 'Product'}"
+                        width="180" height="140"
+                        style="display:block;margin:0 auto;width:100%;max-width:180px;height:140px;object-fit:contain;border-radius:8px;" />
+                 </a>`
+              : `<div style="height:140px;background:${brand.colors.bgLight};border-radius:8px;display:flex;align-items:center;justify-content:center;">
+                   <span style="font-size:32px;">📦</span>
+                 </div>`
+            }
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:0 16px 16px 16px;">
+            <p style="margin:0 0 12px 0;font-size:14px;font-weight:600;color:${brand.colors.textDark};line-height:1.4;height:40px;overflow:hidden;">
+              <a href="${p.url}" style="color:${brand.colors.textDark};text-decoration:none;">
+                ${p.title || 'Featured Product'}
+              </a>
+            </p>
+            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+              <tr>
+                <td>
+                  <a href="${p.url}"
+                     style="display:block;text-align:center;padding:10px 16px;background-color:${brand.colors.primary};
+                            color:#F8FAFC;font-size:13px;font-weight:700;text-decoration:none;border-radius:8px;">
+                    View Product →
+                  </a>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    `;
+
+    return `
+      <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+             style="margin-bottom:${rowIdx < rows.length - 1 ? '16px' : '0'};">
+        <tr class="prod-row">
+          <td class="prod-col" width="${isSingleInRow ? '100%' : '48%'}" valign="top">
+            ${renderCard(pair[0])}
+          </td>
+          ${!isSingleInRow ? `
+            <td class="prod-spacer" width="4%" style="font-size:0;line-height:0;">&nbsp;</td>
+            <td class="prod-col" width="48%" valign="top">
+              ${renderCard(pair[1])}
+            </td>
+          ` : ''}
+        </tr>
+      </table>
+    `;
+  }).join('');
+}
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -173,241 +130,142 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { customerEmail, customerName, sourceProductName, productLinks, senderEmail } = req.body;
+    const { customerName, customerEmail, sourceProductName, productLinks = [], senderEmail, website } = req.body;
 
-    // ── Validation ──────────────────────────────────────────────────────
     if (!customerEmail) {
-      return res.status(400).json({ error: 'customerEmail is required' });
+      return res.status(400).json({ error: 'Missing required field: customerEmail' });
     }
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(customerEmail)) {
       return res.status(400).json({ error: 'Invalid email format' });
     }
-    if (!Array.isArray(productLinks) || productLinks.length === 0) {
-      return res.status(400).json({ error: 'At least one productLink is required' });
+
+    const cleanLinks = (Array.isArray(productLinks) ? productLinks : [productLinks])
+      .map(l => (typeof l === 'string' ? l.trim() : ''))
+      .filter(l => l.startsWith('http'));
+
+    if (cleanLinks.length === 0) {
+      return res.status(400).json({ error: 'At least one valid product URL is required' });
     }
 
-    console.log(`[recommendations] Sending to ${customerEmail} with ${productLinks.length} products`);
+    const brandCtx = getBrandEmailContext(website);
+    const brand = brandCtx.brand;
 
-    // ── Scrape all product pages in parallel ────────────────────────────
-    const scraped = await Promise.all(
-      productLinks.map(async (url) => {
-        const { image, title, price } = await scrapeProduct(url);
-        return { url, image, title, price };
-      })
-    );
+    const scraped = await Promise.all(cleanLinks.slice(0, 6).map(scrapeProduct));
 
-    // ── Pick email account ──────────────────────────────────────────────
-    let account;
-    if (senderEmail) {
-      account = getAccountByUser(senderEmail) || getRandomAccount();
-    } else {
-      account = getRandomAccount();
-    }
-    console.log(`[recommendations] Using sender: ${account.user}`);
-    const transporter = createTransporter(account);
-    const senderIdentity = getSenderIdentity(account);
+    let account = senderEmail ? getAccountByUser(senderEmail, brand.id) : getRandomAccount(brand.id);
+    if (!account) account = getRandomAccount(brand.id);
 
-    // ── Build subject ───────────────────────────────────────────────────
-    const firstName = customerName ? customerName.split(' ')[0] : null;
-    const subject = firstName
-      ? `${firstName}, here are a few more items to explore`
-      : 'A few more items you may want to explore';
+    const emailTransporter = createTransporter(account);
+    const senderIdentity = getSenderIdentity(account, brand.id);
+    const firstName = customerName ? customerName.trim().split(' ')[0] : '';
 
-    // ── HTML email template ─────────────────────────────────────────────
-    const htmlTemplate = `
-<!DOCTYPE html>
+    const htmlTemplate = `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="format-detection" content="telephone=no, date=no, email=no, address=no">
-  <title>Products you might love — Casoodo.com</title>
-  <!--[if mso]>
-  <noscript>
-    <xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml>
-  </noscript>
-  <![endif]-->
+  <title>Products you might love — ${brand.name}</title>
   <style>
-    body {
-      margin:0; padding:0;
-      background-color:#F0F6FF;
-      font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
-      line-height:1.5; color:#070B17;
-      -webkit-text-size-adjust:100%; -ms-text-size-adjust:100%;
-    }
+    body { margin:0; padding:0; background-color:${brand.colors.bgLight}; font-family:'Inter',sans-serif; }
     @media screen and (max-width:600px){
       .content-cell { padding:16px !important; }
-      .header h1   { font-size:22px !important; }
-      .prod-row    { display:block !important; width:100% !important; }
-      .prod-col    { display:block !important; width:100% !important; box-sizing:border-box !important; padding:4px 0 16px 0 !important; }
+      .prod-row { display:block !important; width:100% !important; }
+      .prod-col { display:block !important; width:100% !important; padding:4px 0 16px 0 !important; }
       .prod-spacer { display:none !important; }
     }
   </style>
 </head>
-<body style="margin:0;padding:0;background-color:#F0F6FF;">
-
-  <!-- Wrapper -->
-  <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color:#F0F6FF;">
+<body style="margin:0;padding:0;background-color:${brand.colors.bgLight};">
+  <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
     <tr>
       <td align="center" style="padding:20px 10px;">
-
-        <!-- Container -->
         <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
-               style="max-width:620px;background:#F0F6FF;border-radius:20px;overflow:hidden;border:1px solid #e2e8f0;">
+               style="max-width:620px;background:#ffffff;border-radius:16px;overflow:hidden;border:1px solid ${brand.colors.cardBorder};">
 
-          <!-- Header -->
-          <tr class="header">
-            <td style="background-color:#070B17;padding:36px 32px;text-align:center;">
-              <p style="margin:0 0 10px 0;font-size:13px;font-weight:600;color:#FFFBB6;text-transform:uppercase;letter-spacing:0.1em;">
-                Handpicked for you
-              </p>
-              <h1 style="color:#F0F6FF;font-size:26px;font-weight:800;margin:0 0 14px 0;line-height:1.25;">
-                ${firstName ? `${firstName}, you might love these` : 'Products you might love'} <span style="color:#FFFBB6;">✨</span>
-              </h1>
-              <p style="color:#F0F6FF99;font-size:15px;margin:0;line-height:1.5;">
-                We curated ${scraped.length} item${scraped.length !== 1 ? 's' : ''} we think you&rsquo;ll be interested in.
-                Click any product to explore the deal.
-              </p>
-            </td>
-          </tr>
+          ${brandCtx.getHeaderHtml(
+            `${firstName ? `${firstName}, you might love these ✨` : 'Handpicked products you might love ✨'}`,
+            `Curated selection from ${brand.name}`
+          )}
 
-          <!-- Body -->
           <tr>
             <td class="content-cell" style="padding:28px 24px;">
-
-              <!-- Greeting -->
-              <p style="margin:0 0 24px 0;font-size:16px;color:#374151;line-height:1.6;">
-                ${customerName ? `Hi ${customerName},` : 'Hi there,'}<br><br>
+              <p style="margin:0 0 20px 0;font-size:15px;color:#475569;line-height:1.6;">
+                ${customerName ? `Hi ${customerName},` : 'Hello,'}<br><br>
                 ${sourceProductName
-                  ? `Based on your interest in <strong>${sourceProductName}</strong>, here are a few more items from our store you may want to explore.`
-                  : 'Here are a few more items from our store you may want to explore.'}
-                Every product comes with <strong>fast, tracked shipping</strong> and our
-                <strong>30-day return guarantee</strong>.
+                  ? `Based on your interest in <strong>${sourceProductName}</strong>, here are recommended items from our catalog.`
+                  : 'Here are handpicked items from our catalog selected for you.'}
               </p>
 
-              <!-- Product Grid -->
-              ${renderProductGrid(scraped)}
+              ${renderProductGrid(scraped, brand)}
 
-              <!-- CTA footer -->
-              <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
-                     style="margin-top:28px;text-align:center;">
+              <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-top:28px;text-align:center;">
                 <tr>
                   <td>
-                    <p style="color:#6b7280;font-size:14px;margin:0 0 16px 0;">
-                      Want to browse more? Visit our full store.
-                    </p>
-                    <a href="https://casoodo.com"
-                       style="display:inline-block;padding:14px 32px;background-color:#070B17;
-                              color:#F0F6FF;text-decoration:none;font-weight:700;font-size:14px;
-                              border-radius:10px;">
-                      Browse All Deals
+                    <a href="${brand.domain}" style="display:inline-block;padding:12px 28px;background-color:${brand.colors.primary};color:#ffffff;text-decoration:none;font-weight:700;font-size:14px;border-radius:8px;">
+                      Browse Full Catalog at ${brand.name} →
                     </a>
                   </td>
                 </tr>
               </table>
-
             </td>
           </tr>
 
-          <!-- Trust strip -->
-          <tr>
-            <td style="background-color:#fafafa;padding:20px 32px;border-top:1px solid #e5e7eb;text-align:center;">
-              <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center">
-                <tr>
-                  <td style="padding:0 16px;font-size:12px;color:#9ca3af;border-right:1px solid #e5e7eb;">
-                    ✅ Verified Products
-                  </td>
-                  <td style="padding:0 16px;font-size:12px;color:#9ca3af;border-right:1px solid #e5e7eb;">
-                    📦 Fast Tracked Shipping
-                  </td>
-                  <td style="padding:0 16px;font-size:12px;color:#9ca3af;">
-                    🔄 30-Day Returns
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-
-          <!-- Footer -->
-          <tr>
-            <td style="padding:24px 32px;text-align:center;background-color:#F0F6FF;border-top:1px solid #e5e7eb;">
-              <p style="margin:0 0 8px 0;font-size:13px;color:#6b7280;">
-                Questions? Reply to this email or&nbsp;
-                <a href="https://wa.me/13186574299" style="color:#070B17;text-decoration:none;">WhatsApp +1 318 657 4299</a>.
-              </p>
-              <p style="margin:0;color:#9ca3af;font-size:12px;">
-                © 2026 Casoodo.com · All rights reserved.
-              </p>
-            </td>
-          </tr>
-
+          ${brandCtx.getFooterHtml()}
         </table>
       </td>
     </tr>
   </table>
-
 </body>
 </html>`;
 
-    // ── Plain text fallback ─────────────────────────────────────────────
     const textTemplate = [
-      customerName ? `Hi ${customerName},` : 'Hi there,',
+      customerName ? `Hi ${customerName},` : 'Hello,',
       '',
-      sourceProductName
-        ? `Based on your interest in ${sourceProductName}, here are ${scraped.length} more items to explore:`
-        : `Here are ${scraped.length} products we picked for you:`,
+      `Here are recommended products from ${brand.name}:`,
       '',
       ...scraped.map((p, i) => `${i + 1}. ${p.title || 'Product'}\n   ${p.url}`),
       '',
-      'Browse all deals: https://casoodo.com',
-      '',
-      'Questions? Reply here or WhatsApp +1 318 657 4299.',
-      '',
-      '© 2026 Casoodo.com. All rights reserved.',
+      brandCtx.getTextFooter(),
     ].join('\n');
 
-    // ── Send ────────────────────────────────────────────────────────────
-    const startTime = Date.now();
-    const info = await transporter.sendMail({
+    const subject = firstName
+      ? `${firstName}, we found items you might like at ${brand.name} ✨`
+      : `Recommended items for you | ${brand.name}`;
+
+    const mailOptions = {
       from: `"${senderIdentity.fromName}" <${senderIdentity.fromEmail}>`,
-      replyTo: senderIdentity.fromEmail,
+      replyTo: brand.supportEmail || senderIdentity.fromEmail,
       to: customerEmail,
       subject,
       html: htmlTemplate,
       text: textTemplate,
-    });
-    console.log(`[recommendations] Sent in ${Date.now() - startTime}ms — ID: ${info.messageId}`);
+    };
 
-    // ── Log ─────────────────────────────────────────────────────────────
+    const info = await emailTransporter.sendMail(mailOptions);
+
     await logEmail({
-      templateName: 'Promotional — Recommendations',
+      templateName: 'Product Recommendations',
       senderEmail: senderIdentity.fromEmail,
       recipientEmail: customerEmail,
-      recipientName: customerName || null,
-      productName: scraped.map(p => p.title || p.url).join(', ').slice(0, 200),
+      recipientName: customerName,
+      productName: sourceProductName || cleanLinks[0],
       status: 'Success',
-      payload: req.body,
+      payload: { ...req.body, website: brand.id },
     });
 
     return res.status(200).json({
       success: true,
-      message: `Recommendations email sent with ${scraped.length} products.`,
+      message: 'Product recommendations email sent successfully',
       messageId: info.messageId,
+      website: brand.id,
     });
 
   } catch (error) {
-    console.error('[recommendations] Error:', error);
-
-    if (error.code === 'ECONNREFUSED' || error.code === 'ESOCKET') {
-      return res.status(503).json({
-        error: 'Email Service Unavailable',
-        details: 'Network connection to Gmail was refused. Check your firewall or VPN.',
-      });
-    }
-
+    console.error('Error in send-product-recommendations:', error);
     return res.status(500).json({
-      error: 'Failed to send recommendations email',
+      error: 'Failed to send product recommendations email',
       details: error.message,
     });
   }
